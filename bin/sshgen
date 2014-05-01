@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# generates an ssh key interactively
+#
+
+printf "test"
+
+# user () {
+#   printf "\r  [ \033[0;33m?\033[0m ] $1 "
+# }
+
+# user "Enter your email address: "
+
+# read -n 1 email
+
+# ssh-keygen -t rsa -C "$email"
+
+# user "Enter file in which to save the key: "
+
+# read -n 1 filename
+
+# ssh-keygen -t rsa -C "$email | $filename"
+
+# ssh-add $filename
+
+
+# pbcopy < $filename.pub
+
+
+# user "Public key copied to your clipboard."

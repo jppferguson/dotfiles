@@ -1,0 +1,85 @@
+# Path to your oh-my-zsh configuration.
+ZSH=$HOME/Code/oh-my-zsh
+
+# shortcut to this dotfiles path is $ZSH
+export ZSH=$HOME/Code/oh-my-zsh
+
+# your project folder that we can `c [tab]` to
+export PROJECTS=~/Projects
+
+# move the custom folder outside of the oh-my-zsh repo
+export ZSH_CUSTOM=~/Code/oh-my-zsh-custom
+
+
+# Set name of the theme to load.
+ZSH_THEME="agnoster"
+
+# Base16 Shell
+# BASE16_SHELL="$PROJECTS/dotfiles/zsh/base16-ocean.dark.sh"
+# [[ -s $BASE16_SHELL ]] && . $BASE16_SHELL
+
+
+# use .localrc for SUPER SECRET CRAP that you don't
+# want in your public, versioned repo.
+if [[ -a ~/.localrc ]]
+then
+  source ~/.localrc
+fi
+
+# using .commonrc for stuff you want shared between zsh and bash
+if [[ -a ~/.commonrc ]]
+then
+  source ~/.commonrc
+fi
+
+
+# all of our zsh files
+typeset -U config_files
+config_files=($ZSH/**/*.zsh)
+
+# load the path files
+for file in ${(M)config_files:#*/path.zsh}
+do
+  source $file
+done
+
+# load everything but the path and completion files
+# for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+# do
+#   source $file
+# done
+
+# initialize autocomplete here, otherwise functions won't be loaded
+autoload -U compinit
+compinit
+
+# load every completion after autocomplete loads
+for file in ${(M)config_files:#*/completion.zsh}
+do
+  source $file
+done
+
+unset config_files
+
+
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+plugins=(git brew sublime osx node colorize ruby)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export MANPATH="/usr/local/man:$MANPATH"
+
+
+# init z   https://github.com/rupa/z
+. ~/code/z/z.sh
+
+
+# include bash aliases
+. ~/.aliases
+

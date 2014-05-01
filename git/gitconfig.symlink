@@ -1,0 +1,200 @@
+# Sample gitconfig
+#
+
+[hub]
+    protocol = https
+
+
+[user]
+  name = jppferguson
+  email = jppferguson@gmail.com
+
+[credential]
+    helper = osxkeychain
+
+[alias]
+
+    ####################
+    # Day-to-day aliases
+    ####################
+    # List both remote-tracking branches and local branches.
+    br = branch -a
+    # [c]ommit...
+    c = commit -a -m
+    # Add and commit all changes
+    ca = !git add -A && git commit -av -m
+    # Clone a repository including all submodules
+    cl = clone --recursive
+    # Switch to a branch, creating it if necessary
+    go = checkout -B
+    # Checkout a branch or paths to the working tree
+    co = checkout
+    # Add all files in the working tree to the index
+    aa = add --all
+    # Update remote refs along with associated objects
+    ph = push
+    # Fetch from another repository or a local branch
+    pl = pull
+    # Show the current working tree status using the short-format
+    s = status -s -u
+    # Show remotes a little more verbose with url after name
+    rv = remote -v
+
+
+    #############
+    # Log aliases
+    #############
+    # Description TBC
+    lsm = log -M --stat
+    # Description TBC
+    hse = log --stat -5
+    # Description TBC
+    logr = log -M
+    # Description TBC
+    logr2 = log --stat -M -2
+    # Description TBC
+    logit = log --stat -M
+    # Description TBC
+    lp = log -p
+    # Description TBC
+    lod = log --oneline --decorate
+    # Description TBC
+    lg = log --graph
+    # Description TBC
+    lwr = log --stat -C
+    # Description TBC
+    lpo = log --pretty=oneline --abbrev-commit --graph --decorate --all
+    # Description TBC
+    who = shortlog -s --
+
+
+    ##############
+    # Diff aliases
+    ##############
+    # TBC
+
+
+    ##############
+    # Misc aliases
+    ##############
+    # Credit an author on the latest commit
+    credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+    # Show the diff between the latest commit and the current state
+    d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+    # `git di $number` shows the diff between the state `$number` revisions ago and the current state
+    di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+    # View abbreviated SHA, description, and history graph of the latest 20 commits
+    l = log --pretty=oneline -n 20 --graph --abbrev-commit
+    # Pull in remote changes for the current repository and all its submodules
+    p = !"git pull; git submodule foreach git pull origin master"
+
+
+    # Show verbose output about tags, branches or remotes
+    tags = tag -l
+    branches = branch -a
+    remotes = remote -v
+
+    # list all config/aliases for your reference
+    aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'
+    listconf = config --global --list
+
+    ################################################################################
+    #
+    # More potentially useful aliases at https://github.com/matthewmccullough/
+    # and https://git.wiki.kernel.org/index.php?title=Aliases
+    #
+    ################################################################################
+
+
+[apply]
+    # Detect whitespace errors when applying a patch
+    whitespace = fix
+
+
+[core]
+    # Use custom `.gitignore` and `.gitattributes`
+    excludesfile = ~/.gitignore
+    attributesfile = ~/.gitattributes
+    # Treat spaces before tabs and all kinds of trailing whitespace as an error.
+    # [default] trailing-space: looks for spaces at the end of a line
+    # [default] space-before-tab: looks for spaces before tabs at the beginning of
+    # a line
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+    # Make `git rebase` safer on OS X
+    # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+    trustctime = false
+    # Fix encoding
+    quotepath = false
+    # Configure Git on OS X to properly handle line endings
+    autocrlf = input
+    safecrlf = warn
+    # Set default git editor
+    editor = vim
+
+
+[color]
+# ui = true is a superset of all the more specific color options
+#  as documented at http://book.git-scm.com/5_customizing_git.html
+# When set to always, always use colors in all git commands which are capable of colored output.
+# When false, never. When set to true or auto, use colors only when the output is to the terminal.
+# When more specific variables of color.* are set, they always take precedence over this setting.
+# Defaults to false.
+  ui = auto
+  # diff = auto
+  # status = auto
+  # branch = auto
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+
+[help]
+    autocorrect = 1
+
+[merge]
+    # Include summaries of merged commits in newly created merge commit messages
+    log = true
+
+[mergetool "sourcetree"]
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
+
+
+[rerere]
+  # one day, when I'm all grown up
+  enabled = false
+
+
+# URL shorthands
+[url "git@github.com:"]
+    insteadOf = "gh:"
+    pushInsteadOf = "github:"
+    pushInsteadOf = "git://github.com/"
+[url "git://github.com/"]
+    insteadOf = "github:"
+[url "git@gist.github.com:"]
+    insteadOf = "gst:"
+    pushInsteadOf = "gist:"
+    pushInsteadOf = "git://gist.github.com/"
+[url "git://gist.github.com/"]
+    insteadOf = "gist:"
+[url "https://github.com/jppferguson/"]
+  insteadOf = "ghjf://"
+  pushInsteadOf = "ghjf://"
+
+
+[push]
+    # See `git help config` (search for push.default)
+    # for more information on different options of the below setting.
+    #
+    # Setting to git 2.0 default to surpress warning message
+    default = simple

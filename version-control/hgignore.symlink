@@ -1,0 +1,59 @@
+# Use shell-style glob syntax
+syntax: glob
+
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+.AppleDouble
+.LSOverride
+
+
+# Thumbnail cache files
+._*
+Thumbs.db
+
+
+# Icon must ends with two \r.
+Icon
+
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+
+# Compiled Python files
+*.pyc
+
+
+# Composer
+vendor
+vendor/*
+composer.phar
+
+
+# Logs
+logs
+logs/*
+error.log
+access.log
+
+
+# Cache files
+cache/*
+
+
+# SublimeText workspace files are user-specific
+*.sublime-workspace
+
+
+# Dreamweaver (*shudder*)
+_notes
+dwsync.xml
+
+
+# Misc project files
+timesheet.md
+todo.md
+*.tmp
+*.tmp*
