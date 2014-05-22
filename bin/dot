@@ -6,15 +6,19 @@
 # to make sure you're on the latest and greatest.
 
 # Set OS X defaults
+echo "\nSetting OS X defaults...";
 $DOTFILES/osx/set-defaults.sh
 
 # Upgrade homebrew
+echo "\nUpgrading homebrew...";
 brew update
 
 # Install homebrew packages
+echo "\nInstalling homebrew packages...";
 $DOTFILES/homebrew/install.sh 2>&1
 
 
 # Install z: https://github.com/rupa/z
+echo "\nInstalling z...";
 $DOTFILES/z/install.sh 2>&1
 
