@@ -1,11 +1,11 @@
 # Path to your oh-my-zsh configuration.
-ZSH=$HOME/Code/oh-my-zsh
-
-# shortcut to this dotfiles path is $ZSH
 export ZSH=$HOME/Code/oh-my-zsh
 
+# shortcut to this dotfiles path is $DOTFILES
+export DOTFILES=$HOME/Projects/dotfiles
+
 # your project folder that we can `c [tab]` to
-export PROJECTS=~/Projects
+export PROJECTS='~/Projects'
 
 # move the custom folder outside of the oh-my-zsh repo
 export ZSH_CUSTOM=~/Code/oh-my-zsh-custom
@@ -35,7 +35,7 @@ fi
 
 # all of our zsh files
 typeset -U config_files
-config_files=($ZSH/**/*.zsh)
+config_files=($DOTFILES/**/*.zsh)
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}
@@ -44,10 +44,10 @@ do
 done
 
 # load everything but the path and completion files
-# for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
-# do
-#   source $file
-# done
+for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+do
+  source $file
+done
 
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -U compinit
@@ -57,6 +57,7 @@ compinit
 for file in ${(M)config_files:#*/completion.zsh}
 do
   source $file
+
 done
 
 unset config_files
@@ -69,11 +70,6 @@ unset config_files
 plugins=(git brew sublime osx node colorize ruby)
 
 source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-# export MANPATH="/usr/local/man:$MANPATH"
 
 
 # init z   https://github.com/rupa/z

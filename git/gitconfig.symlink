@@ -6,11 +6,11 @@
 
 
 [user]
-  name = jppferguson
-  email = jppferguson@gmail.com
+  name = Jamie Ferguson
+  email = jamie_ferguson@adnostic.co.uk
 
 [credential]
-    helper = osxkeychain
+    helper = GIT_CREDENTIAL_HELPER
 
 [alias]
 
@@ -113,7 +113,7 @@
 
 [core]
     # Use custom `.gitignore` and `.gitattributes`
-    excludesfile = ~/.gitignore
+	excludesfile = /Users/jamie_ferguson/.gitignore
     attributesfile = ~/.gitattributes
     # Treat spaces before tabs and all kinds of trailing whitespace as an error.
     # [default] trailing-space: looks for spaces at the end of a line
@@ -165,8 +165,8 @@
     log = true
 
 [mergetool "sourcetree"]
-  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-  trustExitCode = true
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
 
 
 [rerere]
@@ -198,3 +198,6 @@
     #
     # Setting to git 2.0 default to surpress warning message
     default = simple
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
