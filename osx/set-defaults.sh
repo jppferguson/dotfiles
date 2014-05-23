@@ -30,6 +30,9 @@ sudo pmset -a standbydelay 86400
 # Disable the sound effects on boot
 sudo nvram SystemAudioVolume=" "
 
+# Menu bar: set the date format
+defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM  HH:mm:ss"
+
 # Menu bar: disable transparency
 defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
 
@@ -227,6 +230,28 @@ defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 # Enable the debug menu in Disk Utility
 defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
 defaults write com.apple.DiskUtility advanced-image-options -bool true
+
+
+# Alfred (TODO)
+###############################################################################
+
+# Set double tap of command key as the shortcut
+defaults write com.runningwithcrayons.Alfred-Preferences hotkey.default -dict-add key -1
+defaults write com.runningwithcrayons.Alfred-Preferences hotkey.default -dict-add mod 1048576
+defaults write com.runningwithcrayons.Alfred-Preferences hotkey.default -dict-add string "double tap"
+
+# Hide his hat and menu icon
+defaults write ~/Library/Application\ Support/Alfred\ 2/Alfred.alfredpreferences/preferences/appearance/options/prefs.plist hidehat -bool true
+defaults write ~/Library/Application\ Support/Alfred\ 2/Alfred.alfredpreferences/preferences/appearance/options/prefs.plist hidemenu -bool true
+
+# Set location to the UK
+defaults write ~/Library/Application\ Support/Alfred\ 2/Alfred.alfredpreferences/preferences/prefs.plist location -string "United Kingdom"
+
+# Alfred prefs
+defaults write com.runningwithcrayons.Alfred-Preferences appearance.theme -string "alfred.theme.lightlarge"
+
+
+
 
 
 # Dock, Dashboard, and hot corners
