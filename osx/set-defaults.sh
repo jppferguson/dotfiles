@@ -11,8 +11,7 @@
 #
 ###############################################################################
 
-cp -r $DOTFILES/sublime/User/Preferences.sublime-settings ~/Library/Application\ Support/Sublime\ Text*/Packages/User/Preferences.sublime-settings 2> /dev/null
-exit;
+
 # Ask for the administrator password upfront
 sudo -v
 
