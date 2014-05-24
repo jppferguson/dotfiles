@@ -593,8 +593,18 @@ cp -r ../sublime/User/Preferences.sublime-settings ~/Library/Application\ Suppor
 # Terminal & iTerm 2
 ###############################################################################
 
+# Set the default shell to zsh
+chsh -s /bin/zsh
+
 # Only use UTF-8 in Terminal.app
 defaults write com.apple.terminal StringEncodings -array 4
+
+# Use the Pro theme by default in Terminal.app
+defaults write com.apple.Terminal "Default Window Settings" -string 'Pro'
+defaults write com.apple.Terminal "Startup Window Settings" -string 'Pro'
+
+# Use zsh at start up in Terminal.app
+defaults write com.apple.Terminal "Shell" -string '/bin/zsh'
 
 # # Use a modified version of the Pro theme by default in Terminal.app
 # open "${HOME}/init/Mathias.terminal"
