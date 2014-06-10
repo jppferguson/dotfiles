@@ -1,5 +1,3 @@
-# Path to your oh-my-zsh configuration.
-export ZSH=$HOME/Code/oh-my-zsh
 
 # shortcut to this dotfiles path is $DOTFILES
 export DOTFILES=$HOME/Projects/dotfiles
@@ -7,12 +5,7 @@ export DOTFILES=$HOME/Projects/dotfiles
 # your project folder that we can `c [tab]` to
 export PROJECTS='~/Projects'
 
-# move the custom folder outside of the oh-my-zsh repo
-export ZSH_CUSTOM=~/Code/oh-my-zsh-custom
 
-
-# Set name of the theme to load.
-ZSH_THEME="agnoster"
 
 # Base16 Shell
 # BASE16_SHELL="$PROJECTS/dotfiles/zsh/base16-ocean.dark.sh"
@@ -62,18 +55,6 @@ done
 
 unset config_files
 
-
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew sublime osx node colorize ruby)
-
-source $ZSH/oh-my-zsh.sh
-
-
-# init z   https://github.com/rupa/z
-. ~/code/z/z.sh
 
 
 # include bash aliases
