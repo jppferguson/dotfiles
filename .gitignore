@@ -2,3 +2,6 @@
 # Misc project files
 todo.md
 *tmp*
+
+# the actual git config
+git/gitconfig.symlink
