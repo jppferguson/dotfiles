@@ -5,9 +5,8 @@ Dotfiles are all those files beginning with a "." in your user directory and mak
 
 ## Installation
 
-*Don't do it yet, it's not ready!*
-<!--
-Run this:
+### Using Git and the bootstrap script
+You can clone the repository wherever you want. (I like to keep it in `~/Projects/dotfiles`).
 
 ```sh
 git clone https://github.com/jppferguson/dotfiles.git ~/.dotfiles
@@ -21,13 +20,22 @@ Everything is configured and tweaked within `~/.dotfiles`.
 The main file you'll want to change right off the bat is `zsh/zshrc.symlink`,
 which sets up a few paths that'll be different on your particular machine.
 
-`dot` is a simple script that installs some dependencies, sets sane OS X
-defaults, and so on. Tweak this script, and occasionally run `dot` from
-time to time to keep your environment fresh and up-to-date. You can find
-this script in `bin/`.
+`dot` installs some dependencies, sets sane OS X defaults, and so on.
+Tweak this script, and occasionally run `dot` from time to time to keep 
+your environment fresh and up-to-date. You can find this script in `bin/`.
 
 
-## topical
+### Git-free install
+
+To install these dotfiles without Git:
+
+```bash
+cd; curl -#L https://github.com/jppferguson/dotfiles/tarball/master | tar -xzv --strip-components 1 --exclude={README.md}
+script/bootstrap
+```
+
+
+## Topical
 
 Everything's built around topic areas. If you're adding a new area to your
 forked dotfiles — say, "Java" — you can simply add a `java` directory and put
@@ -36,7 +44,7 @@ included into your shell. Anything with an extension of `.symlink` will get
 symlinked without extension into `$HOME` when you run `script/bootstrap`.
 
 
-## components
+## Components
 
 There's a few special files in the hierarchy.
 
@@ -54,15 +62,11 @@ There's a few special files in the hierarchy.
   symlinked in when you run `script/bootstrap`.
 
 
--->
-
 
 ## Thanks
+Largely based off @holman's awesome repo, but also with some
+help/ideas/blatent pilfering from these fantastic people:
 
 - [@holman](https://github.com/holman/dotfiles)
 - [@mathiasbyens](https://github.com/mathiasbynens/dotfiles)
-
-
-## License
-
-Licensed under nothing just yet...
+- [@paulirish](https://github.com/paulirish/dotfiles)
