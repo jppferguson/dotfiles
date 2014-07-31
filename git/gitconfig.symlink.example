@@ -190,7 +190,9 @@
 [url "https://github.com/jppferguson/"]
   insteadOf = "ghjf://"
   pushInsteadOf = "ghjf://"
-
+# forces https to get around corporate firewalls
+[url "https://"]
+    insteadOf = git://
 
 [push]
     # See `git help config` (search for push.default)
