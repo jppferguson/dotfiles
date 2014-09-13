@@ -1,0 +1,2 @@
+
+alias composer="composer.phar"
