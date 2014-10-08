@@ -130,6 +130,8 @@
     safecrlf = warn
     # Set default git editor
     editor = vim
+    # don't ignore case
+    ignorecase = false
 
 
 [color]
