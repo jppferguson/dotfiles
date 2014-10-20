@@ -1,5 +1,5 @@
 # shortcut to this dotfiles path is $DOTFILES
-export DOTFILES=.dotfiles
+export DOTFILES=$HOME/.dotfiles
 export VENDOR=$DOTFILES/vendor
 
 # check for RVM
@@ -32,7 +32,9 @@ fi
 
 # all of our zsh files
 typeset -U config_files
-config_files=($DOTFILES/**/*.zsh)
+# setopt extended_glob
+# config_files=($DOTFILES/(^vendor/)#/*.zsh) # with extended glob
+config_files=($DOTFILES/(**|^vendor)/*.zsh)
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}

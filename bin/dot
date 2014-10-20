@@ -6,8 +6,8 @@
 # to make sure you're on the latest and greatest.
 
 # Set OS X defaults
-echo "\nSetting OS X defaults...";
-$DOTFILES/osx/set-defaults.sh
+#echo "\nSetting OS X defaults...";
+#$DOTFILES/osx/set-defaults.sh
 
 # Upgrade homebrew
 echo "\nUpgrading homebrew...";
