@@ -5,3 +5,7 @@ todo.md
 
 # the actual git config
 git/gitconfig.symlink
+
+# dotfile vendor libs
+vendor
+vendor/*

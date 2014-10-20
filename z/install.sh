@@ -1,21 +1,18 @@
 #!/bin/sh
 #
+# git clone https://github.com/rupa/z
+# z, oh how i love you
 # Z - A cd command that learns - easily navigate directories from the command line
 #
-# This installs some of the common dependencies needed (or at least desired)
-# using Homebrew.
 
 # Check for z
 if [ "`type -t z`" = 'function' ]
 then
   echo "  Installing z for you."
-  #ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)" > /tmp/homebrew-install.log
+
+  cd $VENDOR
+  git clone https://github.com/rupa/z.git
+  chmod +x $VENDOR/z/z.sh
+  # also consider moving over your current .z file if possible. it's painful to rebuild :)
 fi
 
-# Install homebrew packages
-#brew install grc coreutils spark
-
-exit 0
-
-
-#git clone https://github.com/rupa/z
