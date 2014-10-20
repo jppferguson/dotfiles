@@ -1,1 +1,1 @@
-export NVM_HOME=$HOME/Code/nvm
+export NVM_HOME=$VENDOR/nvm

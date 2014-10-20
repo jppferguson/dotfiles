@@ -1,9 +1,9 @@
 
 # Path to your oh-my-zsh configuration.
-export ZSH=$HOME/Code/oh-my-zsh
+export ZSH=$VENDOR/oh-my-zsh
 
 # move the custom folder outside of the oh-my-zsh repo
-export ZSH_CUSTOM=~/Code/oh-my-zsh-custom
+export ZSH_CUSTOM=$VENDOR/oh-my-zsh-custom
 
 # Set name of the theme to load.
 ZSH_THEME="agnoster"
