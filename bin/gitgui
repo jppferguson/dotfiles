@@ -6,11 +6,11 @@
 #
 # USAGE:
 #
-#   $ gitui
+#   $ gitgui
 #   # => opens the current directory in your Git GUI
 #
-#   $ gitui .
-#   $ gitui /usr/local
+#   $ gitgui .
+#   $ gitgui /usr/local
 #   # => opens the specified directory in your Git GUI
 
 if [ "$1" = "" ] ; then
