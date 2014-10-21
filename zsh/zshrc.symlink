@@ -1,9 +1,6 @@
-
 # shortcut to this dotfiles path is $DOTFILES
-export DOTFILES=$HOME/Projects/dotfiles
-
-# your project folder that we can `c [tab]` to
-export PROJECTS='~/Projects'
+export DOTFILES=$HOME/.dotfiles
+export VENDOR=$DOTFILES/vendor
 
 # check for RVM
 if [[ -a ~/.rvm ]]
@@ -15,7 +12,7 @@ fi
 
 
 # Base16 Shell
-# BASE16_SHELL="$PROJECTS/dotfiles/zsh/base16-ocean.dark.sh"
+# BASE16_SHELL="$DOTFILES/zsh/base16-ocean.dark.sh"
 # [[ -s $BASE16_SHELL ]] && . $BASE16_SHELL
 
 
@@ -35,7 +32,9 @@ fi
 
 # all of our zsh files
 typeset -U config_files
-config_files=($DOTFILES/**/*.zsh)
+# setopt extended_glob
+# config_files=($DOTFILES/(^vendor/)#/*.zsh) # with extended glob
+config_files=($DOTFILES/(**|^vendor)/*.zsh)
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}

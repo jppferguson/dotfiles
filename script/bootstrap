@@ -5,7 +5,7 @@
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd)
 CUR_UNIX="`date +%s`"
-BACKUP_DIR=~/Backups/dotfiles/$CUR_UNIX/
+BACKUP_DIR=${DOTFILES}_backup/$CUR_UNIX/
 
 set -e
 
