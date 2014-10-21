@@ -64,6 +64,7 @@ unset config_files
 
 
 
-# include bash aliases
+# include bash aliases & functions
 . ~/.aliases
+. ~/.functions
 
