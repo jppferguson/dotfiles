@@ -1,0 +1,25 @@
+{
+	"installed_packages":
+	[
+		"AdvancedNewFile",
+		"Alignment",
+		"ApacheConf.tmLanguage",
+		"Autoprefixer",
+		"CSS Unminifier",
+		"DevDocs",
+		"Dotfiles Syntax Highlighting",
+		"EditorConfig",
+		"Emmet",
+		"GitGutter",
+		"JsFormat",
+		"JSHint",
+		"LiveStyle",
+		"Markdown Extended",
+		"Pretty JSON",
+		"Sass",
+		"SideBarEnhancements",
+		"SublimeLinter",
+		"SublimeLinter-jshint",
+		"Theme - Spacegray"
+	]
+}
