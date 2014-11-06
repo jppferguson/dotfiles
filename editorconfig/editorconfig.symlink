@@ -1,0 +1,20 @@
+# See http://editorconfig.org
+
+# This is the top-most .editorconfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# JavaScript files
+[*.js]
+indent_style = tab
+indent_size = 2
+
+# SASS files look a bit better with more indents
+[*.scss]
+indent_size = 4
