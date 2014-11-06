@@ -1,0 +1,22 @@
+{
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				"*.cache",
+				"*.last-run",
+				"*.system-ca-bundle",
+				"*.tmTheme"
+			],
+			"folder_exclude_patterns":
+			[
+				"*.cache",
+				"TabsExtra"
+			],
+			"follow_symlinks": true,
+			"name": "Dotfiles",
+			"path": "/Users/jamie_ferguson/.dotfiles"
+		}
+	]
+}
