@@ -39,6 +39,8 @@
     s = status -s -u
     # Show remotes a little more verbose with url after name
     rv = remote -v
+    # Use instead of pull - no risk of merge conflicts
+    up = !git remote update -p; git merge --ff-only @{u}
 
 
     #############

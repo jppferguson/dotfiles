@@ -14,7 +14,7 @@ if [ ! -d "$VENDOR/z" ]; then
   # also consider moving over your current .z file if possible. it's painful to rebuild :)
 else
   . $VENDOR/z/z.sh
-  if hash _z >/dev/null 2>&1; then echo "Z is already installed!"; else echo "Your Z instalation failed!"; fi
+  if hash _z >/dev/null 2>&1; then echo "Z is already installed!"; else echo "Your Z installation failed!"; fi
 fi
 
 

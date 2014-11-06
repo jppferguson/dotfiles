@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#
+# Update all the things
+
+set -e
+
+echo "Updating all the things...";
+
+cd "$(dirname $0)"/..
+
+# find the update.sh files and run them iteratively
+find . -name update.sh -not -path "./vendor/*" | while read updater ; do sh -c "${updater}" ; done

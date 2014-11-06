@@ -9,6 +9,5 @@
 #echo "\nSetting OS X defaults...";
 #$DOTFILES/osx/set-defaults.sh
 
-# Upgrade homebrew
-echo "\nUpgrading homebrew...";
-brew update
+# Update everything
+$DOTFILES/script/update
