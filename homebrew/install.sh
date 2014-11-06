@@ -10,9 +10,13 @@ if test ! $(which brew)
 then
   echo "  Installing Homebrew for you."
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > /tmp/homebrew-install.log
+else
+  echo "Homebrew already installed..."
 fi
 
+echo "Installing homebrew packages."
+
 # Install homebrew packages
-brew install grc coreutils spark nvm
+brew install grc coreutils spark nvm git-extras
 
 exit 0
