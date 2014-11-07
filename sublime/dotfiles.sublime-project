@@ -16,7 +16,7 @@
 			],
 			"follow_symlinks": true,
 			"name": "Dotfiles",
-			"path": "/Users/jamie_ferguson/.dotfiles"
+			"path": "../"
 		}
 	]
 }
