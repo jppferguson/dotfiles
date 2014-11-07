@@ -11,4 +11,7 @@ ZSH_THEME="agnoster"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew sublime osx node colorize ruby)
+plugins=(bower brew colorize composer git-flow git node npm osx ruby sublime)
+
+# disable oh-my-zsh updates entirely, only check when running `dot`
+DISABLE_AUTO_UPDATE=true
