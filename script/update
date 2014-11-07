@@ -6,6 +6,9 @@ set -e
 
 echo "Updating all the things...";
 
+echo "\nDo a self update first...";
+cd $DOTFILES && git up
+
 cd "$(dirname $0)"/..
 
 # find the update.sh files and run them iteratively
