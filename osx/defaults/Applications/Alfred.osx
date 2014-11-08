@@ -1,0 +1,20 @@
+#!/bin/sh
+# Set defaults for Alfred
+set -e
+
+echo "Setting defaults for Alfred...";
+
+# Set double tap of command key as the shortcut
+defaults write com.runningwithcrayons.Alfred-Preferences hotkey.default -dict-add key -1
+defaults write com.runningwithcrayons.Alfred-Preferences hotkey.default -dict-add mod 1048576
+defaults write com.runningwithcrayons.Alfred-Preferences hotkey.default -dict-add string "double tap"
+
+# Hide his hat and menu icon
+defaults write ~/Library/Application\ Support/Alfred\ 2/Alfred.alfredpreferences/preferences/appearance/options/prefs.plist hidehat -bool true
+defaults write ~/Library/Application\ Support/Alfred\ 2/Alfred.alfredpreferences/preferences/appearance/options/prefs.plist hidemenu -bool true
+
+# Set location to the UK
+defaults write ~/Library/Application\ Support/Alfred\ 2/Alfred.alfredpreferences/preferences/prefs.plist location -string "United Kingdom"
+
+# Alfred prefs
+defaults write com.runningwithcrayons.Alfred-Preferences appearance.theme -string "alfred.theme.lightlarge"
