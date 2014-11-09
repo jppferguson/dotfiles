@@ -1,7 +1,7 @@
 #!/bin/sh
-# Set defaults for Address Book, Dashboard, iCal, TextEdit, and Disk Utility
+# Set defaults for Address Book, Dashboard, iCal, TextEdit, iTunes and Disk Utility
 
-echo "Setting defaults for Address Book, Dashboard, iCal, TextEdit, and Disk Utility...";
+echo "Setting defaults for Address Book, Dashboard, iCal, TextEdit, iTunes and Disk Utility...";
 
 # Enable the debug menu in Address Book
 defaults write com.apple.addressbook ABShowDebugMenu -bool true
@@ -21,3 +21,6 @@ defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 # Enable the debug menu in Disk Utility
 defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
 defaults write com.apple.DiskUtility advanced-image-options -bool true
+
+# Stop iTunes from responding to the keyboard media keys
+launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null
