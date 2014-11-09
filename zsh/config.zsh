@@ -46,3 +46,10 @@ bindkey '^[[5C' end-of-line
 bindkey '^[[3~' delete-char
 bindkey '^[^N' newtab
 bindkey '^?' backward-delete-char
+
+# dots to be displayed while waiting for completion
+COMPLETION_WAITING_DOTS="true"
+
+
+# turn off auto-correct
+unsetopt correct_all
