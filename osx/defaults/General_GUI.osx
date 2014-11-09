@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for General UI/UX
-set -e
 
 echo "Setting defaults for General UI/UX...";
 

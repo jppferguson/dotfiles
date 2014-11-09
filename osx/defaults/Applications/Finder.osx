@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for Finder
-set -e
 
 echo "Setting defaults for Finder...";
 

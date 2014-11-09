@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for the screen
-set -e
 
 echo "Setting defaults for the screen...";
 

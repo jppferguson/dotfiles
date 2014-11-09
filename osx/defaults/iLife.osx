@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for Address Book, Dashboard, iCal, TextEdit, and Disk Utility
-set -e
 
 echo "Setting defaults for Address Book, Dashboard, iCal, TextEdit, and Disk Utility...";
 

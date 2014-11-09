@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for Mac App Store
-set -e
 
 echo "Setting defaults for Mac App Store...";
 

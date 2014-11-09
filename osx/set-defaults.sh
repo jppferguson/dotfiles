@@ -10,7 +10,6 @@
 # Run `dot` and this will get automatically run.
 #
 ###############################################################################
-set -e
 
 # check this is actually an OSX machine
 if [ $(uname -s) = 'Darwin' ]

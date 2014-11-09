@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for machines with a SSD
-set -e
 
 echo "Setting defaults for Machines with a SSD...";
 

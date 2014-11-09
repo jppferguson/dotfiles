@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for Mail.app
-set -e
 
 echo "Setting defaults for Mail.app...";
 

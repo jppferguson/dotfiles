@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for Dock, Dashboard, and hot corners
-set -e
 
 echo "Setting defaults for Dock, Dashboard, and hot corners...";
 

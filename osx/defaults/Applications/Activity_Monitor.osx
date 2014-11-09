@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for Activity Monitor
-set -e
 
 echo "Setting defaults for Activity Monitor...";
 

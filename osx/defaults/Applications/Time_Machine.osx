@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for Time Machine
-set -e
 
 echo "Setting defaults for Time Machine...";
 

@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for Terminal & iTerm 2
-set -e
 
 echo "Setting defaults for Terminal & iTerm 2...";
 

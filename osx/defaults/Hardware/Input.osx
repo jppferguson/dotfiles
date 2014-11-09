@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for Trackpad, mouse, keyboard, Bluetooth accessories, and input
-set -e
 
 echo "Setting defaults for Trackpad, mouse, keyboard, Bluetooth accessories, and input...";
 

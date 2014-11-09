@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for Safari & WebKit
-set -e
 
 echo "Setting defaults for Safari & WebKit...";
 

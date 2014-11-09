@@ -1,6 +1,5 @@
 #!/bin/sh
 # Set defaults for Alfred
-set -e
 
 echo "Setting defaults for Alfred...";
 
