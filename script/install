@@ -1,10 +1,169 @@
 #!/usr/bin/env bash
 #
-# Run all dotfiles installers.
+# Run all dotfiles installers interactively.
+#
+###############################################################################
 
-set -e
+# Local variables
+_DOTFILES_IGNORE=()
+verbose='false'
+dryRunFlag=''
 
+# Allow using flags when running this script
+while getopts 'dv' flag; do
+  case "${flag}" in
+    d) dryRunFlag='true' ;;
+    v) verbose='true' ;;
+    *) error "Unexpected option ${flag}" ;;
+  esac
+done
+
+# Make sure we're in the right directory
 cd "$(dirname $0)"/..
 
-# find the installers and run them iteratively
-find . -name install.sh -not -path "./vendor/*" | while read installer ; do sh -c "${installer}" ; done
+# Set where we want to store the DOTFILES_IGNORE variable
+localSettings=~/.localrc
+
+# Get general install/update functions
+. script/functions
+
+# Source .localrc file for stuff we don't want to install
+. $localSettings
+
+
+# Functions
+###################
+
+# Gets the name of topic, we're going to install
+
+install_get_topic_name () {
+  local script=$1
+  script=${script///install.sh/}   # remove install.sh
+  script=${script##*/}             # remove the path
+  script_name=$script
+}
+
+
+# Build a string for the interactive options for each install
+
+install_options () {
+  local _opts=()
+  local _default=" (${cWhite}d${cNo}efault)"
+
+  # Build the display string
+  opts="Install $1?"
+  _opts=("${_opts[@]} ${cWhite}i${cNo}nstall")
+  if ! inArray $1 "${DOTFILES_IGNORE[@]}"
+  then
+    _opts=("${_opts[@]} ${_default}")
+  fi
+  _opts=("${_opts[@]}, ${cWhite}I${cNo}nstall everything")
+  _opts=("${_opts[@]}, ${cWhite}s${cNo}kip this time")
+  _opts=("${_opts[@]}, ${cWhite}S${cNo}kip everything this time")
+  _opts=("${_opts[@]}, ${cWhite}n${cNo}ever install")
+  if inArray $1 "${DOTFILES_IGNORE[@]}"
+  then
+    _opts=("${_opts[@]} ${_default}")
+  fi
+  _opts=("${_opts[@]}, ${cWhite}N${cNo}ever install anything")
+  opts="${opts} ${_opts[*]}"
+}
+
+
+# Interactively runs an install.sh
+
+install_run () {
+  local install= always_skip= skip=
+  local installer=$1
+  local script=$2
+
+  if [ "$install_all" == "false" ] && [ "$skip_all" == "false" ] && [ "$always_skip_all" == "false" ]; then
+    install_options $script
+    user "$opts"
+    read -s -n 1 install_action
+
+    case "${install_action:-d}" in
+      i )
+        install=true;;
+      I )
+        install_all=true;;
+      n )
+        always_skip=true;;
+      N )
+        always_skip_all=true;;
+      s )
+        skip=true;;
+      S )
+        skip_all=true;;
+      d )
+        if inArray $script "${DOTFILES_IGNORE[@]}"; then
+          install=false
+          always_skip=true
+        else
+          install=true
+        fi;;
+      * )
+        ;;
+    esac
+  fi
+
+  install=${install:-$install_all}
+  always_skip=${always_skip:-$always_skip_all}
+  skip=${skip:-$skip_all}
+
+  if [ "$install" == "true" ]; then
+    if [ ! "$dryRunFlag" == "true" ]; then
+      sh -c "${installer}"
+    fi
+    success "Installed $script"
+  fi
+
+  if [ "$always_skip" == "true" ]; then
+    if [ ! "$dryRunFlag" == "true" ]; then
+      # add to DOTFILES_IGNORE array
+      _DOTFILES_IGNORE=("${_DOTFILES_IGNORE[@]}" "$script")
+    fi
+    success "Will never install $script"
+  fi
+
+  if [ "$skip" == "true" ]; then
+    success "Skipped $script"
+  fi
+
+}
+
+
+# Interactively installs everything!
+
+install_run_all () {
+  local install_scripts=( $(find . -name install.sh -not -path "./vendor/*" ) )
+  local install_all=false always_skip_all=false skip_all=false
+
+  for install_script in "${install_scripts[@]}"; do
+    install_get_topic_name $install_script
+    install_run $install_script $script_name
+  done
+
+}
+
+# Install all the things!
+install_run_all
+
+# Add DOTFILES_IGNORE stuff to a global array in .localrc
+_DOTFILES_IGNORE=${_DOTFILES_IGNORE[*]}
+DOTFILES_IGNORE="DOTFILES_IGNORE=( $_DOTFILES_IGNORE )"
+
+# Check if the array already exists within .localrc
+if grep -q DOTFILES_IGNORE "$localSettings"; then
+   perl -pi -e "s/DOTFILES_IGNORE.*/$DOTFILES_IGNORE/g" $localSettings
+else
+   echo -e "\n# Ignore these dotfiles installers: \n$DOTFILES_IGNORE" >> $localSettings
+fi
+
+
+# Clean up variables
+unset localSettings
+
+
+# and we're done...
+echo "Everything installed..."
