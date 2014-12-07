@@ -43,7 +43,13 @@ print_block_end () {
 
 # pretty line output
 print_line () {
-  printf "$1 $cGreen$2$cNo\n"
+  printf "$1$cGreen $2$cNo$3\n"
+}
+
+# print task header
+print_task ()
+{
+  printf "\n$1 $cGreen$2$cNo\n"
 }
 
 # pretty error output

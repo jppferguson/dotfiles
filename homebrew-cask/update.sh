@@ -5,8 +5,20 @@
 #
 ###############################################################################
 
+# Allow using flags when running this script directly
+forceInstall=''
+while getopts 'f' flag; do
+  case "${flag}" in
+    f) forceInstall='true' ;;
+    *) error "Unexpected option ${flag}" ;;
+  esac
+done
+
 # Include the general functions
 . ./functions/general
+
+# Include ~/.localrc for any custom stuff
+. ~/.localrc
 
 # Let the user know what's happening
 print_block "Installing native applications"
@@ -15,21 +27,45 @@ print_block "Installing native applications"
 brew upgrade brew-cask 2> /dev/null
 
 # Install apps to /Applications (Default is: /Users/$user/Applications)
-. ./homebrew-cask/env.zsh
-appsFolder=$HOMEBREW_CASK_OPTS
+appdir="/Applications"
 
 function cask_install() {
-  brew cask install --appdir="$appsFolder" "${@}" 2> /dev/null
+  print_task "Installing" "${@}"
+  sudo brew cask install --appdir="$appdir" "${@}"
 }
 
+function cask_reinstall() {
+  print_task "Installing ${@} (with force)"
+  sudo brew cask install --appdir="$appdir" --force "${@}"
+}
+
+# get currently installed apps
+installedApps=( $(brew cask list) )
+
 # Load list of applications to update from the apps file
-IFS=$'\n' apps=($(egrep -v '(^#|^$)' $DOTFILES/homebrew-cask/apps))
-# TODO: join additional apps array from .localrc to update non standard ones
+OLDIFS=$IFS; IFS=$'\n' apps=($(egrep -v '(^#|^$)' $DOTFILES/homebrew-cask/apps)); IFS=$OLDIFS
+
+# Add additional apps array from .localrc to update non standard ones
+apps=("${apps[@]}" "${CASKROOM_APPS_EXTRA[@]}")
+
 for app in "${apps[@]}"; do
-  # TODO: Check if its not in a do not install array in .localrc
-  print_line "Installing" "${app}"
-  cask_install $app
+  # Check if it's not in the do not install array in .localrc
+  if inArray "$app" "${CASKROOM_APPS_IGNORE[@]}"; then
+    print_line "Ignored" "${app}"
+  else
+    # Check if the force flag is set
+    if [ "$forceInstall" == "true" ]; then
+      cask_reinstall $app
+    else
+      if inArray "$app" "${installedApps[@]}"; then
+        print_line "Skipping" "${app}"
+      else
+        cask_install $app
+      fi
+    fi
+  fi
 done
+
 
 # Clean up cask
 brew cask cleanup
