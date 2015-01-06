@@ -79,3 +79,7 @@ fail () {
   echo ''
   exit
 }
+
+uncomment () {
+  sudo sed -ie "s|#${1}|${1}|g" "$2"
+}
