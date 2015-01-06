@@ -1,0 +1,22 @@
+# Custom vhosts from dotfiles
+#  creates home.dev and *wildcard*.dev hostnames under /var/www
+
+<Directory "/var/www">
+    Options Indexes MultiViews FollowSymLinks
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+</Directory>
+
+<Virtualhost *:80>
+    VirtualDocumentRoot "/var/www/home/public"
+    ServerName home.dev
+    UseCanonicalName Off
+</Virtualhost>
+
+<Virtualhost *:80>
+    VirtualDocumentRoot "/var/www/sites/%1/public"
+    ServerName sites.dev
+    ServerAlias *.dev
+    UseCanonicalName Off
+</Virtualhost>
