@@ -7,11 +7,13 @@
 	"close_windows_when_empty": false,
 	"color_scheme": "Packages/User/base16-ocean.dark (SL).tmTheme",
 	"create_window_at_startup": false,
+	"detect_indentation": false,
 	"dictionary": "Packages/Language - English/en_GB.dic",
 	"draw_centered": false,
 	"draw_minimap_border": true,
 	"draw_white_space": "selection",
-	"find_selected_text": true,
+	"fade_fold_buttons": false,
+	"find_selected_text": false,
 	"fold_buttons": true,
 	"folder_exclude_patterns":
 	[
@@ -34,7 +36,7 @@
 	[
 		"Vintage"
 	],
-	"indent_to_bracket": false,
+	"indent_to_bracket": true,
 	"match_brackets_angle": true,
 	"move_to_limit_on_up_down": true,
 	"rulers":
@@ -51,7 +53,7 @@
 	"theme": "Spacegray.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_automatic_white_space": true,
-	"trim_trailing_white_space_on_save": true,
+	"trim_trailing_white_space_on_save": false,
 	"use_tab_stops": true,
 	"word_wrap": true
 }
