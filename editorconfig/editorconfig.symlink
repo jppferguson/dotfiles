@@ -15,3 +15,9 @@ indent_size = 2
 # SASS files look a bit better with more indents
 [*.scss]
 indent_size = 4
+
+# Sublime seems to use tabs in its settings files,
+# so lets just stick with that for consistency...
+[**.sublime-settings]
+indent_style = tab
+indent_size = 2
