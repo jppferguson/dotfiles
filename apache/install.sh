@@ -47,7 +47,8 @@ sudo mkdir -p /var/www/sites/default/public
 sudo chown -R `whoami` /var/www
 
 # clone local homepage project
-git clone 'git@github.com:cmall/LocalHomePage.git' /var/www/home/public/
+# TODO fork this repo and also ask if you want to include it
+# git clone 'git@github.com:cmall/LocalHomePage.git' /var/www/home/public/
 
 # restart apache
 sudo apachectl restart
