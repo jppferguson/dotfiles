@@ -22,8 +22,8 @@ defaults write com.apple.Terminal "Shell" -string '/bin/zsh'
 # defaults write com.apple.terminal "Default Window Settings" -string "Mathias"
 # defaults write com.apple.terminal "Startup Window Settings" -string "Mathias"
 
-# # Install pretty iTerm colors
-# open "${HOME}/init/Mathias.itermcolors"
+# Install pretty iTerm colours
+open "${DOTFILES}/terminal/Solarized Dark.itermcolors"
 
 # Don’t display the annoying prompt when quitting iTerm
 defaults write com.googlecode.iterm2 PromptOnQuit -bool false
