@@ -46,9 +46,13 @@ print_line () {
   printf "$1$cGreen $2$cNo$3\n"
 }
 
+# pretty warning
+print_warning () {
+  printf "\n${cRed}Warning: ${cYellow}${1}${cNo}\n"
+}
+
 # print task header
-print_task ()
-{
+print_task () {
   printf "\n$1 $cGreen$2$cNo\n"
 }
 

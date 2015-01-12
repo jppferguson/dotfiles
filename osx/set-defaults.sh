@@ -11,12 +11,15 @@
 #
 ###############################################################################
 
+# Include the general functions
+. ./functions/general
+
 # check this is actually an OSX machine
 if [ $(uname -s) = 'Darwin' ]
 then
-  echo "\nSetting OS X defaults...";
+  print_block "Setting OS X defaults";
 else
-  echo "\nNot OSX... skipping OSX defaults."
+  print_line "Not OSX... skipping OSX defaults."
   exit 0
 fi
 
@@ -50,8 +53,13 @@ done
 # Kill affected applications
 for app in "${apps[@]}"
 do
-    echo "Killing ${app}.app"
-    killall "${app}" > /dev/null 2>&1
+    if [ "${app}" != "Terminal" ]
+    then
+      print_line "Killing" "${app}.app"
+      killall "${app}" > /dev/null 2>&1
+    fi
 done
 
-echo "Done. Note that some of these changes require a logout/restart to take effect."
+print_warning "Some of these changes require a logout/restart to take effect."
+
+print_block_end
