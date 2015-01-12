@@ -1,11 +1,9 @@
 # Custom vhosts from dotfiles
 #  creates home.dev and *wildcard*.dev hostnames under /var/www
 
-<Directory "/var/www">
-    Options Indexes MultiViews FollowSymLinks
-    AllowOverride All
-    Order allow,deny
-    Allow from all
+<Directory />
+    AllowOverride none
+    Require all granted
 </Directory>
 
 <Virtualhost *:80>

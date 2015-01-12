@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# Creates a new apache site
+# Usage `new-apache-site {siteDirectory} {siteURL(=siteDirectory)}`
+
+if [ -n "$2" ]
+then
+  siteDir=$1
+  siteURL=$2
+else
+  siteDir=$1
+  siteURL=$1
+fi
+
+# let the user know whats happening
+echo "Creating a new site --> $siteURL.dev"
+
+# set folder structure
+newFolder=$PWD/$siteDir
+sitesFolder=/var/www/sites
+publicFolder=public
+
+# make required directories
+mkdir $newFolder
+mkdir $sitesFolder/$siteURL
+
+# create and example html file so we know we're in the right place
+egFile="${newFolder}/index.html"
+touch $egFile
+echo "Your new site is ready at: ${siteURL}.dev" >> $egFile
+
+# symbolic link the folders
+ln -s $newFolder $sitesFolder/$siteURL/$publicFolder
+
+# open in your browser of choice
+open "http://$siteURL.dev/"
