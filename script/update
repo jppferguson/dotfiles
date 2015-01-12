@@ -4,9 +4,12 @@
 
 set -e
 
-echo "Updating all the things...";
+# Include the general functions
+. ./functions/general
 
-echo "\nDo a self update first...";
+print_block "Updating All The Things"
+print_line "Making sure we're up-to-date first..."
+
 cd $DOTFILES && git up
 
 cd "$(dirname $0)"/..
