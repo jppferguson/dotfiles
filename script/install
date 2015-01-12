@@ -136,7 +136,7 @@ install_run () {
 # Interactively installs everything!
 
 install_run_all () {
-  local install_scripts=( $(find . -name install.sh -not -path "./vendor/*" ) )
+  local install_scripts=('./homebrew/install.sh' $(find . -name install.sh -not -path "./vendor/*" -not -path "./homebrew/*"  ) )
   local install_all=false always_skip_all=false skip_all=false
 
   for install_script in "${install_scripts[@]}"; do
