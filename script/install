@@ -24,8 +24,8 @@ cd "$(dirname $0)"/..
 # Set where we want to store the DOTFILES_IGNORE variable
 localSettings=~/.localrc
 
-# Get general install/update functions
-. script/functions
+# Include the general functions
+. ./functions/general
 
 # Source .localrc file for stuff we don't want to install
 . $localSettings

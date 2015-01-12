@@ -7,14 +7,13 @@
 cd "$(dirname "$0")/.."
 DOTFILES_ROOT=$(pwd)
 CUR_UNIX="`date +%s`"
-BACKUP_DIR=${DOTFILES}_backup/$CUR_UNIX/
+BACKUP_DIR="${DOTFILES}_backup/${CUR_UNIX}/"
 
 set -e
 
-echo ''
+# Include the general functions
+. ./functions/general
 
-# Get general install/update functions
-. script/functions
 
 create_localrc () {
   LOCALRC=~/.localrc
