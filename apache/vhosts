@@ -2,18 +2,18 @@
 #  creates home.dev and *wildcard*.dev hostnames under /var/www
 
 <Directory />
-    AllowOverride none
+    AllowOverride all
     Require all granted
 </Directory>
 
 <Virtualhost *:80>
-    VirtualDocumentRoot "/var/www/home/public"
+    VirtualDocumentRoot "/var/www/home"
     ServerName home.dev
     UseCanonicalName Off
 </Virtualhost>
 
 <Virtualhost *:80>
-    VirtualDocumentRoot "/var/www/sites/%1/public"
+    VirtualDocumentRoot "/var/www/%1"
     ServerName sites.dev
     ServerAlias *.dev
     UseCanonicalName Off

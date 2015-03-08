@@ -87,3 +87,10 @@ fail () {
 uncomment () {
   sudo sed -ie "s|#${1}|${1}|g" "$2"
 }
+
+# outputs debug if $verbose is truthy
+verboseOut () {
+  if [ "$verbose" = true ]; then
+    echo $1 $cYellow$2 $cNo
+  fi
+}
