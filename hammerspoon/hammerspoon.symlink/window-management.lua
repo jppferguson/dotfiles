@@ -4,7 +4,8 @@
 -----------------------------------------------
 
 -- Set the default animation duration
-hs.window.animationDuration = .2
+local animationDuration = .2
+hs.window.animationDuration = animationDuration
 
 
 -----------------------------------------------
@@ -77,4 +78,36 @@ function windowToggleFullscreen()
     -- if not frontMostWindow then return exitModalHotkey(hotkey) end
     frontMostWindow:toggleFullScreen()
     -- exitModalHotkey(hotkey)
+end
+
+
+
+
+-----------------------------------------------
+-- Move current window to another screen
+-----------------------------------------------
+
+function windowMoveToScreen(screen)
+  local win = hs.window.focusedWindow()
+  local screens = 0
+  for _ in pairs(hs.screen.allScreens()) do screens = screens + 1 end
+  hs.window.animationDuration = 0
+
+  if screens >= 2 then
+    if screen == 'prev' then
+      local prevScreen = win:screen():previous()
+      win:moveToScreen(prevScreen)
+      notify("Previous Monitor")
+    elseif screen == 'next' then
+      local nextScreen = win:screen():next()
+      win:moveToScreen(nextScreen)
+      notify("Next Monitor")
+    end
+  else
+    notify("There's only one monitor...")
+  end
+
+  -- reset animation duration
+  hs.window.animationDuration = animationDuration
+
 end
