@@ -16,5 +16,5 @@ hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
 -----------------------------------------------
 
 function showDateAndTime()
-    hs.alert(os.date("It's %R on %B %e, %G"), 3)
+    notify(os.date("It's %R on %B %e, %G"))
 end

@@ -3,19 +3,19 @@
 --  https://github.com/voostindie/hammerspoon-config
 ------------------------------------------------
 
-
--- Let us know we've got the latest and greatest
-------------------------------------------------
-hs.alert("(Re)loaded Hammerspoon config", 1)
-
-
 -----------------------------------------------
 -- Includes
 -----------------------------------------------
 
 require "misc"
+require "notify"
 require "terminal"
 require "window-management"
+
+
+-- Let us know we've got the latest and greatest
+------------------------------------------------
+notify("(Re)loaded Hammerspoon config")
 
 
 -----------------------------------------------
