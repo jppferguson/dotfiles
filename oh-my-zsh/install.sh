@@ -6,6 +6,9 @@
 # “OH MY ZSHELL!”
 #
 
+# Include the general functions
+. ./functions/general
+
 if [ ! -d "$VENDOR/oh-my-zsh" ]; then
   print_block "Installing oh-my-zsh"
   cd $VENDOR

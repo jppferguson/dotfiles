@@ -9,12 +9,13 @@
 # Include the general functions
 . ./functions/general
 
-
 # No Homebrew :(
 print_block "Installing Homebrew"
 
 # Check for Homebrew
 if ! command_exists brew; then
+
+  print_line "If nothing is moving for a while, try hitting" "Return"
 
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > /tmp/homebrew-install.log
 

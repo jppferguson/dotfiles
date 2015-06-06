@@ -1,6 +1,13 @@
 #!/bin/sh
+#
 # Install required fonts
+#
 set -x
+
+# Include the general functions
+. ./functions/general
+
+print_block "Installing Fonts"
 
 # Because OSX doesn't let you install fonts by symlink,
 # lets rsync the folder, keeping things in sync

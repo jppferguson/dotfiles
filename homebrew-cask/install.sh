@@ -25,9 +25,6 @@ else
   # Install the versions cask so we can install beta versions of apps
   brew tap caskroom/versions
 
-  # Hook up alfred
-  brew cask alfred link
-
   # Install the apps
   sh ./homebrew-cask/update.sh
 
