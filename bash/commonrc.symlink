@@ -1,0 +1,3 @@
+# shortcut to this dotfiles path is $DOTFILES
+export DOTFILES=$HOME/.dotfiles
+export VENDOR=$DOTFILES/vendor
