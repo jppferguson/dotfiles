@@ -6,7 +6,12 @@ Dotfiles are all those files beginning with a "." in your user directory and mak
 ## Installation
 
 ### Using Git and the bootstrap script
-You can clone the repository wherever you want. (I like to keep it in `~/Projects/dotfiles`).
+You can clone the repository wherever you want. (I like to keep it in `~/.dotfiles`).
+
+The installation step requires the [XCode Command Line Tools](https://developer.apple.com/downloads), although you *should* be prompted to install these if you don't have them installed already.
+
+### Backups
+Fair warning: The bootstrap script *attempts* to backup existing dotfiles in your HOME directory, but to be safe you should probably make your own copy...
 
 ```sh
 git clone https://github.com/jppferguson/dotfiles.git ~/.dotfiles
@@ -21,7 +26,7 @@ The main file you'll want to change right off the bat is `zsh/zshrc.symlink`,
 which sets up a few paths that'll be different on your particular machine.
 
 `dot` installs some dependencies, sets sane OS X defaults, and so on.
-Tweak this script, and occasionally run `dot` from time to time to keep 
+Tweak this script, and occasionally run `dot` from time to time to keep
 your environment fresh and up-to-date. You can find this script in `bin/`.
 
 
