@@ -136,7 +136,9 @@ install_run () {
 # Interactively installs everything!
 
 install_run_all () {
-  local install_scripts=('./homebrew/install.sh' $(find . -name install.sh -not -path "./vendor/*" -not -path "./homebrew/*"  ) )
+  local install_scripts=('./homebrew/install.sh')
+  install_scripts+=($(find . -name install.sh -not -path "./vendor/*" -not -path "./homebrew/*" -not -path "./homebrew-cask/*"  ) )
+  install_scripts+=('./homebrew-cask/install.sh')
   local install_all=false always_skip_all=false skip_all=false
 
   for install_script in "${install_scripts[@]}"; do
@@ -166,4 +168,4 @@ unset localSettings
 
 
 # and we're done...
-echo "Everything installed..."
+print_fancy ".dotfiles installed"

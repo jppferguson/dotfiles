@@ -29,7 +29,7 @@ fi
 print_line "Installing Homebrew packages"
 
 # Install Homebrew packages
-brew install grc coreutils spark nvm git-extras
+brew install grc coreutils spark nvm git-extras figlet
 
 # And we're done
 print_block_end

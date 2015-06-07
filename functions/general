@@ -31,6 +31,14 @@ print_block () {
   printf "$cNo\n\n"
 }
 
+# print rainbows and unicorns
+print_fancy () {
+  local font=${2}
+  printf "$cGreen"
+  figlet -f ${font:=$(printf "small")} ${1}
+  printf "$cNo\n"
+}
+
 # prints a closing block
 print_block_end () {
   if [ ! -z "$1" ];then
