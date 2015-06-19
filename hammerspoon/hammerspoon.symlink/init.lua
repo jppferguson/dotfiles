@@ -7,6 +7,7 @@
 -- Includes
 -----------------------------------------------
 
+require "caffeine"
 require "misc"
 require "notify"
 require "spotify"
@@ -41,6 +42,7 @@ hs.hotkey.bind(mash, "r", function() reloadConfig() end)
 -----------------------------------------------
 
 hs.hotkey.bind(mash, "w", spotifyWhatTrack)
+hs.hotkey.bind(mash, ",", function() caffeineClicked() end)
 
 
 -- Window management Hotkeys
