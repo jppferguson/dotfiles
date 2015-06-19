@@ -5,7 +5,7 @@
 set -e
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
 
 print_block "Updating All The Things"
 print_line "Making sure we're up-to-date first..."

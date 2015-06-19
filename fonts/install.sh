@@ -2,10 +2,10 @@
 #
 # Install required fonts
 #
-set -x
+set -e
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
 
 print_block "Installing Fonts"
 
