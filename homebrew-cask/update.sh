@@ -15,7 +15,7 @@ while getopts 'f' flag; do
 done
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
 
 # Include ~/.localrc for any custom stuff
 . ~/.localrc

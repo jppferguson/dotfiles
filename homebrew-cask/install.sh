@@ -6,7 +6,7 @@
 ###############################################################################
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
 
 # Check for Homebrew
 if ! command_exists brew; then

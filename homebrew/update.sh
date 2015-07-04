@@ -5,7 +5,7 @@
 ###############################################################################
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
 
 # Let the user know what's happening
 print_block "Updating Homebrew"
