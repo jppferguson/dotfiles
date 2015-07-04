@@ -10,7 +10,7 @@
 # Let the user know what's happening
 print_block "Updating Homebrew"
 
-brew update
+brew update && brew upgrade --all
 
 # And we're done
 print_block_end

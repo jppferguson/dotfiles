@@ -7,9 +7,11 @@
 
 # Allow using flags when running this script directly
 forceInstall=''
-while getopts 'f' flag; do
+skipMessages=''
+while getopts 'fs' flag; do
   case "${flag}" in
     f) forceInstall='true' ;;
+    s) skipMessages='true' ;;
     *) error "Unexpected option ${flag}" ;;
   esac
 done
@@ -58,7 +60,9 @@ for app in "${apps[@]}"; do
       cask_reinstall $app
     else
       if inArray "$app" "${installedApps[@]}"; then
-        print_line "Skipping" "${app}"
+        if [ "$skipMessages" == "true" ]; then
+          print_line "Skipping" "${app}"
+        fi
       else
         cask_install $app
       fi

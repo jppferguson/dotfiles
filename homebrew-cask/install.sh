@@ -26,6 +26,6 @@ else
   brew tap caskroom/versions
 
   # Install the apps
-  sh ./homebrew-cask/update.sh
+  sh $DOTFILES/homebrew-cask/update.sh -s
 
 fi
