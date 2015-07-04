@@ -1,18 +1,30 @@
 #!/usr/bin/env bash
 #
-# Update all the things
-
+# Update all the things (or just 1-or-2)
 set -e
 
 # Include the general functions
 . $DOTFILES/functions/general
 
-print_block "Updating All The Things"
-print_line "Making sure we're up-to-date first..."
+if [ "$1" = "" ] ; then
+  print_block "Updating All The Things"
+fi
 
-cd $DOTFILES && git up
-
-cd "$(dirname $0)"/..
+# Update dotfiles to latest version
+print_line "Making sure dotfiles are up-to-date first..."
+cd $DOTFILES && git pull --ff-only
 
 # find the update.sh files and run them iteratively
-find . -name update.sh -not -path "./vendor/*" | while read updater ; do sh -c "${updater}" ; done
+if [ "$1" = "" ] ; then
+  updates=($( find . -name update.sh -not -path "./vendor/*") )
+else
+  updates=()
+  for search in "${@}"; do
+    updates+=($( find . -name update.sh -path "*${search}*" -not -path "./vendor/*") )
+  done
+fi
+
+# Loop through update.sh files and execute them
+for update in "${updates[@]}"; do
+  sh -c "${update}"
+done
