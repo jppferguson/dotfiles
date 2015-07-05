@@ -26,6 +26,9 @@ fi
 # Ask for the administrator password upfront
 sudo -v
 
+# Set the default shell to zsh
+sudo chsh -s /bin/zsh `whoami`
+
 # # Keep-alive: update existing `sudo` time stamp until we're done
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 

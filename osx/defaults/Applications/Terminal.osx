@@ -3,9 +3,6 @@
 
 echo "Setting defaults for Terminal & iTerm 2...";
 
-# Set the default shell to zsh
-chsh -s /bin/zsh
-
 # Only use UTF-8 in Terminal.app
 defaults write com.apple.terminal StringEncodings -array 4
 
