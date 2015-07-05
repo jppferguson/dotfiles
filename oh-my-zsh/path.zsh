@@ -15,3 +15,4 @@ plugins=(bower brew brew-cask colorize composer git-flow git node npm osx ruby s
 
 # disable oh-my-zsh updates entirely, only check when running `dot`
 DISABLE_AUTO_UPDATE=true
+DISABLE_UPDATE_PROMPT=true
