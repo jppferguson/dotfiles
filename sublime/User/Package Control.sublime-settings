@@ -7,6 +7,7 @@
 		"AdvancedNewFile",
 		"Alignment",
 		"AlignTab",
+		"Ansible",
 		"ApacheConf.tmLanguage",
 		"Autoprefixer",
 		"Bower",
@@ -19,15 +20,16 @@
 		"Emmet Css Snippets",
 		"FindKeyConflicts",
 		"GitGutter",
+		"Handlebars",
 		"HTML-CSS-JS Prettify",
 		"HTMLBeautify",
 		"Http Requester",
 		"Inc-Dec-Value",
 		"Jade",
-		"JavaScriptNext - ES6 Syntax",
 		"jQuery",
 		"JsFormat",
 		"JSHint",
+		"Koken",
 		"LESS",
 		"LiveStyle",
 		"LoremIpsum",
@@ -44,6 +46,7 @@
 		"SublimeLinter",
 		"SublimeLinter-jshint",
 		"TabsExtra",
-		"Theme - Spacegray"
+		"Theme - Spacegray",
+		"Vagrant"
 	]
 }
