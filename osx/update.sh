@@ -1,5 +1,8 @@
 #!/bin/sh
+#
 # Check for OS X updates
+#
+###############################################################################
 set -e
 
 # Include the general functions

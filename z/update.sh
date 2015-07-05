@@ -1,6 +1,13 @@
 #!/bin/sh
+#
 # Update z
+#
+###############################################################################
 set -e
 
-echo "\nUpdating z"
+# Include the general functions
+. $DOTFILES/functions/general
+
+print_block "Updating z";
+
 cd "$VENDOR/z" && git up
