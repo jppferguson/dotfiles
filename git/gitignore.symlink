@@ -24,8 +24,8 @@ Icon
 
 
 # Composer
-vendor
-vendor/*
+/vendor
+/vendor/*
 composer.phar
 
 
