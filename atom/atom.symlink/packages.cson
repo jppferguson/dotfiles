@@ -1,0 +1,9 @@
+packages: [
+  "atom-material-syntax"
+  "atom-material-ui"
+  "minimap"
+  "package-sync"
+  "save-session"
+  "spacegray-dark-ui"
+  "Sublime-Style-Column-Selection"
+]

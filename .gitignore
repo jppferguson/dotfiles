@@ -14,3 +14,11 @@ vendor/*
 sublime/User/*
 !sublime/User/*.sublime-settings
 !sublime/User/*.sublime-keymap
+
+# atom settings
+atom/atom.symlink/.apm
+atom/atom.symlink/.node-gyp
+atom/atom.symlink/compile-cache
+atom/atom.symlink/packages
+atom/atom.symlink/storage
+atom/atom.symlink/themes

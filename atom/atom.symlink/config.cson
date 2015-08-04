@@ -1,0 +1,28 @@
+"*":
+  "release-notes":
+    viewedVersion: "0.81.0"
+  welcome:
+    showOnStartup: false
+  core:
+    ignoredNames: [
+      ".git"
+      ".svn"
+      ".DS_Store"
+    ]
+    themes: [
+      "atom-material-ui"
+      "atom-material-syntax"
+    ]
+    hideGitIgnoredFiles: true
+  "atom-material-ui":
+    panelContrast: true
+  editor:
+    showIndentGuide: true
+    fontFamily: "Source Code Pro"
+    invisibles: {}
+    softWrapAtPreferredLineLength: true
+    fontSize: 11
+  "save-session":
+    dataSaveFolder: "~/.atom/packages/save-session/projects"
+  minimap:
+    absoluteMode: true
