@@ -1,11 +1,12 @@
 {
 	"align_indent": false,
+	"always_show_minimap_viewport": true,
 	"auto_complete": true,
 	"auto_indent": true,
 	"bold_folder_labels": true,
 	"caret_style": "phase",
 	"close_windows_when_empty": false,
-	"color_scheme": "Packages/User/base16-ocean.dark (SL).tmTheme",
+	"color_scheme": "Packages/Material Theme/schemes/Material-Theme.tmTheme",
 	"create_window_at_startup": false,
 	"detect_indentation": false,
 	"dictionary": "Packages/Language - English/en_GB.dic",
@@ -37,8 +38,15 @@
 		"Vintage"
 	],
 	"indent_to_bracket": true,
+	"line_padding_bottom": 2,
+	"line_padding_top": 2,
 	"match_brackets_angle": true,
+	"material_theme_bold_tab": true,
+	"material_theme_disable_tree_indicator": true,
+	"material_theme_small_statusbar": true,
+	"material_theme_small_tab": true,
 	"move_to_limit_on_up_down": true,
+	"overlay_scroll_bars": "enabled",
 	"rulers":
 	[
 		80
@@ -50,7 +58,7 @@
 	"spell_check": true,
 	"tab_completion": true,
 	"tab_size": 2,
-	"theme": "Spacegray.sublime-theme",
+	"theme": "Material-Theme.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_automatic_white_space": true,
 	"trim_trailing_white_space_on_save": false,
