@@ -16,4 +16,4 @@ softwareupdate -l
 print_block_end
 
 # Run the set-defaults script
-$DOTFILES/osx/set-defaults.sh
+# $DOTFILES/osx/set-defaults.sh
