@@ -18,7 +18,6 @@ vlc
 # Productivity
 1password
 alfred
-bartender
 evernote
 things
 
@@ -51,6 +50,7 @@ virtualbox
 # Design
 couleurs
 monotype-skyfonts
+rightfont
 
 # Browsers
 firefox
