@@ -1,2 +1,7 @@
+// When I'm on Windows I like to map the ctrl key to the cmd key,
+// so lets swap a few often used shortcuts from "super" to "ctrl"
 [
+  { "keys": ["ctrl+g"], "command": "find_next" },
+  { "keys": ["super+g"], "command": "show_overlay", "args": {"overlay": "goto", "text": ":"} },
+  { "keys": ["ctrl+alt+."], "command": "close_tag" }
 ]
