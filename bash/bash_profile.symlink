@@ -25,4 +25,14 @@ export LANG="en_UK"
 # You could just use `-g` instead, but I like being explicit
 complete -W "NSGlobalDomain" defaults
 
-source ~/.profile
+# using .commonrc for stuff you want shared between zsh and bash
+if [[ -a ~/.commonrc ]]
+then
+  source ~/.commonrc
+fi
+
+# use .profile if it exists
+if [[ -a ~/.profile ]]
+then
+  source ~/.profile
+fi
