@@ -1,17 +1,12 @@
 
 # Communication
-adium
-slack
 skype
-viber
 
 # Cloud
-cloudup
 dropbox
 google-drive
 
 # Media
-handbrake
 spotify
 vlc
 
@@ -22,21 +17,10 @@ evernote
 things
 
 # System
-appcleaner
-arq
-asepsis
 flux
 hammerspoon
-hazel
-liteicon
-little-snitch
-qlcolorcode
-qlmarkdown
-quicklook-json
-trim-enabler
 
 # Dev
-charles
 iterm2
 kaleidoscope
 reggy
@@ -44,12 +28,9 @@ sequel-pro
 sourcetree
 sublime-text3
 transmit
-vagrant
-virtualbox
 
 # Design
-couleurs
-monotype-skyfonts
+skyfonts
 rightfont
 
 # Browsers
@@ -60,10 +41,4 @@ google-chrome-canary
 opera
 
 # Utilities
-geekbench
-iexplorer
-shiori
-sizeup
-soulver
 the-unarchiver
-transmission
