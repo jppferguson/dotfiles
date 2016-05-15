@@ -1,0 +1,43 @@
+{
+	"history":
+	[
+		{
+			"data":
+			{
+				"args":
+				{
+					"text": "date x3",
+					"threshold": 3
+				},
+				"command": "text_pastry_insert_text",
+				"text": "date x3"
+			},
+			"key": "e65ffcdd58c50f737d2b3f3072feae4d",
+			"label": "date x3"
+		},
+		{
+			"data":
+			{
+				"args":
+				{
+					"repeat": "3",
+					"text": ""
+				},
+				"command": "text_pastry_date_range",
+				"text": "day x3"
+			},
+			"key": "63b45d1ac532bc37f8a8e6000d67c3fb",
+			"label": "day x3"
+		}
+	],
+	"last_command":
+	{
+		"args":
+		{
+			"repeat": "3",
+			"text": ""
+		},
+		"command": "text_pastry_date_range",
+		"text": "day x3"
+	}
+}

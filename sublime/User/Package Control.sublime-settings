@@ -8,9 +8,11 @@
 		"AdvancedNewFile",
 		"Alignment",
 		"AlignTab",
+		"Alternative Autocompletion",
 		"Ansible",
 		"ApacheConf.tmLanguage",
 		"Autoprefixer",
+		"Babel Snippets",
 		"Base16 Color Schemes",
 		"Better CoffeeScript",
 		"Bootstrap 3 Snippets",
@@ -18,6 +20,7 @@
 		"BracketHighlighter",
 		"Color Highlighter",
 		"Comment-Snippets",
+		"Console Wrap for js",
 		"CSS Unminifier",
 		"CSS3",
 		"DevDocs",
@@ -63,8 +66,11 @@
 		"SublimeLinter",
 		"SublimeLinter-jshint",
 		"TabsExtra",
+		"Text Pastry",
 		"Theme - Spacegray",
+		"Twig",
 		"UIkit autocomplete",
-		"Vagrant"
+		"Vagrant",
+		"WordPress"
 	]
 }
