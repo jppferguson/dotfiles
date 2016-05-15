@@ -163,3 +163,9 @@ command -v npm > /dev/null && alias npme="npm --registry http://registry.npmjs.e
 alias server="open http://localhost:8000 && python -m SimpleHTTPServer 8000"
 
 alias cleardns="sudo killall -HUP mDNSResponder"
+
+# Remove a host from known hosts when the server has changed
+alias ssh-fix="ssh-keygen -R ${1}"
+
+# Edit hosts file
+alias hostsfile="sudo nano /etc/hosts"
