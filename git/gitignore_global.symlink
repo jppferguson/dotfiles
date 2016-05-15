@@ -1,7 +1,16 @@
-*~
+# Folder view configuration files
 .DS_Store
-old
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# SublimeText workspace files are user-specific
+*.sublime-workspace
+
+# Misc project files
 timesheet.md
 todo.md
-*.tmp.bak
-*.sass-cache*
+*.tmp
+*.tmp*
+*__*
