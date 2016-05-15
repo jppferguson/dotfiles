@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# Shortcut for searching for strings across files in large websites.
+#
+#
+# USAGE:
+#
+#   $ agrep "SearchString"
+#   # => search the current directory for "SearchString"
+#
+#   $ agrep "SearchString" "Some/Dir"
+#   # => search Some/Dir for "SearchString"
+
+if [ "$2" = "" ] ; then
+  DIR="."
+else
+  DIR="$2"
+fi
+
+grep -ril --color --include=*.{php,js,css,scss,html} "$1" $DIR
