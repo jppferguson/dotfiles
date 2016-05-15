@@ -31,5 +31,8 @@ print_line "Installing Homebrew packages"
 # Install Homebrew packages
 brew install grc coreutils spark nvm git-extras figlet
 
+# Install services
+brew tap homebrew/services
+
 # And we're done
 print_block_end
