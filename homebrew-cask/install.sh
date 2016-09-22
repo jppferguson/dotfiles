@@ -20,7 +20,7 @@ else
   print_block "Installing Homebrew Cask"
 
   # Install homebrew cask
-  brew install caskroom/cask/brew-cask
+  brew tap caskroom/cask
 
   # Install the versions cask so we can install beta versions of apps
   brew tap caskroom/versions
