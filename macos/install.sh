@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Set OSX defaults
+# Set macOS defaults
 #
 set -e
 
@@ -8,4 +8,4 @@ set -e
 . ./functions/general
 
 # Run the set-defaults script
-$DOTFILES/osx/set-defaults.sh
+$DOTFILES/macos/set-defaults.sh

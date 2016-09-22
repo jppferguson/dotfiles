@@ -14,12 +14,12 @@
 # Include the general functions
 . ./functions/general
 
-# check this is actually an OSX machine
+# check this is actually an macOS machine
 if [ $(uname -s) = 'Darwin' ]
 then
-  print_block "Setting OS X defaults";
+  print_block "Setting macOS defaults";
 else
-  print_line "Not OSX... skipping OSX defaults."
+  print_line "Not macOS... skipping macOS defaults."
   exit 0
 fi
 
@@ -32,8 +32,8 @@ sudo chsh -s /bin/zsh `whoami`
 # # Keep-alive: update existing `sudo` time stamp until we're done
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-# find all the .osx default files and then run them iteratively
-default_files=( $(find . -name "*.osx" ) )
+# find all the .macos default files and then run them iteratively
+default_files=( $(find . -name "*.macos" ) )
 
 # create an array of the apps we should now kill
 # apps=(SystemUIServer cfprefsd)
@@ -46,7 +46,7 @@ do
   # create an array of the apps we should now kill
   if [[ $file == *Applications/* ]]
   then
-    app=${file//.osx/}          # remove the .osx extension
+    app=${file//.macos/}          # remove the .macos extension
     app=${app//_/ }             # remove app- prefix
     app=${app##*/}              # remove the path
     apps=("${apps[@]}" "$app")  # add to the apps array

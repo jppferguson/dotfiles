@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Check for OS X updates
+# Check for macOS updates
 #
 ###############################################################################
 set -e
@@ -8,7 +8,7 @@ set -e
 # Include the general functions
 . $DOTFILES/functions/general
 
-print_block "Checking for OSX updates";
+print_block "Checking for macOS updates";
 
 softwareupdate -l
 # we're not really doing anything for now, so just list them out
@@ -16,4 +16,4 @@ softwareupdate -l
 print_block_end
 
 # Run the set-defaults script
-# $DOTFILES/osx/set-defaults.sh
+# $DOTFILES/macos/set-defaults.sh
