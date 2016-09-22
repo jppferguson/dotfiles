@@ -5,7 +5,7 @@
 set -e
 
 # Include the general functions
-. $DOTFILES/functions/general
+. ./functions/general
 
 print_block "Installing Fonts"
 
