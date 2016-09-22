@@ -12,3 +12,6 @@ print_block "Installing Node.js"
 
 # Install with homebrew
 brew install node
+
+# Install nvm
+brew install nvm

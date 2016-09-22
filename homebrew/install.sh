@@ -29,7 +29,7 @@ fi
 print_line "Installing Homebrew packages"
 
 # Install Homebrew packages
-brew install grc coreutils spark nvm git-extras figlet
+brew install grc coreutils spark git-extras figlet
 
 # Install services
 brew tap homebrew/services
