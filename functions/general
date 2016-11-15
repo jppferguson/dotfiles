@@ -102,3 +102,13 @@ verboseOut () {
     echo $1 $cYellow$2 $cNo
   fi
 }
+
+cask_install() {
+  print_task "Installing" "${@}"
+  brew cask install "${@}"
+}
+
+cask_reinstall() {
+  print_task "Installing ${@} (with force)"
+  brew cask install --force "${@}"
+}

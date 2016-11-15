@@ -31,16 +31,6 @@ brew upgrade brew-cask 2> /dev/null
 # Install apps to /Applications (Default is: /Users/$user/Applications)
 appdir="/Applications"
 
-function cask_install() {
-  print_task "Installing" "${@}"
-  sudo brew cask install --appdir="$appdir" "${@}"
-}
-
-function cask_reinstall() {
-  print_task "Installing ${@} (with force)"
-  sudo brew cask install --appdir="$appdir" --force "${@}"
-}
-
 # get currently installed apps
 installedApps=( $(brew cask list) )
 

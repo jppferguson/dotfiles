@@ -7,13 +7,17 @@ set -e
 # Include the general functions
 . ./functions/general
 
-print_block "Installing Fonts"
+if ! command_exists brew; then
 
-# Because OSX doesn't let you install fonts by symlink,
-# lets rsync the folder, keeping things in sync
+  # No Homebrew :(
+  print_error "Please install homebrew and homebrew cask to install homebrew fonts!"
 
-OSX_FONTS_DIR=~/Library/Fonts/dotfiles-fonts
-DOTFILES_FONTS_DIR="$DOTFILES/fonts"
+else
 
-# do it
-rsync -avz --exclude-from $DOTFILES_FONTS_DIR/rsync-exclude $DOTFILES_FONTS_DIR/ $OSX_FONTS_DIR
+  # Install homebrew cask fonts
+  brew tap caskroom/fonts
+
+fi
+
+# Install the fonts
+sh $DOTFILES/fonts/update.sh -s
