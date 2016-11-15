@@ -1,28 +1,35 @@
 "*":
-  "release-notes":
-    viewedVersion: "0.81.0"
-  welcome:
-    showOnStartup: false
+  "activate-power-mode":
+    autoToggle: false
+    screenShake: {}
+  "atom-material-ui":
+    panelContrast: true
   core:
+    hideGitIgnoredFiles: true
     ignoredNames: [
       ".git"
       ".svn"
       ".DS_Store"
     ]
+    telemetryConsent: "limited"
     themes: [
       "atom-material-ui"
       "atom-material-syntax"
     ]
-    hideGitIgnoredFiles: true
-  "atom-material-ui":
-    panelContrast: true
   editor:
-    showIndentGuide: true
-    fontFamily: "Source Code Pro"
+    fontFamily: "Operator Mono, Fira Sans, Source Code Pro"
+    fontSize: 15
     invisibles: {}
+    showIndentGuide: true
+    showInvisibles: true
     softWrapAtPreferredLineLength: true
-    fontSize: 11
-  "save-session":
-    dataSaveFolder: "~/.atom/packages/save-session/projects"
+  "exception-reporting":
+    userId: "b0906014-73da-d10c-12de-a343fd7f4e2a"
   minimap:
     absoluteMode: true
+  "release-notes":
+    viewedVersion: "0.81.0"
+  "save-session":
+    dataSaveFolder: "~/.atom/packages/save-session/projects"
+  welcome:
+    showOnStartup: false
