@@ -72,5 +72,9 @@
 		"UIkit autocomplete",
 		"Vagrant",
 		"WordPress"
+	],
+	"repositories":
+	[
+		"https://github.com/titoBouzout/SideBarEnhancements/tree/st3"
 	]
 }
