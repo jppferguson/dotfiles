@@ -23,3 +23,6 @@ atom/atom.symlink/compile-cache
 atom/atom.symlink/packages
 atom/atom.symlink/storage
 atom/atom.symlink/themes
+
+# hammerspoon settings
+hammerspoon/hammerspoon.symlink/config.lua
