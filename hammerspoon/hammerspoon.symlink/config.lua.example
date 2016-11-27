@@ -1,0 +1,42 @@
+-- copy this file to config.lua and edit as needed
+--
+local config = {}
+
+-- Accessible to modules
+-----------------------------------------------
+config.global = {}   -- Accessible to modules
+config.bindings = {} -- Key bindings
+
+
+-- Logging
+config.global.loglevel = 'debug'
+
+
+-- Overide messages
+-----------------------------------------------
+config.global['system.caffeine'] = {
+  message = {
+    caffinated = '(ʘ‿ʘ) Wired',
+    decaffinated = '¬_¬ Sleepy',
+  }
+}
+
+config.global['window.management'] = {}
+config.global['window.management'].animationDuration = .1
+
+
+
+-- Overide key bindings
+-----------------------------------------------
+config.bindings.keys = { triggers = {} }
+config.bindings.keys.triggers["Spotify What Track"] = { "mash", "y" }
+
+
+-- Overide hammerspoon settings
+-----------------------------------------------
+-- Disable all window animations
+hs.window.animationDuration = 0
+
+
+----------------------------------------------------------------------------
+return config

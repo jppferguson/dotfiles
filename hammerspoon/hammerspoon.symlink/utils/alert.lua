@@ -1,9 +1,10 @@
+
+-- Alerts and notifications
 -----------------------------------------------
--- Notifications
------------------------------------------------
+local alert = {}
 
 
-function notify(message, useNotificationCenter, subtitle, infoText, callback, duration)
+function alert.onScreenNotification(message, useNotificationCenter, subtitle, infoText, callback, duration)
 
   local useNotificationCenter = useNotificationCenter == nil and true or useNotificationCenter
   local autoWithdraw = autoWithdraw == nil and true or useNotificationCenter
@@ -23,3 +24,18 @@ function notify(message, useNotificationCenter, subtitle, infoText, callback, du
   end
 
 end
+
+function alert.onScreen(message)
+  alert.onScreenNotification(message)
+end
+
+function alert.simple(message, displayIfNil)
+  if not (message == nil and not displayIfNil) then
+    alert.onScreenNotification(message,false)
+  end
+end
+
+
+
+----------------------------------------------------------------------------
+return alert
