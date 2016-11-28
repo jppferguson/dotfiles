@@ -35,6 +35,7 @@ jspoon.utils.watch = require("utils.watch")
 -----------------------------------------------
 local modules = {
   "application.toggle",
+  "audio.headphones",
   "audio.music",
   "misc.playground",
   "misc.triggers",
