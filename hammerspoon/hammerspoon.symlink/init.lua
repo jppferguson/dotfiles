@@ -37,6 +37,7 @@ local modules = {
   "application.toggle",
   "audio.headphones",
   "audio.music",
+  "keyboard.shortcuts",
   "misc.playground",
   "misc.triggers",
   "system.caffeine",

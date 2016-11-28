@@ -8,6 +8,7 @@ local hotkey = require "hs.hotkey"
 
 keys.modifiers = {}
 keys.triggers = {}
+keys.bound = {}
 keys.shortcuts = {}
 
 
@@ -73,7 +74,8 @@ end
 
 function keys.bindKey(keyName, keyBinding, fn)
   if(keys.getModifier(keyBinding[1])) then
-    keys.shortcuts[keyName] = hotkey.new(keys.getModifier(keyBinding[1]), keyBinding[2], fn)
+    keys.bound[keyName] = hotkey.new(keys.getModifier(keyBinding[1]), keyBinding[2], fn)
+    keys.shortcuts[keyName] = keyBinding
   end
 end
 
@@ -95,7 +97,7 @@ end
 
 
 function keys.activate()
-  for index, key in pairs(keys.shortcuts) do
+  for index, key in pairs(keys.bound) do
     key:enable()
   end
   log("Keys activated")
@@ -103,7 +105,7 @@ end
 
 
 function keys.deactivate()
-  for index, key in pairs(keys.shortcuts) do
+  for index, key in pairs(keys.bound) do
     key:disable()
   end
   log("Keys deactivated")

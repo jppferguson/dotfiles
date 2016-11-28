@@ -29,9 +29,9 @@ function alert.onScreen(message)
   alert.onScreenNotification(message)
 end
 
-function alert.simple(message, displayIfNil)
+function alert.simple(message, duration, displayIfNil)
   if not (message == nil and not displayIfNil) then
-    alert.onScreenNotification(message,false)
+    hs.alert(message, duration or 1)
   end
 end
 

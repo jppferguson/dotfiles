@@ -30,6 +30,10 @@ keys.triggers = {
   -----------------------------------------------
   ["Spotify What Track"] = { "mash", "w" },
 
+  -- Keyboard
+  -----------------------------------------------
+  ["Keyboard Help"] = { "mash", "/" },
+
   -- Misc
   -----------------------------------------------
   ["Test Something"] = { "mash", "t" },
@@ -42,12 +46,12 @@ keys.triggers = {
   ["Lock Mac"] = { "mash", "l" },
   -- ["Sleep Mac"] = { "mash", "s" },
 
-  ["Show Date And Time"] = { "mash", "." },
+  ["Show Date And Time"] = { "mash", "d" },
 
   ["WiFi Toggle"] = { "mash", "e" },
   ["WiFi Status"] = { "mash", "r" },
 
-  ["Window Hints"] = { "mash", "/" },
+  ["Window Hints"] = { "mash", "." },
 
   -- Window management Hotkeys
   -----------------------------------------------
