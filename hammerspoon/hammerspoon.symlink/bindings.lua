@@ -10,7 +10,7 @@ local keys = {}
 -----------------------------------------------
 keys.modifiers = {
   ['cmd'] = {"cmd"},
-  ['mash'] = {"cmd", "alt", "ctrl"},
+  ['mash'] = {"ctrl", "alt", "cmd"},
   ['alt'] = {"alt"},
 }
 

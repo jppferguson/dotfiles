@@ -17,6 +17,13 @@ function fn.merge(t1, t2)
     return t1
 end
 
+-- Get the length of a table
+-----------------------------------------------
+function fn.tablelength(T)
+  local count = 0
+  for _ in pairs(T) do count = count + 1 end
+  return count
+end
 
 -- Overide config with ./config.lua if available
 -----------------------------------------------
