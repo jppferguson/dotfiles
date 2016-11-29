@@ -5,16 +5,12 @@
 local system = {}
 
 
--- Lock Mac
------------------------------------------------
-function system.lock()
-    os.execute("/System/Library/CoreServices/Menu\\ Extras/User.menu/Contents/Resources/CGSession -suspend")
-end
-
 -- Add triggers
 -----------------------------------------------
 system.triggers = {}
-system.triggers["Lock Mac"] = system.lock
+system.triggers["System Lock"] = hs.caffeinate.lockScreen
+system.triggers["System Sleep"] = hs.caffeinate.systemSleep
+system.triggers["System Screensaver"] = hs.caffeinate.startScreensaver
 
 ----------------------------------------------------------------------------
 return system

@@ -43,8 +43,9 @@ keys.triggers = {
   -- ["Bluetooth Toggle"] = { "mash", "E" },
   ["Caffeine Toggle"] = { "mash", "," },
 
-  ["Lock Mac"] = { "mash", "l" },
-  -- ["Sleep Mac"] = { "mash", "s" },
+  ["System Lock"] = { "mash", "l" },
+  ["System Screensaver"] = { "mash", "v" },
+  ["System Sleep"] = { "mash", "s" },
 
   ["Show Date And Time"] = { "mash", "d" },
 
