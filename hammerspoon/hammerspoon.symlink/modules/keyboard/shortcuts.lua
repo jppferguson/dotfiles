@@ -5,11 +5,16 @@ local shortcuts = {}
 shortcuts.helpstr = ''
 
 shortcuts.config = {
+  helpCharPad = 30,
   fadeOut = .5,
   fadeIn = .3,
 }
 
 shortcuts.keyStrings = {
+  ["Left"] = "←",
+  ["Right"] = "→",
+  ["Up"] = "↑",
+  ["Down"] = "↓",
   ["cmd"] = "⌘",
   ["alt"] = "⌥",
   ["option"] = "⌥",
@@ -35,6 +40,10 @@ function shortcuts.calcFontSize(windowHeight, min, max)
   if(size < min) then size = min or 10 end
   if(size > max) then size = max or 30 end
   return size
+end
+
+function shortcuts.calcWindowWidth(fontSize)
+  return fontSize * shortcuts.config.helpCharPad * 1.1
 end
 
 function shortcuts.makeShortcutReplacements(str)
@@ -76,26 +85,37 @@ function shortcuts.showHelpOverlay(message)
   end
 
   local scr = hs.screen.primaryScreen():currentMode()
-
+  local windowHeight = scr.h - 400
+  local fontSize = shortcuts.calcFontSize(windowHeight, 12, 24)
+  local windowWidth = shortcuts.calcWindowWidth(fontSize)
   local ov = {
     p = 30,
-    w = 800
+    w = windowWidth,
+    h = windowHeight,
+    x = scr.w / 2 - windowWidth / 2,
+    y = scr.h / 2 - windowHeight / 2 - 50,
   }
-  ov.h = scr.h - 400
-  ov.x = scr.w / 2 - ov.w / 2
-  ov.y = scr.h / 2 - ov.h / 2 - 50
 
   shortcuts.helpOverlayX = hs.drawing.text(hs.geometry.rect(ov.x + ov.w, ov.y, 50, 50), "×")
   shortcuts.helpOverlayBG = hs.drawing.rectangle(hs.geometry.rect(ov.x, ov.y, ov.w + ov.p * 2, ov.h + ov.p * 2))
   shortcuts.helpOverlay = hs.drawing.text(hs.geometry.rect(ov.x + ov.p, ov.y + ov.p, ov.w, ov.h), message)
   local font = hs.styledtext.convertFont({
     name = 'Fira Code',
-    size = shortcuts.calcFontSize(ov.h, 12, 24)
+    size = fontSize
   }, 0)
   local textStyle = {
     font = font,
     paragraphStyle = {
-      lineSpacing = font.size * .6,
+      alignment = "left",
+      lineSpacing = fontSize * .6,
+      tabStops = {{
+        location = fontSize * .1 * 180,
+        tabStopType = 'right'
+      },
+      {
+        location = fontSize * .1 * 245,
+        tabStopType = 'right'
+      }}
     },
     shadow = {
       offset = {h = -1, w = 1},
@@ -115,11 +135,11 @@ end
 function shortcuts.updateHelpString()
   local allShortcuts = {}
   local scTable = jspoon.utils.keys.shortcuts
-  table.insert(allShortcuts, "--> KEYBOARD SHORTCUTS <--")
+  table.insert(allShortcuts, "\t KEYBOARD\tSHORTCUTS")
   for key, value in pairs(scTable) do
     local scTitle = key
     local scKeys = shortcuts.createShortcutString(value)
-    table.insert(allShortcuts, string.format("%s      %s", lpad(scTitle, 40), scKeys))
+    table.insert(allShortcuts, string.format("\t%s\t%s", scTitle, scKeys ))
   end
   table.sort(allShortcuts)
   shortcuts.helpstr = table.concat(allShortcuts,'\n')

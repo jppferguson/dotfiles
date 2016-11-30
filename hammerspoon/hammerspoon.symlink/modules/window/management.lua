@@ -6,7 +6,13 @@ local hswindow = hs.window
 local alert = jspoon.utils.alert.simple
 
 window.config = {
-  animationDuration = .2
+  animationDuration = .2,
+  grid = {
+    MARGINX = 0,
+    MARGINY = 0,
+    GRIDWIDTH = 12,
+    GRIDHEIGHT = 4,
+  }
 }
 
 -----------------------------------------------
@@ -125,6 +131,12 @@ end
 function window.start()
   -- Set the default animation duration
   hswindow.animationDuration = window.config.animationDuration
+
+  hs.grid.MARGINX    = window.config.grid.MARGINX
+  hs.grid.MARGINY    = window.config.grid.MARGINY
+  hs.grid.GRIDWIDTH  = window.config.grid.GRIDWIDTH
+  hs.grid.GRIDHEIGHT = window.config.grid.GRIDHEIGHT
+
 end
 
 
@@ -158,6 +170,19 @@ window.triggers["Window Smaller"] = function() window.increment(20, false) end
 -- Move current window to next/prev display
 window.triggers["Window Previous Screen"] = function() window.moveToScreen('prev') end
 window.triggers["Window Next Screen"]     = function() window.moveToScreen('next') end
+
+-- Shift window on grid
+window.triggers["Window Push Left"]  = function() hs.grid.pushWindowLeft(hs.window.focusedWindow()) end
+window.triggers["Window Push Right"] = function() hs.grid.pushWindowRight(hs.window.focusedWindow()) end
+window.triggers["Window Push Up"]    = function() hs.grid.pushWindowUp(hs.window.focusedWindow()) end
+window.triggers["Window Push Down"]  = function() hs.grid.pushWindowDown(hs.window.focusedWindow()) end
+
+-- Resize window on grid
+window.triggers["Window Resize Thinner"] = function() hs.grid.resizeWindowThinner(hs.window.focusedWindow()) end
+window.triggers["Window Resize Shorter"] = function() hs.grid.resizeWindowShorter(hs.window.focusedWindow()) end
+window.triggers["Window Resize Taller"]  = function() hs.grid.resizeWindowTaller(hs.window.focusedWindow()) end
+window.triggers["Window Resize Wider"]   = function() hs.grid.resizeWindowWider(hs.window.focusedWindow()) end
+
 
 -- TODO: Move current window to next/prev third
 -- TODO: Undo/redo

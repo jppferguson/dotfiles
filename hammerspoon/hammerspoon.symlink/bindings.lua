@@ -64,25 +64,26 @@ keys.triggers = {
   ["Window Maximise"] = { "mash", "m" },
   ["Window Toggle Fullscreen"] = { "mash", "f" },
 
-  -- Resize current window to half of the screen using arrow keys
-  ["Window Half Left"]   = { "mash", "Left" },
-  ["Window Half Right"]  = { "mash", "Right" },
-  ["Window Half Top"]    = { "mash", "Up" },
-  ["Window Half Bottom"] = { "mash", "Down" },
+  -- Resize current window to half of the screen
+  ["Window Half Left"]   = { "mash", "h" },
+  ["Window Half Right"]  = { "mash", "k" },
+  ["Window Half Top"]    = { "mash", "u" },
+  ["Window Half Bottom"] = { "mash", "j" },
 
-  -- Move current window to quarter of the screen using u,i,j,k
-  ["Window Quarter Top Left"]     = { "mash", "u" },
-  ["Window Quarter Top Right"]    = { "mash", "i" },
-  ["Window Quarter Bottom Right"] = { "mash", "j" },
-  ["Window Quarter Bottom Left"]  = { "mash", "k" },
+  -- Push current window around the grid
+  ["Window Push Left"]  = { "mash", "Left" },
+  ["Window Push Right"] = { "mash", "Right" },
+  ["Window Push Up"]    = { "mash", "Up" },
+  ["Window Push Down"]  = { "mash", "Down" },
 
-  -- Make current window larger/smaller
-  ["Window Larger"]  = { "mash", "=" },
-  ["Window Smaller"] = { "mash", "-" },
+  -- Resize current window to grid
+  ["Window Resize Thinner"] = { "mash", "[" },
+  ["Window Resize Wider"]   = { "mash", "]" },
+  ["Window Resize Taller"]  = { "mash", "=" },
+  ["Window Resize Shorter"] = { "mash", "'" },
 
   -- Move current window to next/prev display
-  ["Window Previous Screen"] = { "mash", "[" },
-  ["Window Next Screen"] = { "mash", "]" }
+  ["Window Next Screen"] = { "mash", "0" }
 
 }
 
