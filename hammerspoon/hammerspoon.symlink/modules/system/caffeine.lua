@@ -6,6 +6,7 @@ local alert = jspoon.utils.alert
 local log = jspoon.log
 
 caffeine.config = {
+  isActiveDir = hs.fs.temporaryDirectory() .. "caffeineIsAActive/",
   message = {
     caffinated = 'Coffee is good',
     decaffinated = 'Sleep is good'
@@ -18,6 +19,18 @@ caffeine.config = {
 
 caffeine.menubar = hs.menubar.new()
 
+function caffeine.setPersistantState(state)
+  if(state) then
+    hs.fs.mkdir(caffeine.config.isActiveDir)
+  else
+    hs.fs.rmdir(caffeine.config.isActiveDir)
+  end
+end
+
+function caffeine.getPersistantState()
+  return (hs.fs.attributes(caffeine.config.isActiveDir) ~= nil)
+end
+
 function caffeine.setDisplay(state)
     local result
     if state then
@@ -29,6 +42,8 @@ function caffeine.setDisplay(state)
         caffeine.log.i(caffeine.config.message.decaffinated)
         alert.simple(caffeine.config.message.decaffinated)
     end
+    hs.caffeinate.set("displayIdle", state)
+    caffeine.setPersistantState(state)
 end
 
 function caffeine.handleClick()
@@ -39,7 +54,7 @@ end
 function caffeine.start()
   if caffeine.menubar then
       caffeine.menubar:setClickCallback(caffeine.handleClick)
-      caffeine.setDisplay(hs.caffeinate.get("displayIdle"))
+      caffeine.setDisplay(caffeine.getPersistantState())
       caffeine.log.i(caffeine.config)
   end
 end
