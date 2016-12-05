@@ -40,6 +40,7 @@ local modules = {
   "keyboard.shortcuts",
   "misc.playground",
   "misc.triggers",
+  "misc.weather",
   "system.caffeine",
   "system.controls",
   "system.misc",

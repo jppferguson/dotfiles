@@ -24,6 +24,10 @@ config.global['system.caffeine'] = {
 config.global['window.management'] = {}
 config.global['window.management'].animationDuration = .1
 
+config.global['misc.weather'] = {
+  location = 'Edinburgh, UK',
+}
+
 
 
 -- Overide key bindings
