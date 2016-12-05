@@ -32,11 +32,11 @@ keys.triggers = {
 
   -- Keyboard
   -----------------------------------------------
-  ["Keyboard Help"] = { "mash", "/" },
+  ["Keyboard Help"] = { "mash", "/", false },
 
   -- Misc
   -----------------------------------------------
-  ["Test Something"] = { "mash", "t" },
+  ["Test Something"] = { "mash", "t", false },
 
   -- System
   -----------------------------------------------

@@ -3,59 +3,54 @@
 -----------------------------------------------
 local caffeine = {}
 local alert = jspoon.utils.alert
-local log = jspoon.log
 
 caffeine.config = {
-  isActiveDir = hs.fs.temporaryDirectory() .. "caffeineIsAActive/",
+  isActiveKey = 'jspoon_caffeine',
   message = {
     caffinated = 'Coffee is good',
     decaffinated = 'Sleep is good'
   },
   assets = {
-    iconOn = "assets/images/caffeine-on.pdf",
-    iconOff = "assets/images/caffeine-off.pdf",
+    caffinated = "assets/icons/caffeine/on.pdf",
+    decaffinated = "assets/icons/caffeine/off.pdf",
   }
 }
 
 caffeine.menubar = hs.menubar.new()
 
-function caffeine.setPersistantState(state)
-  if(state) then
-    hs.fs.mkdir(caffeine.config.isActiveDir)
-  else
-    hs.fs.rmdir(caffeine.config.isActiveDir)
-  end
-end
+function caffeine.getStateKey(state) return state and 'caffinated' or 'decaffinated' end
 
-function caffeine.getPersistantState()
-  return (hs.fs.attributes(caffeine.config.isActiveDir) ~= nil)
-end
-
-function caffeine.setDisplay(state)
-    local result
-    if state then
-        result = caffeine.menubar:setIcon(caffeine.config.assets.iconOn)
-        caffeine.log.i(caffeine.config.message.caffinated)
-        alert.simple(caffeine.config.message.caffinated)
-    else
-        result = caffeine.menubar:setIcon(caffeine.config.assets.iconOff)
-        caffeine.log.i(caffeine.config.message.decaffinated)
-        alert.simple(caffeine.config.message.decaffinated)
-    end
+function caffeine.setState(state)
+    local stateKey = caffeine.getStateKey(state)
+    -- Set menubar icon
+    caffeine.menubar:setIcon(caffeine.config.assets[stateKey])
+    -- Log state to console
+    caffeine.log.i('Setting to ' .. stateKey)
+    -- Alert message to user
+    alert.simple(caffeine.config.message[stateKey])
+    -- Set the caffeinate state
     hs.caffeinate.set("displayIdle", state)
-    caffeine.setPersistantState(state)
+    -- Persist the state across sessions
+    hs.settings.set(caffeine.config.isActiveKey, state)
+end
+
+function caffeine.toggleState()
+    caffeine.setState(hs.caffeinate.toggle("displayIdle"))
 end
 
 function caffeine.handleClick()
-    caffeine.setDisplay(hs.caffeinate.toggle("displayIdle"))
+    caffeine.toggleState()
 end
 
-
 function caffeine.start()
+  -- Get the persistant state
+  local persistedState = hs.settings.get(caffeine.config.isActiveKey)
   if caffeine.menubar then
-      caffeine.menubar:setClickCallback(caffeine.handleClick)
-      caffeine.setDisplay(caffeine.getPersistantState())
-      caffeine.log.i(caffeine.config)
+    caffeine.log.i('Persisted state was ' .. caffeine.getStateKey(persistedState))
+    -- Set the click handler
+    caffeine.menubar:setClickCallback(caffeine.handleClick)
+    -- Set the state
+    caffeine.setState(persistedState)
   end
 end
 

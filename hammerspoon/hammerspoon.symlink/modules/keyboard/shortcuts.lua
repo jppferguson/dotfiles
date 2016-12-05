@@ -3,6 +3,7 @@
 -----------------------------------------------
 local shortcuts = {}
 shortcuts.helpstr = ''
+shortcuts.table = {}
 
 shortcuts.config = {
   helpCharPad = 30,
@@ -36,7 +37,7 @@ function shortcuts.close()
 end
 
 function shortcuts.calcFontSize(windowHeight, min, max)
-  local size = windowHeight / jspoon.fn.tablelength(jspoon.utils.keys.shortcuts) * .45
+  local size = windowHeight / jspoon.fn.tablelength(shortcuts.table) * .45
   if(size < min) then size = min or 10 end
   if(size > max) then size = max or 30 end
   return size
@@ -69,7 +70,9 @@ end
 function shortcuts.createShortcutString(keysTable)
   local keys = {}
   for key, value in pairs(keysTable) do
-    keys[key] = shortcuts.makeShortcutReplacements(value)
+    if (key <= 2) then
+      keys[key] = shortcuts.makeShortcutReplacements(value)
+    end
   end
   return table.concat(keys, " + ")
 end
@@ -133,16 +136,20 @@ function shortcuts.showHelpOverlay(message)
 end
 
 function shortcuts.updateHelpString()
-  local allShortcuts = {}
   local scTable = jspoon.utils.keys.shortcuts
-  table.insert(allShortcuts, "\t KEYBOARD\tSHORTCUTS")
+  shortcuts.table = {}
+  table.insert(shortcuts.table, "\t KEYBOARD\tSHORTCUTS")
   for key, value in pairs(scTable) do
     local scTitle = key
     local scKeys = shortcuts.createShortcutString(value)
-    table.insert(allShortcuts, string.format("\t%s\t%s", scTitle, scKeys ))
+    if value[3] == false then
+      shortcuts.log.i(key .. ' is excluded from help overlay')
+    else
+      table.insert(shortcuts.table, string.format("\t%s\t%s", scTitle, scKeys ))
+    end
   end
-  table.sort(allShortcuts)
-  shortcuts.helpstr = table.concat(allShortcuts,'\n')
+  table.sort(shortcuts.table)
+  shortcuts.helpstr = table.concat(shortcuts.table,'\n')
 end
 
 
