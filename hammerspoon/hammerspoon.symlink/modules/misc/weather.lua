@@ -5,22 +5,28 @@
 
 local weather = {}
 local hammerDir = hs.fs.currentDir()
+local alert = jspoon.utils.alert
+local settings = require("hs.settings")
 local iconsDir = (hammerDir .. '/assets/icons/weather/')
 local urlBase = 'https://query.yahooapis.com/v1/public/yql?q='
 local query = 'select item.title, item.condition from weather.forecast where \
                woeid in (select woeid from geo.places(1) where text="'
 
 weather.config = {
+  cacheKey = "jspoon_weather",
   geolocation = false,
   location = "London, UK",
   refresh = 1800,
   units = "C"
 }
 
+weather.cache = settings.get(weather.config.cacheKey)
+
 
 -- https://developer.yahoo.com/weather/archive.html#codes
 -- icons by RNS, Freepik, Vectors Market, Yannick at http://www.flaticon.com
 weatherSymbols = {
+  ['load'] = (iconsDir .. 'loading.png'), -- loading
   [0] = (iconsDir .. 'tornado.png'),      -- tornado
   [1] = (iconsDir .. 'storm.png'),        -- tropical storm
   [2] = (iconsDir .. 'tornado.png'),      -- hurricane
@@ -82,9 +88,11 @@ function weather.setTitle(app, unitSys, temp)
   if unitSys == 'C' then
     local tempCelsius = weather.toCelsius(temp)
     local tempRounded = math.floor(tempCelsius * 10 + 0.5) / 10
-    app:setTitle(tempRounded .. ' °C  ')
+    app:setTitle(tempRounded .. ' °C ')
+  elseif unitSys == false then
+    app:setTitle(temp)
   else
-    app:setTitle(temp .. ' °F  ')
+    app:setTitle(temp .. ' °F ')
   end
 end
 
@@ -108,9 +116,25 @@ end
 --   return hs.http.get(weatherEndpoint)
 -- end
 
-function weather.setForLocation(location, unitSys)
+function weather.setUI(code, unitSys, temp, title, condition)
+  weather.setIcon(weather.app, code)
+  weather.setTitle(weather.app, unitSys, temp)
+  weather.app:setTooltip((title .. '\n' .. 'Condition: ' .. condition))
+  settings.set(weather.config.cacheKey, {
+    code = code,
+    unitSys = unitSys,
+    temp = temp,
+    title = title,
+    condition = condition
+  })
+
+end
+
+
+function weather.getFromService(location, unitSys)
   local weatherEndpoint = (
     urlBase .. urlencode(query .. location .. '")') .. '&format=json')
+  weather.setLoading(location)
   hs.http.asyncGet(weatherEndpoint, nil,
     function(code, body, table)
       if code ~= 200 then
@@ -118,27 +142,29 @@ function weather.setForLocation(location, unitSys)
       else
         weather.log.i('Weather for ' .. location .. ': ' .. body)
         local response = hs.json.decode(body)
-        local temp = response.query.results.channel.item.condition.temp
-        local code = tonumber(response.query.results.channel.item.condition.code)
-        local condition = response.query.results.channel.item.condition.text
-        local title = response.query.results.channel.item.title
-        weather.setIcon(weather.app, code)
-        weather.setTitle(weather.app, unitSys, temp)
-        weather.app:setTooltip((title .. '\n' .. 'Condition: ' .. condition))
+        if(response.query.results) then
+          local temp = response.query.results.channel.item.condition.temp
+          local code = tonumber(response.query.results.channel.item.condition.code)
+          local condition = response.query.results.channel.item.condition.text
+          local title = response.query.results.channel.item.title
+          weather.setUI(code, unitSys, temp, title, condition)
+        else
+          alert.simple('There was a problem loading the weather for ' .. location, 3)
+        end
       end
     end)
 end
 
 -- Get weather for current location
 -- Hammerspoon needs access to OS location services
-function weather.setForCurrentLocation(unitSys)
+function weather.getForCurrentLocation(unitSys)
   if hs.location.services_enabled() then
     hs.location.start()
     hs.timer.doAfter(1,
       function ()
         local loc = hs.location.get()
         hs.location.stop()
-        weather.setForLocation('(' .. loc.latitude .. ',' .. loc.longitude .. ')', unitSys)
+        weather.getFromService('(' .. loc.latitude .. ',' .. loc.longitude .. ')', unitSys)
       end)
   else
     weather.log.i('Location services disabled!')
@@ -147,16 +173,30 @@ end
 
 function weather.set(conf)
   if conf.geolocation then
-    weather.setForCurrentLocation(conf.units)
+    weather.getForCurrentLocation(conf.units)
   else
-    weather.setForLocation(conf.location, conf.units)
+    weather.getFromService(conf.location, conf.units)
   end
+end
+
+function weather.setLoading(location)
+  weather.setIcon(weather.app, "load")
+  weather.setTitle(weather.app, false, "Loading...")
+  weather.app:setTooltip("Loading latest weather for " .. location)
 end
 
 function weather.update()
   weather.set(weather.config)
 end
 
+function weather.init()
+  if(weather.cache) then
+    local ca = weather.cache
+    weather.setUI(ca.code, ca.unitSys, ca.temp, ca.title, ca.condition)
+  else
+    weather.set(weather.config)
+  end
+end
 
 function weather.start(conf)
   weather.app = hs.menubar.new()
@@ -165,7 +205,7 @@ function weather.start(conf)
   -- update weather every so often
   w = hs.timer.doEvery(weather.config.refresh, weather.update)
   -- set initial view
-  weather.update()
+  weather.init()
 end
 
 
