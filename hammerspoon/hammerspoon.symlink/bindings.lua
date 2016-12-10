@@ -58,10 +58,10 @@ keys.triggers = {
   -----------------------------------------------
 
   -- Center current window
-  ["Window Center"] = { "mash", "c" },
+  ["Window Toggle Center"] = { "mash", "c" },
 
   -- Resize current window to maximise or fullscreen
-  ["Window Maximise"] = { "mash", "m" },
+  ["Window Toggle Maximise"] = { "mash", "m" },
   ["Window Toggle Fullscreen"] = { "mash", "f" },
 
   -- Resize current window to half of the screen
@@ -83,7 +83,11 @@ keys.triggers = {
   ["Window Resize Shorter"] = { "mash", "'" },
 
   -- Move current window to next/prev display
-  ["Window Next Screen"] = { "mash", "0" }
+  ["Window Next Screen"] = { "mash", "0" },
+
+  -- Show interactive grid
+  ["Window Show Grid"] = { "mash", "§" },
+
 
 }
 

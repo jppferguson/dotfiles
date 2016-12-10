@@ -29,6 +29,7 @@ jspoon.config = config.global
 jspoon.utils.alert = require("utils.alert")
 jspoon.utils.keys = require("utils.keys")
 jspoon.utils.load = require("utils.load")
+jspoon.utils.misc = require("utils.misc")
 jspoon.utils.watch = require("utils.watch")
 
 -- Modules to load

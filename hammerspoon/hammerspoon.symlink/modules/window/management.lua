@@ -4,7 +4,15 @@
 local window = {}
 local hswindow = hs.window
 local alert = jspoon.utils.alert.simple
+local isRectsApproxMatch = jspoon.utils.misc.isRectsApproxMatch
+local lastWindowLocation = {
+  center = {},
+  max = {},
+}
 
+-----------------------------------------------
+-- Default Settings
+-----------------------------------------------
 window.config = {
   animationDuration = .2,
   grid = {
@@ -14,10 +22,6 @@ window.config = {
     GRIDHEIGHT = 4,
   }
 }
-
------------------------------------------------
--- Default Settings
------------------------------------------------
 
 
 -----------------------------------------------
@@ -39,19 +43,30 @@ end
 
 
 -----------------------------------------------
--- Center currently focused window
+-- Toggle align center currently focused window
 -----------------------------------------------
 
-function window.center()
+function window.toggleCenter()
   local win = hswindow.focusedWindow()
-  local f = win:frame()
+  local winFrame = win:frame()
+  local winThis = win:id()
   local screen = win:screen()
   local size = win:size()
   local max = screen:frame()
+  local centerFrame = win:frame()
 
-  f.x = 0 + (max.w / 2) - (size.w / 2)
-  f.y = 0 + (max.h / 2) - (size.h / 2)
-  win:setFrame(f)
+  centerFrame.x = 0 + (max.w / 2) - (size.w / 2)
+  centerFrame.y = 0 + (max.h / 2) - (size.h / 2)
+
+  if isRectsApproxMatch(winFrame, centerFrame) then
+    if lastWindowLocation.center[winThis] then
+      win:setFrame(lastWindowLocation.center[winThis])
+      lastWindowLocation.center[winThis] = nil
+    end
+  else
+    lastWindowLocation.center[winThis] = winFrame
+    win:setFrame(centerFrame)
+  end
 end
 
 
@@ -86,13 +101,31 @@ end
 -----------------------------------------------
 
 function window.toggleFullscreen()
-    local frontMostWindow = hswindow.focusedWindow()
-    -- if not frontMostWindow then return exitModalHotkey(hotkey) end
-    frontMostWindow:toggleFullScreen()
-    -- exitModalHotkey(hotkey)
+  local win = hswindow.focusedWindow()
+  win:toggleFullScreen()
 end
 
 
+-----------------------------------------------
+-- Toggle maximize on the current window
+-----------------------------------------------
+
+function window.toggleMaximize()
+  local win = hswindow.focusedWindow()
+  local winFrame = win:frame()
+  local winThis = win:id()
+  local screenFrame = win:screen():frame()
+
+  if isRectsApproxMatch(winFrame, screenFrame) then
+    if lastWindowLocation.max[winThis] then
+      win:setFrame(lastWindowLocation.max[winThis])
+      lastWindowLocation.max[winThis] = nil
+    end
+  else
+    lastWindowLocation.max[winThis] = winFrame
+    win:maximize()
+  end
+end
 
 
 -----------------------------------------------
@@ -124,6 +157,43 @@ function window.moveToScreen(screen)
 
 end
 
+-----------------------------------------------
+-- Push window
+-----------------------------------------------
+
+function window.pushWindow(direction)
+  local win = hs.window.focusedWindow()
+  local winGrid = hs.grid.get(win)
+  local result
+  if(direction == "up") then
+    if(winGrid.y == 0) then
+      -- make window shorter if we are at the top
+      result = hs.grid.resizeWindowShorter(win)
+    else
+      result = hs.grid.pushWindowUp(win)
+    end
+  elseif(direction == "right") then
+    if(winGrid.x == (window.config.grid.GRIDWIDTH - winGrid.w)) then
+      -- make window thinner if we are at the right
+      result = hs.grid.resizeWindowThinner(win)
+    end
+    result = hs.grid.pushWindowRight(win)
+  elseif(direction == "down") then
+    if(winGrid.y == (window.config.grid.GRIDHEIGHT - winGrid.h)) then
+      -- make window shorter if we are at the top
+      result = hs.grid.resizeWindowShorter(win)
+    end
+    result = hs.grid.pushWindowDown(win)
+  elseif(direction == "left") then
+    if(winGrid.x == 0) then
+      -- make window thinner if we are at the left
+      result = hs.grid.resizeWindowThinner(win)
+    else
+      result = hs.grid.pushWindowLeft(win)
+    end
+  end
+end
+
 
 -----------------------------------------------
 -- Start
@@ -145,10 +215,10 @@ end
 window.triggers = {}
 
 -- Center current window
-window.triggers["Window Center"] = window.center
+window.triggers["Window Toggle Center"] = window.toggleCenter
 
 -- Resize current window to maximise or fullscreen
-window.triggers["Window Maximise"] = function() window.resize( 1, 1, 0, 0) end
+window.triggers["Window Toggle Maximise"] = window.toggleMaximize
 window.triggers["Window Toggle Fullscreen"] = window.toggleFullscreen
 
 -- Resize current window to half of the screen using arrow keys
@@ -172,16 +242,20 @@ window.triggers["Window Previous Screen"] = function() window.moveToScreen('prev
 window.triggers["Window Next Screen"]     = function() window.moveToScreen('next') end
 
 -- Shift window on grid
-window.triggers["Window Push Left"]  = function() hs.grid.pushWindowLeft(hs.window.focusedWindow()) end
-window.triggers["Window Push Right"] = function() hs.grid.pushWindowRight(hs.window.focusedWindow()) end
-window.triggers["Window Push Up"]    = function() hs.grid.pushWindowUp(hs.window.focusedWindow()) end
-window.triggers["Window Push Down"]  = function() hs.grid.pushWindowDown(hs.window.focusedWindow()) end
+window.triggers["Window Push Left"]  = function() window.pushWindow('left') end
+window.triggers["Window Push Right"] = function() window.pushWindow('right') end
+window.triggers["Window Push Up"]    = function() window.pushWindow('up') end
+window.triggers["Window Push Down"]  = function() window.pushWindow('down') end
 
 -- Resize window on grid
 window.triggers["Window Resize Thinner"] = function() hs.grid.resizeWindowThinner(hs.window.focusedWindow()) end
 window.triggers["Window Resize Shorter"] = function() hs.grid.resizeWindowShorter(hs.window.focusedWindow()) end
 window.triggers["Window Resize Taller"]  = function() hs.grid.resizeWindowTaller(hs.window.focusedWindow()) end
 window.triggers["Window Resize Wider"]   = function() hs.grid.resizeWindowWider(hs.window.focusedWindow()) end
+
+-- Interactive grid
+window.triggers["Window Show Grid"] = function() hs.grid.show(nil, true) end
+window.triggers["Window Hide Grid"] = hs.grid.hide
 
 
 -- TODO: Move current window to next/prev third
