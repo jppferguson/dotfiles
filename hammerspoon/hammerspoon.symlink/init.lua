@@ -43,6 +43,7 @@ local modules = {
   "misc.triggers",
   "misc.weather",
   "system.caffeine",
+  "system.clipboard",
   "system.controls",
   "system.misc",
   "system.wifi",
