@@ -20,9 +20,9 @@ keys.triggers = {
 
   -- Apps
   -----------------------------------------------
-  -- ["Hammerspoon Console"] = { "cmd", "4" },
-  -- ["Hammerspoon Reload Config"] = { "cmd", "R" },
-  -- ["Hammerspoon Status"] = { "cmd", "\\" },
+  ["Hammerspoon Console"] = { "mash", "\\" },
+  ["Hammerspoon Reload"] = { "mash", "R", false },
+  ["Hammerspoon Docs"] = { "mash", "`" },
 
   ["Terminal Toggle"] = { "cmd", "§" },
 
@@ -37,6 +37,7 @@ keys.triggers = {
   -- Misc
   -----------------------------------------------
   ["Test Something"] = { "mash", "t", false },
+  ["Defeat Paste Blocking"] = { "mash", "v" },
 
   -- System
   -----------------------------------------------

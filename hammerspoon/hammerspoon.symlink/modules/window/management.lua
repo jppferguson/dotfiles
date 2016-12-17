@@ -34,6 +34,11 @@ function window.resize(w,h,x,y)
   local screen = win:screen()
   local max = screen:frame()
 
+  if not win then
+    window.alertCannotManipulateWindow()
+    return
+  end
+
   f.x = max.x + (max.w * x)
   f.y = max.y + (max.h * y)
   f.w = max.w * w
@@ -54,6 +59,11 @@ function window.toggleCenter()
   local size = win:size()
   local max = screen:frame()
   local centerFrame = win:frame()
+
+  if not win then
+    window.alertCannotManipulateWindow()
+    return
+  end
 
   centerFrame.x = 0 + (max.w / 2) - (size.w / 2)
   centerFrame.y = 0 + (max.h / 2) - (size.h / 2)
@@ -81,6 +91,11 @@ function window.increment(increment, increase)
   local screen = win:screen()
   local max = screen:frame()
 
+  if not win then
+    window.alertCannotManipulateWindow()
+    return
+  end
+
   if not increase then increment = 0 - increment end
 
   f.x = f.x - (increment / 2)
@@ -102,6 +117,12 @@ end
 
 function window.toggleFullscreen()
   local win = hswindow.focusedWindow()
+
+  if not win then
+    window.alertCannotManipulateWindow()
+    return
+  end
+
   win:toggleFullScreen()
 end
 
@@ -115,6 +136,11 @@ function window.toggleMaximize()
   local winFrame = win:frame()
   local winThis = win:id()
   local screenFrame = win:screen():frame()
+
+  if not win then
+    window.alertCannotManipulateWindow()
+    return
+  end
 
   if isRectsApproxMatch(winFrame, screenFrame) then
     if lastWindowLocation.max[winThis] then
@@ -137,6 +163,11 @@ function window.moveToScreen(screen)
   local screens = 0
   for _ in pairs(hs.screen.allScreens()) do screens = screens + 1 end
   hswindow.animationDuration = 0
+
+  if not win then
+    window.alertCannotManipulateWindow()
+    return
+  end
 
   if screens >= 2 then
     if screen == 'prev' then
@@ -165,6 +196,12 @@ function window.pushWindow(direction)
   local win = hs.window.focusedWindow()
   local winGrid = hs.grid.get(win)
   local result
+
+  if not win then
+    window.alertCannotManipulateWindow()
+    return
+  end
+
   if(direction == "up") then
     if(winGrid.y == 0) then
       -- make window shorter if we are at the top
@@ -192,6 +229,14 @@ function window.pushWindow(direction)
       result = hs.grid.pushWindowLeft(win)
     end
   end
+end
+
+-----------------------------------------------
+-- Check can move window
+-----------------------------------------------
+
+function window.alertCannotManipulateWindow()
+  alert.show("Can't move window")
 end
 
 

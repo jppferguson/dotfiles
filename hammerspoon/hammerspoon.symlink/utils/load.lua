@@ -3,6 +3,7 @@ local config = jspoon.config
 
 -- load a module from modules/ dir, and set up a logger for it
 function load.moduleByName(moduleName)
+  -- TODO: check if module file actually exists, and warn but dont fall over
   jspoon.loadedModules[moduleName] = require('modules.' .. moduleName)
   jspoon.loadedModules[moduleName].name = moduleName
   jspoon.loadedModules[moduleName].log = hs.logger.new(moduleName, config.loglevel)
