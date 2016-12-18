@@ -39,6 +39,7 @@ local modules = {
   "audio.headphones",
   "audio.music",
   "keyboard.shortcuts",
+  "misc.anycomplete",
   "misc.playground",
   "misc.triggers",
   "misc.weather",

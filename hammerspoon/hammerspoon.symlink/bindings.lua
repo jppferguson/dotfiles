@@ -37,6 +37,7 @@ keys.triggers = {
   -- Misc
   -----------------------------------------------
   ["Test Something"] = { "mash", "t", false },
+  ["Anycomplete"] = { "mash", "a" },
   ["Defeat Paste Blocking"] = { "mash", "v" },
 
   -- System
