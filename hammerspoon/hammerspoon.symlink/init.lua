@@ -46,6 +46,7 @@ local modules = {
   "system.clipboard",
   "system.controls",
   "system.misc",
+  "system.nightshift",
   "system.wifi",
   "window.management",
 }
