@@ -22,7 +22,7 @@
     invisibles: {}
     showIndentGuide: true
     showInvisibles: true
-    softWrapAtPreferredLineLength: true
+    softWrap: true
   "exception-reporting":
     userId: "b0906014-73da-d10c-12de-a343fd7f4e2a"
   minimap:
@@ -31,5 +31,7 @@
     viewedVersion: "0.81.0"
   "save-session":
     dataSaveFolder: "~/.atom/packages/save-session/projects"
+  wakatime:
+    apikey: "Saved in your ~/.wakatime.cfg file"
   welcome:
     showOnStartup: false

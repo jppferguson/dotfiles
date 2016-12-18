@@ -1,2 +1,2 @@
-export EDITOR='subl'
+export EDITOR='atom'
 export GITGUI='SourceTree'
