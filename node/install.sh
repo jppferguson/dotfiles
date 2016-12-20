@@ -15,3 +15,9 @@ brew install node
 
 # Install nvm
 brew install nvm
+
+# Install yarn
+brew install yarn
+
+# Run updates
+sh $DOTFILES/node/update.sh -s
