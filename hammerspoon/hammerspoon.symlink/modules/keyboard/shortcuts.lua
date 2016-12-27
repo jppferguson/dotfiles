@@ -13,16 +13,18 @@ shortcuts.config = {
 }
 
 shortcuts.keyStrings = {
-  ["Left"] = "←",
-  ["Right"] = "→",
-  ["Up"] = "↑",
-  ["Down"] = "↓",
+  ["left"] = "←",
+  ["right"] = "→",
+  ["up"] = "↑",
+  ["down"] = "↓",
   ["cmd"] = "⌘",
   ["alt"] = "⌥",
   ["option"] = "⌥",
   ["opt"] = "⌥",
   ["ctrl"] = "⌃",
-  ["shift"] = "⇧"
+  ["shift"] = "⇧",
+  ["space"] = "␣",
+  ["escape"] = "⎋",
 }
 
 --- Pads str to length len with char from right
@@ -50,8 +52,8 @@ function shortcuts.calcWindowWidth(fontSize)
 end
 
 function shortcuts.makeShortcutReplacements(str)
-  if(shortcuts.keyStrings[str]) then
-    str = shortcuts.keyStrings[str]
+  if(type(str) == "string" and shortcuts.keyStrings[string.lower(str)]) then
+    str = shortcuts.keyStrings[string.lower(str)]
   elseif(jspoon.utils.keys.modifiers[str]) then
     str = jspoon.utils.keys.modifiers[str]
   end
