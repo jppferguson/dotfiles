@@ -45,6 +45,7 @@ local modules = {
   "misc.scratchpad",
   "misc.triggers",
   "misc.weather",
+  "misc.url",
   "system.caffeine",
   "system.clipboard",
   "system.controls",
