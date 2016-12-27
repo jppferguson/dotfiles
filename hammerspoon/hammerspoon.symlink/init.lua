@@ -35,6 +35,7 @@ jspoon.utils.watch = require("utils.watch")
 -- Modules to load
 -----------------------------------------------
 local modules = {
+  "application.autohide",
   "application.toggle",
   "audio.headphones",
   "audio.music",

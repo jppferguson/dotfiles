@@ -20,6 +20,8 @@ keys.triggers = {
 
   -- Apps
   -----------------------------------------------
+  ["Autohide Toggle"] = { "mash", "F13" },
+
   ["Hammerspoon Console"] = { "mash", "\\" },
   ["Hammerspoon Reload"] = { "mash", "R", false },
   ["Hammerspoon Docs"] = { "mash", "`" },
