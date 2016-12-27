@@ -6,7 +6,7 @@
 local m = {}
 
 local ufile = require('utils.file')
-local uapp = require('utils.app')
+local alert = require('hs.alert')
 
 local lastApp = nil
 local chooser = nil
@@ -75,7 +75,7 @@ local function removeLine(line)
 
   ufile.move(tmpfile, m.config.file, true,
     function(output) end,
-    function(err) uapp.notify('Error updating Scratchpad file', err) end
+    function(err) alert.show('Error updating Scratchpad file: ' .. err) end
   )
 end
 

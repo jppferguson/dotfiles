@@ -41,6 +41,7 @@ keys.triggers = {
   ["Test Something"] = { "mash", "t", false },
   ["Anycomplete"] = { "mash", "a" },
   ["Defeat Paste Blocking"] = { "mash", "v" },
+  ["Scratchpad Toggle"] = { "mash", "Space" },
 
   -- System
   -----------------------------------------------
