@@ -7,7 +7,7 @@ local triggers = {}
 -----------------------------------------------
 triggers.triggers = {}
 triggers.triggers["Window Hints"] = hs.hints.windowHints
-triggers.triggers["Hammerspoon Console"] = hs.openConsole
+triggers.triggers["Hammerspoon Console"] = hs.toggleConsole
 triggers.triggers["Hammerspoon Reload"] = hs.reload
 triggers.triggers["Hammerspoon Docs"] = hs.hsdocs
 

@@ -1,6 +1,7 @@
 
 -- Display keyboard shortcuts
 -----------------------------------------------
+local escKey
 local shortcuts = {}
 shortcuts.helpstr = ''
 shortcuts.table = {}
@@ -34,6 +35,7 @@ function shortcuts.close()
   shortcuts.helpOverlayBG:hide(shortcuts.config.fadeOut)
   shortcuts.helpOverlayX:hide(shortcuts.config.fadeOut/2)
   shortcuts.helpOverlay:hide(shortcuts.config.fadeOut/2)
+  shortcuts.removeEscKeyBinding()
 end
 
 function shortcuts.calcFontSize(windowHeight, min, max)
@@ -156,6 +158,17 @@ end
 function shortcuts.display()
   shortcuts.updateHelpString()
   shortcuts.showHelpOverlay(shortcuts.helpstr)
+  shortcuts.addEscKeyBinding()
+end
+
+function shortcuts.addEscKeyBinding()
+  escKey = hs.hotkey.bind('', 'escape', nil, shortcuts.close)
+end
+
+function shortcuts.removeEscKeyBinding()
+  if(escKey ~= nil) then
+    escKey:delete()
+  end
 end
 
 -- Add triggers

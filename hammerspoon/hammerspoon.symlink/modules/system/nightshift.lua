@@ -12,7 +12,7 @@ m.config = {
   nightStart = '21:00',
   nightEnd = '7:00',
   transition = '4h',
-  invertAtNight = true,
+  invertAtNight = false,
   -- Disable nightshift/inversion for: Photos and screensaver/login window
   windowfilterDisable = {
     Photos = { focused = true },
