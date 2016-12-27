@@ -41,6 +41,7 @@ local modules = {
   "keyboard.shortcuts",
   "misc.anycomplete",
   "misc.playground",
+  "misc.scratchpad",
   "misc.triggers",
   "misc.weather",
   "system.caffeine",
