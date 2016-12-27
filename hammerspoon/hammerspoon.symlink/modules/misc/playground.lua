@@ -2,22 +2,22 @@
 -- Playground
 --   A place for trying stuff out
 -----------------------------------------------
-local playground = {}
-local alert = jspoon.utils.alert
+local m = {}
+local alert = require('hs.alert').show
 
 -- Toggle an application:
 -- if frontmost: hide it. if not: activate/launch it
 -----------------------------------------------
 
-function playground.testSomething()
-  alert.simple(hs.host.operatingSystemVersionString())
+function m.testSomething()
+  alert(hs.host.operatingSystemVersionString())
 end
 
 
 -- Add triggers
 -----------------------------------------------
-playground.triggers = {}
-playground.triggers["Test Something"] = playground.testSomething
+m.triggers = {}
+m.triggers["Test Something"] = m.testSomething
 
 ----------------------------------------------------------------------------
-return playground
+return m

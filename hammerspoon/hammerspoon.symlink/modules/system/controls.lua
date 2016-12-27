@@ -2,15 +2,15 @@
 -- System
 --   Mac system related functions
 -----------------------------------------------
-local system = {}
+local m = {}
 
 
 -- Add triggers
 -----------------------------------------------
-system.triggers = {}
-system.triggers["System Lock"] = hs.caffeinate.lockScreen
-system.triggers["System Sleep"] = hs.caffeinate.systemSleep
-system.triggers["System Screensaver"] = hs.caffeinate.startScreensaver
+m.triggers = {}
+m.triggers["System Lock"] = hs.caffeinate.lockScreen
+m.triggers["System Sleep"] = hs.caffeinate.systemSleep
+m.triggers["System Screensaver"] = hs.caffeinate.startScreensaver
 
 ----------------------------------------------------------------------------
-return system
+return m

@@ -3,12 +3,14 @@
 --     Mainly based on dbmrq's clipboard.lua
 --     (https://github.com/dbmrq/dotfiles/blob/master/home/.hammerspoon/clipboard.lua)
 -----------------------------------------------
-local clipboard = {}
+local m = {}
+local settings = require("hs.settings")
 local pasteboard = require("hs.pasteboard")
 local pasteboardCounter = 0
-local settings = require("hs.settings")
 
-clipboard.config = {
+m.config = {
+  -- menubar priority (lower is lefter)
+  menupriority = 1300,
   menubar = {
     historySize = 30,
     title = "✂",
@@ -18,92 +20,97 @@ clipboard.config = {
   clipboardKey = 'jspoon_clipboard',
 }
 
-clipboard.menubar = hs.menubar.new()
-clipboard.lastChange = pasteboard.changeCount()
-clipboard.history = settings.get(clipboard.config.clipboardKey) or {}
+m.lastChange = pasteboard.changeCount()
+m.history = settings.get(m.config.clipboardKey) or {}
 
-clipboard.clearAll = function()
-    pasteboard.clearContents()
-    clipboard.history = {}
-    settings.set(clipboard.config.clipboardKey, clipboard.history)
-    pasteboardCounter = pasteboard.changeCount()
+-- Clear all items from pasteboard
+m.clearAll = function()
+  pasteboard.clearContents()
+  m.history = {}
+  settings.set(m.config.clipboardKey, m.history)
+  pasteboardCounter = pasteboard.changeCount()
 end
 
-clipboard.clearLastItem = function()
-    table.remove(clipboard.history, #clipboard.history)
-    settings.set(clipboard.config.clipboardKey, clipboard.history)
-    pasteboardCounter = pasteboard.changeCount()
+-- Clear last item from pasteboard
+m.clearLastItem = function()
+  table.remove(m.history, #m.history)
+  settings.set(m.config.clipboardKey, m.history)
+  pasteboardCounter = pasteboard.changeCount()
 end
 
-clipboard.addToClipboard = function(item)
-    -- limit quantity of entries
-    while (#clipboard.history >= clipboard.config.menubar.historySize) do
-        table.remove(clipboard.history, 1)
+-- Add item from pasteboard
+m.addToClipboard = function(item)
+  -- limit quantity of entries
+  while (#m.history >= m.config.menubar.historySize) do
+    table.remove(m.history, 1)
+  end
+  table.insert(m.history, item)
+  settings.set(m.config.clipboardKey, m.history)
+end
+
+m.copyOrPaste = function(string, key)
+  if (key.alt == true) then
+    hs.eventtap.keyStrokes(string)
+  else
+    pasteboard.setContents(string)
+    last_change = pasteboard.changeCount()
+  end
+end
+
+-- Populate the pasteboard menu
+m.populateMenu = function(key)
+  menuData = {}
+  if (#m.history == 0) then
+    table.insert(menuData, {title="None", disabled = true})
+  else
+    for k, v in pairs(m.history) do
+      if string.len(v) > m.config.menubar.width then
+        table.insert(menuData, 1,
+          {title=string.sub(v, 0, m.config.menubar.width).."…",
+          fn = function() m.copyOrPaste(v, key) end })
+      else
+        table.insert(menuData, 1,
+          {title=v, fn = function() m.copyOrPaste(v, key) end })
+      end
     end
-    table.insert(clipboard.history, item)
-    settings.set(clipboard.config.clipboardKey, clipboard.history)
+  end
+  table.insert(menuData, {title="-"})
+  table.insert(menuData,
+    {title="Clear All", fn = function() m.clearAll() end })
+  return menuData
 end
 
-clipboard.copyOrPaste = function(string,key)
-    if (key.alt == true) then
-      hs.eventtap.keyStrokes(string)
-    else
-      pasteboard.setContents(string)
-      last_change = pasteboard.changeCount()
-    end
+-- Store the string that was copied in the pasteboard
+m.storeCopy = function()
+  pasteboardCounter = pasteboard.changeCount()
+  if pasteboardCounter > m.lastChange then
+    currentContents = pasteboard.getContents()
+    m.addToClipboard(currentContents)
+    m.lastChange = pasteboardCounter
+  end
 end
 
-clipboard.populateMenu = function(key)
-    menuData = {}
-    if (#clipboard.history == 0) then
-        table.insert(menuData, {title="None", disabled = true})
-    else
-        for k, v in pairs(clipboard.history) do
-            if string.len(v) > clipboard.config.menubar.width then
-                table.insert(menuData, 1,
-                    {title=string.sub(v, 0, clipboard.config.menubar.width).."…",
-                    fn = function() clipboard.copyOrPaste(v, key) end })
-            else
-                table.insert(menuData, 1,
-                    {title=v, fn = function() clipboard.copyOrPaste(v, key) end })
-            end
-        end
-    end
-    table.insert(menuData, {title="-"})
-    table.insert(menuData,
-        {title="Clear All", fn = function() clipboard.clearAll() end })
-    return menuData
-end
-
-clipboard.storeCopy = function()
-    pasteboardCounter = pasteboard.changeCount()
-    if pasteboardCounter > clipboard.lastChange then
-        currentContents = pasteboard.getContents()
-        clipboard.addToClipboard(currentContents)
-        clipboard.lastChange = pasteboardCounter
-    end
-end
-
-clipboard.start = function()
+-- Start the module
+m.start = function()
   local copy
-  clipboard.menubar:setTooltip(clipboard.config.menubar.tooltip)
-  clipboard.menubar:setTitle(clipboard.config.menubar.title)
-  clipboard.menubar:setMenu(clipboard.populateMenu)
+  m.menubar = hs.menubar.newWithPriority(m.config.menupriority)
+  m.menubar:setTooltip(m.config.menubar.tooltip)
+  m.menubar:setTitle(m.config.menubar.title)
+  m.menubar:setMenu(m.populateMenu)
 
   copy = hs.hotkey.bind({"cmd"}, "c", function()
-      copy:disable()
-      hs.eventtap.keyStroke({"cmd"}, "c")
-      copy:enable()
-      hs.timer.doAfter(1, clipboard.storeCopy)
+    copy:disable()
+    hs.eventtap.keyStroke({"cmd"}, "c")
+    copy:enable()
+    hs.timer.doAfter(1, m.storeCopy)
   end)
-
 end
 
 
 -- Add triggers
 -----------------------------------------------
-clipboard.triggers = {}
+m.triggers = {}
 
 
 ----------------------------------------------------------------------------
-return clipboard
+return m

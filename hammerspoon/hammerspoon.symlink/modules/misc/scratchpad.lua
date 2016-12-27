@@ -14,7 +14,8 @@ local menu = nil
 local visible = false
 
 m.config = {
-  menupriority = 1370,            -- menubar priority (lower is lefter)
+  -- menubar priority (lower is lefter)
+  menupriority = 1400,
   width = 60,
   file = ufile.toPath(jspoon.config.paths.base, 'scratchpad.md'),
   fileTmp = ufile.toPath(jspoon.config.paths.tmp, 'scratchpad.md'),

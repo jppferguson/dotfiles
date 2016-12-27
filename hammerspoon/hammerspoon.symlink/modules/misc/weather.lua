@@ -2,17 +2,19 @@
 --   Current conditions for your location
 --   Largely based on <https://github.com/skamsie/hs-weather>
 -------------------------------------------------------------
+local m = {}
 
-local weather = {}
-local hammerDir = hs.fs.currentDir()
-local alert = jspoon.utils.alert
+local hsDir = hs.fs.currentDir()
+local alert = require("hs.alert").show
 local settings = require("hs.settings")
-local iconsDir = (hammerDir .. '/assets/icons/weather/')
+local iconsDir = (hsDir .. '/assets/icons/weather/')
 local urlBase = 'https://query.yahooapis.com/v1/public/yql?q='
 local query = 'select item.title, item.condition from weather.forecast where \
                woeid in (select woeid from geo.places(1) where text="'
 
-weather.config = {
+m.config = {
+  -- menubar priority (lower is lefter)
+  menupriority = 100,
   cacheKey = "jspoon_weather",
   geolocation = false,
   location = "London, UK",
@@ -20,8 +22,7 @@ weather.config = {
   units = "C"
 }
 
-weather.cache = settings.get(weather.config.cacheKey)
-
+m.cache = settings.get(m.config.cacheKey)
 
 -- https://developer.yahoo.com/weather/archive.html#codes
 -- icons by RNS, Freepik, Vectors Market, Yannick at http://www.flaticon.com
@@ -78,15 +79,16 @@ weatherSymbols = {
   [3200] = (iconsDir .. 'na.png')         -- not available
 }
 
-
-function weather.setIcon(app, code)
+-- Set the weather icon, based on the code
+m.setIcon = function(app, code)
   local iconPath = code and weatherSymbols[code] or weatherSymbols[3200]
   app:setIcon(hs.image.imageFromPath(iconPath):setSize({w=16,h=16}))
 end
 
-function weather.setTitle(app, unitSys, temp)
+-- Set text in the menubar (usually the temp)
+m.setTitle = function(app, unitSys, temp)
   if unitSys == 'C' then
-    local tempCelsius = weather.toCelsius(temp)
+    local tempCelsius = m.toCelsius(temp)
     local tempRounded = math.floor(tempCelsius * 10 + 0.5) / 10
     app:setTitle(tempRounded .. ' °C ')
   elseif unitSys == false then
@@ -96,6 +98,7 @@ function weather.setTitle(app, unitSys, temp)
   end
 end
 
+-- Encode the url
 function urlencode(str)
   if (str) then
     str = string.gsub (str, "\n", "\r\n")
@@ -106,21 +109,17 @@ function urlencode(str)
   return str
 end
 
-function weather.toCelsius(f)
+-- Convert farenheit to celsius
+m.toCelsius = function(f)
   return (f - 32) * 5 / 9
 end
 
--- function getWeather(location)
---   local weatherEndpoint = (
---     urlBase .. urlencode(query .. location .. '")') .. '&format=json')
---   return hs.http.get(weatherEndpoint)
--- end
-
-function weather.setUI(code, unitSys, temp, title, condition)
-  weather.setIcon(weather.app, code)
-  weather.setTitle(weather.app, unitSys, temp)
-  weather.app:setTooltip((title .. '\n' .. 'Condition: ' .. condition))
-  settings.set(weather.config.cacheKey, {
+-- Set the menubar UI
+m.setUI = function(code, unitSys, temp, title, condition)
+  m.setIcon(m.app, code)
+  m.setTitle(m.app, unitSys, temp)
+  m.app:setTooltip((title .. '\n' .. 'Condition: ' .. condition))
+  settings.set(m.config.cacheKey, {
     code = code,
     unitSys = unitSys,
     temp = temp,
@@ -130,26 +129,28 @@ function weather.setUI(code, unitSys, temp, title, condition)
 
 end
 
-
-function weather.getFromService(location, unitSys)
+-- Get the weather forcast from the service
+m.getFromService = function(location, unitSys)
   local weatherEndpoint = (
     urlBase .. urlencode(query .. location .. '")') .. '&format=json')
-  weather.setLoading(location)
+  m.setLoading(location)
   hs.http.asyncGet(weatherEndpoint, nil,
     function(code, body, table)
       if code ~= 200 then
-        weather.log.i('Could not get weather. Response code: ' .. code)
+        m.log.i('Could not get m. Response code: ' .. code)
       else
-        weather.log.i('Weather for ' .. location .. ': ' .. body)
+        m.log.i('Weather for ' .. location .. ': ' .. body)
         local response = hs.json.decode(body)
         if(response.query.results) then
           local temp = response.query.results.channel.item.condition.temp
           local code = tonumber(response.query.results.channel.item.condition.code)
           local condition = response.query.results.channel.item.condition.text
           local title = response.query.results.channel.item.title
-          weather.setUI(code, unitSys, temp, title, condition)
+          m.setUI(code, unitSys, temp, title, condition)
         else
-          alert.simple('There was a problem loading the weather for ' .. location, 3)
+          alert('There was a problem loading the weather for ' .. location, 3)
+          -- get the cached version
+          m.init()
         end
       end
     end)
@@ -157,63 +158,68 @@ end
 
 -- Get weather for current location
 -- Hammerspoon needs access to OS location services
-function weather.getForCurrentLocation(unitSys)
+m.getForCurrentLocation = function(unitSys)
   if hs.location.services_enabled() then
     hs.location.start()
     hs.timer.doAfter(1,
       function ()
         local loc = hs.location.get()
         hs.location.stop()
-        weather.getFromService('(' .. loc.latitude .. ',' .. loc.longitude .. ')', unitSys)
+        m.getFromService('(' .. loc.latitude .. ',' .. loc.longitude .. ')', unitSys)
       end)
   else
-    weather.log.i('Location services disabled!')
+    m.log.i('Location services disabled!')
   end
 end
 
-function weather.set(conf)
+-- Get the latest weather
+m.set = function(conf)
   if conf.geolocation then
-    weather.getForCurrentLocation(conf.units)
+    m.getForCurrentLocation(conf.units)
   else
-    weather.getFromService(conf.location, conf.units)
+    m.getFromService(conf.location, conf.units)
   end
 end
 
-function weather.setLoading(location)
-  weather.setIcon(weather.app, "load")
-  weather.setTitle(weather.app, false, "Loading...")
-  weather.app:setTooltip("Loading latest weather for " .. location)
+-- Set the loading
+m.setLoading = function(location)
+  m.setIcon(m.app, "load")
+  m.setTitle(m.app, false, "Loading...")
+  m.app:setTooltip("Loading latest weather for " .. location)
 end
 
-function weather.update()
-  weather.set(weather.config)
+-- Update the weather
+m.update = function()
+  m.set(m.config)
 end
 
-function weather.init()
-  if(weather.cache) then
-    local ca = weather.cache
-    weather.setUI(ca.code, ca.unitSys, ca.temp, ca.title, ca.condition)
+-- Show the cached weather if available
+m.init = function()
+  if(m.cache) then
+    local ca = m.cache
+    m.setUI(ca.code, ca.unitSys, ca.temp, ca.title, ca.condition)
   else
-    weather.set(weather.config)
+    m.set(m.config)
   end
 end
 
-function weather.start(conf)
-  weather.app = hs.menubar.new()
+-- Start the module
+m.start = function(conf)
+  m.app = hs.menubar.newWithPriority(m.config.menupriority)
   -- refresh on click
-  weather.app:setClickCallback(weather.update)
+  m.app:setClickCallback(m.update)
   -- update weather every so often
-  w = hs.timer.doEvery(weather.config.refresh, weather.update)
+  w = hs.timer.doEvery(m.config.refresh, m.update)
   -- set initial view
-  weather.init()
+  m.init()
 end
 
 
 -- Add triggers
 -----------------------------------------------
-weather.triggers = {}
-weather.triggers["Weather Refresh"] = weather.update
+m.triggers = {}
+m.triggers["Weather Refresh"] = m.update
 
 
 ----------------------------------------------------------------------------
-return weather
+return m

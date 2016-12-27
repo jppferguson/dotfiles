@@ -4,9 +4,11 @@
 --   with a long transition duration (19->23 and 5->9)
 -----------------------------------------------
 local m = {}
-local alert = jspoon.utils.alert
+local alert = require('hs.alert').show
 
 m.config = {
+  -- menubar priority (lower is lefter)
+  menupriority = 1100,
   isActiveKey = 'jspoon_nightshift',
   colorTemp = 2800,
   nightStart = '21:00',
@@ -35,9 +37,6 @@ m.config = {
 -- Disable by default
 m.enabled = false
 
--- Setup menubar app
-m.menubar = hs.menubar.new()
-
 -- Get the state key, used in config for messages and menubar icons
 m.getStateKey = function(state) return state and 'on' or 'off' end
 
@@ -49,7 +48,7 @@ m.setState = function(state)
     -- Log state to console
     m.log.i('Setting to ' .. stateKey)
     -- Alert message to user
-    alert.simple(m.config.message[stateKey])
+    alert(m.config.message[stateKey])
     -- Set the state
     if(state) then
       hs.redshift.start(
@@ -69,7 +68,6 @@ m.setState = function(state)
     hs.settings.set(m.config.isActiveKey, state)
 end
 
-
 -- Helper: toggle nightshift state
 m.toggleState = function()
   if(m.enabled) then
@@ -87,6 +85,8 @@ m.handleClick = m.toggleState
 
 -- Start nightshift
 m.start = function()
+  -- Setup menubar app
+  m.menubar = hs.menubar.newWithPriority(m.config.menupriority)
   -- Get the persistant state
   local persistedState = hs.settings.get(m.config.isActiveKey)
   if m.menubar then

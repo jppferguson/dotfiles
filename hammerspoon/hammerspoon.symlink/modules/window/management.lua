@@ -1,9 +1,9 @@
 
 -- Window management
 -----------------------------------------------
-local window = {}
+local m = {}
 local hswindow = hs.window
-local alert = jspoon.utils.alert.simple
+local alert = require('hs.alert').show
 local isRectsApproxMatch = jspoon.utils.misc.isRectsApproxMatch
 local lastWindowLocation = {
   center = {},
@@ -13,7 +13,7 @@ local lastWindowLocation = {
 -----------------------------------------------
 -- Default Settings
 -----------------------------------------------
-window.config = {
+m.config = {
   animationDuration = .2,
   grid = {
     MARGINX = 0,
@@ -28,14 +28,14 @@ window.config = {
 -- Resize currently focused window
 -----------------------------------------------
 
-function window.resize(w,h,x,y)
+m.resize = function(w,h,x,y)
   local win = hswindow.focusedWindow()
   local f = win:frame()
   local screen = win:screen()
   local max = screen:frame()
 
   if not win then
-    window.alertCannotManipulateWindow()
+    m.alertCannotManipulateWindow()
     return
   end
 
@@ -51,7 +51,7 @@ end
 -- Toggle align center currently focused window
 -----------------------------------------------
 
-function window.toggleCenter()
+m.toggleCenter = function()
   local win = hswindow.focusedWindow()
   local winFrame = win:frame()
   local winThis = win:id()
@@ -61,7 +61,7 @@ function window.toggleCenter()
   local centerFrame = win:frame()
 
   if not win then
-    window.alertCannotManipulateWindow()
+    m.alertCannotManipulateWindow()
     return
   end
 
@@ -84,7 +84,7 @@ end
 -- Increment resize currently focused window
 -----------------------------------------------
 
-function window.increment(increment, increase)
+m.increment = function(increment, increase)
 
   local win = hswindow.focusedWindow()
   local f = win:frame()
@@ -92,7 +92,7 @@ function window.increment(increment, increase)
   local max = screen:frame()
 
   if not win then
-    window.alertCannotManipulateWindow()
+    m.alertCannotManipulateWindow()
     return
   end
 
@@ -115,11 +115,11 @@ end
 -- Toggle fullscreen on the current window
 -----------------------------------------------
 
-function window.toggleFullscreen()
+m.toggleFullscreen = function()
   local win = hswindow.focusedWindow()
 
   if not win then
-    window.alertCannotManipulateWindow()
+    m.alertCannotManipulateWindow()
     return
   end
 
@@ -131,14 +131,14 @@ end
 -- Toggle maximize on the current window
 -----------------------------------------------
 
-function window.toggleMaximize()
+m.toggleMaximize = function()
   local win = hswindow.focusedWindow()
   local winFrame = win:frame()
   local winThis = win:id()
   local screenFrame = win:screen():frame()
 
   if not win then
-    window.alertCannotManipulateWindow()
+    m.alertCannotManipulateWindow()
     return
   end
 
@@ -158,14 +158,14 @@ end
 -- Move current window to another screen
 -----------------------------------------------
 
-function window.moveToScreen(screen)
+m.moveToScreen = function(screen)
   local win = hswindow.focusedWindow()
   local screens = 0
   for _ in pairs(hs.screen.allScreens()) do screens = screens + 1 end
   hswindow.animationDuration = 0
 
   if not win then
-    window.alertCannotManipulateWindow()
+    m.alertCannotManipulateWindow()
     return
   end
 
@@ -192,13 +192,13 @@ end
 -- Push window
 -----------------------------------------------
 
-function window.pushWindow(direction)
+m.pushWindow = function(direction)
   local win = hs.window.focusedWindow()
   local winGrid = hs.grid.get(win)
   local result
 
   if not win then
-    window.alertCannotManipulateWindow()
+    m.alertCannotManipulateWindow()
     return
   end
 
@@ -235,76 +235,73 @@ end
 -- Check can move window
 -----------------------------------------------
 
-function window.alertCannotManipulateWindow()
-  alert.show("Can't move window")
+m.alertCannotManipulateWindow = function()
+  alert("Can't move window")
 end
 
 
 -----------------------------------------------
 -- Start
 -----------------------------------------------
-function window.start()
+function m.start()
   -- Set the default animation duration
-  hswindow.animationDuration = window.config.animationDuration
+  hswindow.animationDuration = m.config.animationDuration
 
-  hs.grid.MARGINX    = window.config.grid.MARGINX
-  hs.grid.MARGINY    = window.config.grid.MARGINY
-  hs.grid.GRIDWIDTH  = window.config.grid.GRIDWIDTH
-  hs.grid.GRIDHEIGHT = window.config.grid.GRIDHEIGHT
+  hs.grid.MARGINX    = m.config.grid.MARGINX
+  hs.grid.MARGINY    = m.config.grid.MARGINY
+  hs.grid.GRIDWIDTH  = m.config.grid.GRIDWIDTH
+  hs.grid.GRIDHEIGHT = m.config.grid.GRIDHEIGHT
 
 end
 
 
 -- Add triggers
 -----------------------------------------------
-window.triggers = {}
+m.triggers = {}
 
 -- Center current window
-window.triggers["Window Toggle Center"] = window.toggleCenter
+m.triggers["Window Toggle Center"] = m.toggleCenter
 
 -- Resize current window to maximise or fullscreen
-window.triggers["Window Toggle Maximise"] = window.toggleMaximize
-window.triggers["Window Toggle Fullscreen"] = window.toggleFullscreen
+m.triggers["Window Toggle Maximise"] = m.toggleMaximize
+m.triggers["Window Toggle Fullscreen"] = m.toggleFullscreen
 
 -- Resize current window to half of the screen using arrow keys
-window.triggers["Window Half Left"]   = function() window.resize(.5, 1, 0, 0) end
-window.triggers["Window Half Right"]  = function() window.resize(.5, 1,.5, 0) end
-window.triggers["Window Half Top"]    = function() window.resize( 1,.5, 0, 0) end
-window.triggers["Window Half Bottom"] = function() window.resize( 1,.5, 0,.5) end
+m.triggers["Window Half Left"]   = function() m.resize(.5, 1, 0, 0) end
+m.triggers["Window Half Right"]  = function() m.resize(.5, 1,.5, 0) end
+m.triggers["Window Half Top"]    = function() m.resize( 1,.5, 0, 0) end
+m.triggers["Window Half Bottom"] = function() m.resize( 1,.5, 0,.5) end
 
 -- Move current window to quarter of the screen using u,i,j,k
-window.triggers["Window Quarter Top Left"]     = function() window.resize(.5,.5, 0, 0) end
-window.triggers["Window Quarter Top Right"]    = function() window.resize(.5,.5,.5, 0) end
-window.triggers["Window Quarter Bottom Right"] = function() window.resize(.5,.5, 0,.5) end
-window.triggers["Window Quarter Bottom Left"]  = function() window.resize(.5,.5,.5,.5) end
+m.triggers["Window Quarter Top Left"]     = function() m.resize(.5,.5, 0, 0) end
+m.triggers["Window Quarter Top Right"]    = function() m.resize(.5,.5,.5, 0) end
+m.triggers["Window Quarter Bottom Right"] = function() m.resize(.5,.5, 0,.5) end
+m.triggers["Window Quarter Bottom Left"]  = function() m.resize(.5,.5,.5,.5) end
 
 -- Make current window larger/smaller
-window.triggers["Window Larger"]  = function() window.increment(20, true) end
-window.triggers["Window Smaller"] = function() window.increment(20, false) end
+m.triggers["Window Larger"]  = function() m.increment(20, true) end
+m.triggers["Window Smaller"] = function() m.increment(20, false) end
 
 -- Move current window to next/prev display
-window.triggers["Window Previous Screen"] = function() window.moveToScreen('prev') end
-window.triggers["Window Next Screen"]     = function() window.moveToScreen('next') end
+m.triggers["Window Previous Screen"] = function() m.moveToScreen('prev') end
+m.triggers["Window Next Screen"]     = function() m.moveToScreen('next') end
 
 -- Shift window on grid
-window.triggers["Window Push Left"]  = function() window.pushWindow('left') end
-window.triggers["Window Push Right"] = function() window.pushWindow('right') end
-window.triggers["Window Push Up"]    = function() window.pushWindow('up') end
-window.triggers["Window Push Down"]  = function() window.pushWindow('down') end
+m.triggers["Window Push Left"]  = function() m.pushWindow('left') end
+m.triggers["Window Push Right"] = function() m.pushWindow('right') end
+m.triggers["Window Push Up"]    = function() m.pushWindow('up') end
+m.triggers["Window Push Down"]  = function() m.pushWindow('down') end
 
 -- Resize window on grid
-window.triggers["Window Resize Thinner"] = function() hs.grid.resizeWindowThinner(hs.window.focusedWindow()) end
-window.triggers["Window Resize Shorter"] = function() hs.grid.resizeWindowShorter(hs.window.focusedWindow()) end
-window.triggers["Window Resize Taller"]  = function() hs.grid.resizeWindowTaller(hs.window.focusedWindow()) end
-window.triggers["Window Resize Wider"]   = function() hs.grid.resizeWindowWider(hs.window.focusedWindow()) end
+m.triggers["Window Resize Thinner"] = function() hs.grid.resizeWindowThinner(hs.window.focusedWindow()) end
+m.triggers["Window Resize Shorter"] = function() hs.grid.resizeWindowShorter(hs.window.focusedWindow()) end
+m.triggers["Window Resize Taller"]  = function() hs.grid.resizeWindowTaller(hs.window.focusedWindow()) end
+m.triggers["Window Resize Wider"]   = function() hs.grid.resizeWindowWider(hs.window.focusedWindow()) end
 
 -- Interactive grid
-window.triggers["Window Show Grid"] = function() hs.grid.show(nil, true) end
-window.triggers["Window Hide Grid"] = hs.grid.hide
+m.triggers["Window Show Grid"] = function() hs.grid.show(nil, true) end
+m.triggers["Window Hide Grid"] = hs.grid.hide
 
-
--- TODO: Move current window to next/prev third
--- TODO: Undo/redo
 
 ----------------------------------------------------------------------------
-return window
+return m

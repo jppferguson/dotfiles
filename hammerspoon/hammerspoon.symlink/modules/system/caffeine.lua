@@ -1,10 +1,12 @@
 -- Caffeine
 --   Keep computer awake
 -----------------------------------------------
-local caffeine = {}
-local alert = jspoon.utils.alert
+local m = {}
+local alert = require('hs.alert').show
 
-caffeine.config = {
+m.config = {
+  -- menubar priority (lower is lefter)
+  menupriority = 1200,
   isActiveKey = 'jspoon_caffeine',
   message = {
     caffinated = 'Coffee is good',
@@ -16,50 +18,54 @@ caffeine.config = {
   }
 }
 
-caffeine.menubar = hs.menubar.new()
+-- Get the state key (used for getting the menubar icon and message)
+m.getStateKey = function(state) return state and 'caffinated' or 'decaffinated' end
 
-function caffeine.getStateKey(state) return state and 'caffinated' or 'decaffinated' end
-
-function caffeine.setState(state)
-    local stateKey = caffeine.getStateKey(state)
-    -- Set menubar icon
-    caffeine.menubar:setIcon(caffeine.config.assets[stateKey])
-    -- Log state to console
-    caffeine.log.i('Setting to ' .. stateKey)
-    -- Alert message to user
-    alert.simple(caffeine.config.message[stateKey])
-    -- Set the caffeinate state
-    hs.caffeinate.set("displayIdle", state)
-    -- Persist the state across sessions
-    hs.settings.set(caffeine.config.isActiveKey, state)
+-- Set the caffinated state and persist it
+m.setState = function(state)
+  local stateKey = m.getStateKey(state)
+  -- Set menubar icon
+  m.menubar:setIcon(m.config.assets[stateKey])
+  -- Log state to console
+  m.log.i('Setting to ' .. stateKey)
+  -- Alert message to user
+  alert(m.config.message[stateKey])
+  -- Set the caffeinate state
+  hs.caffeinate.set("displayIdle", state)
+  -- Persist the state across sessions
+  hs.settings.set(m.config.isActiveKey, state)
 end
 
-function caffeine.toggleState()
-    caffeine.setState(hs.caffeinate.toggle("displayIdle"))
+-- Toggle the state
+m.toggleState = function()
+  m.setState(hs.caffeinate.toggle("displayIdle"))
 end
 
-function caffeine.handleClick()
-    caffeine.toggleState()
+-- Handle clicks on the menubar icon
+m.handleClick = function()
+  m.toggleState()
 end
 
-function caffeine.start()
+-- Start the module
+m.start = function()
+  m.menubar = hs.menubar.newWithPriority(m.config.menupriority)
   -- Get the persistant state
-  local persistedState = hs.settings.get(caffeine.config.isActiveKey)
-  if caffeine.menubar then
-    caffeine.log.i('Persisted state was ' .. caffeine.getStateKey(persistedState))
+  local persistedState = hs.settings.get(m.config.isActiveKey)
+  if m.menubar then
+    m.log.i('Persisted state was ' .. m.getStateKey(persistedState))
     -- Set the click handler
-    caffeine.menubar:setClickCallback(caffeine.handleClick)
+    m.menubar:setClickCallback(m.handleClick)
     -- Set the state
-    caffeine.setState(persistedState)
+    m.setState(persistedState)
   end
 end
 
 
 -- Add triggers
 -----------------------------------------------
-caffeine.triggers = {}
-caffeine.triggers["Caffeine Toggle"] = caffeine.handleClick
+m.triggers = {}
+m.triggers["Caffeine Toggle"] = m.handleClick
 
 
 ----------------------------------------------------------------------------
-return caffeine
+return m

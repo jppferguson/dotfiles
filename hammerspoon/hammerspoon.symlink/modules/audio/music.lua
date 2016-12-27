@@ -2,18 +2,18 @@
 -- Music
 --   Music related stuff
 -----------------------------------------------
-local music = {}
+local m = {}
 
-function music.spotifyWhatTrack()
+-- Display the currently playing track in Spotify
+m.spotifyWhatTrack = function()
   hs.spotify.displayCurrentTrack()
 end
 
 
 -- Add triggers
 -----------------------------------------------
-music.triggers = {}
-music.triggers["Spotify What Track"] = music.spotifyWhatTrack
-
+m.triggers = {}
+m.triggers["Spotify What Track"] = m.spotifyWhatTrack
 
 ----------------------------------------------------------------------------
-return music
+return m

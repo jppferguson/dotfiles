@@ -13,7 +13,7 @@ m.config = {
   }
 }
 
-
+-- Create the chooser instance
 m.complete = function()
   local current = hs.application.frontmostApplication()
 
@@ -45,6 +45,7 @@ m.complete = function()
 
 end
 
+-- Set the chooser UI to light/dark and display it
 m.setUIAndShow = function(chooserInstance)
   chooserInstance:bgDark(m.config.ui.dark)
   chooserInstance:fgColor(m.config.ui.fgColour)

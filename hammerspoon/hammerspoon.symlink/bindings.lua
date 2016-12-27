@@ -55,7 +55,6 @@ keys.triggers = {
   ["Show Date And Time"] = { "mash", "d" },
 
   ["WiFi Toggle"] = { "mash", "F5" },
-  ["WiFi Status"] = { "mash", "F6" },
 
   ["Window Hints"] = { "mash", "." },
 

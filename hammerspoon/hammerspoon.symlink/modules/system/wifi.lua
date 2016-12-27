@@ -2,15 +2,16 @@
 -- Wifi
 --   Notify on wifi changes
 -----------------------------------------------
-local wifi = {}
-local alert = jspoon.utils.alert
+local m = {}
+local alert = require('hs.alert').show
+local wifi = require('hs.wifi')
 
 -- keep track of the previously connected network
-local lastNetwork = hs.wifi.currentNetwork()
+local lastNetwork = wifi.currentNetwork()
 
 -- callback called when wifi network changes
 local function ssidChangedCallback()
-    local newNetwork = hs.wifi.currentNetwork()
+    local newNetwork = wifi.currentNetwork()
 
     -- send notification if we're on a different network than we were before
     if lastNetwork ~= newNetwork then
@@ -18,7 +19,7 @@ local function ssidChangedCallback()
         title = 'Wi-Fi Status',
         subTitle = newNetwork and 'Network:' or 'Disconnected',
         informativeText = newNetwork,
-        contentImage = wifi.cfg.icon,
+        contentImage = m.cfg.icon,
         autoWithdraw = true,
         hasActionButton = false,
       }):send()
@@ -27,39 +28,40 @@ local function ssidChangedCallback()
     end
 end
 
-function wifi.start()
-  wifi.watcher = hs.wifi.watcher.new(ssidChangedCallback)
-  wifi.watcher:start()
-end
-
-function wifi.stop()
-  wifi.watcher:stop()
-  wifi.watcher = nil
-end
-
-
-function wifi.status()
+-- Get the wifi status
+m.status = function()
   output = io.popen("networksetup -getairportpower en0", "r")
   result = output:read()
   return result:find(": On") and "on" or "off"
 end
 
-function wifi.toggle()
-  if wifi.status() == "on" then
-    alert.simple("Wi-Fi: Off")
+-- Toggle the wifi on and off
+m.toggle = function()
+  if m.status() == "on" then
+    alert("Wi-Fi: Off")
     os.execute("networksetup -setairportpower en0 off")
   else
-    alert.simple("Wi-Fi: On")
+    alert("Wi-Fi: On")
     os.execute("networksetup -setairportpower en0 on")
   end
 end
 
+-- Start the module
+m.start = function()
+  m.watcher = wifi.watcher.new(ssidChangedCallback)
+  m.watcher:start()
+end
+
+-- Stop the module
+m.stop = function()
+  m.watcher:stop()
+  m.watcher = nil
+end
 
 -- Add triggers
 -----------------------------------------------
-wifi.triggers = {}
-wifi.triggers["WiFi Status"] = wifi.status
-wifi.triggers["WiFi Toggle"] = wifi.toggle
+m.triggers = {}
+m.triggers["WiFi Toggle"] = m.toggle
 
 ----------------------------------------------------------------------------
-return wifi
+return m

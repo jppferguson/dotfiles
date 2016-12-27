@@ -2,22 +2,26 @@
 -- Headphones
 --   Mute when headphones unplugged
 -----------------------------------------------
-local headphones = {}
-local alert = jspoon.utils.alert
+local m = {}
+local alert = require('hs.alert')
 
--- Mute on jack in/out
-function headphones.audioCallback(uid, eventName, eventScope, channelIdx)
+m.config = {
+  message = 'Headphone jack changed, muting.'
+}
+
+-- Mute on headphone jack plugged/unplugged
+m.audioCallback = function(uid, eventName, eventScope, channelIdx)
   if eventName == 'jack' then
-    alert.simple("Headphone jack changed, muting.")
+    alert.show(m.config.message)
     hs.audiodevice.defaultOutputDevice():setVolume(0)
   end
 end
 
-function headphones.start()
+m.start = function()
   local defaultDevice = hs.audiodevice.defaultOutputDevice()
-  defaultDevice:watcherCallback(headphones.audioCallback);
+  defaultDevice:watcherCallback(m.audioCallback);
   defaultDevice:watcherStart();
 end
 
 ----------------------------------------------------------------------------
-return headphones
+return m
