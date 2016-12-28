@@ -49,7 +49,7 @@ keys.triggers = {
   ["Caffeine Toggle"] = { "mash", "," },
 
   ["System Lock"] = { "mash", "l" },
-  ["System Screensaver"] = { "mash", "v" },
+  ["System Screensaver"] = { "mash", "F6" },
   ["System Sleep"] = { "mash", "s" },
 
   ["Show Date And Time"] = { "mash", "d" },
