@@ -7,6 +7,10 @@ jspoon.loadedModules = {}
 
 jspoon.fn = require("utils.functions")
 
+-- Add break in console
+print("\n--------------------------")
+print(" →  (Re)loading JSpoon  ←")
+print("--------------------------\n")
 
 -- Config
 ---- Load default first, overrides second
