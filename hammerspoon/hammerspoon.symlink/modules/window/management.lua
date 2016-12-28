@@ -210,13 +210,13 @@ m.pushWindow = function(direction)
       result = hs.grid.pushWindowUp(win)
     end
   elseif(direction == "right") then
-    if(winGrid.x == (window.config.grid.GRIDWIDTH - winGrid.w)) then
+    if(winGrid.x == (m.config.grid.GRIDWIDTH - winGrid.w)) then
       -- make window thinner if we are at the right
       result = hs.grid.resizeWindowThinner(win)
     end
     result = hs.grid.pushWindowRight(win)
   elseif(direction == "down") then
-    if(winGrid.y == (window.config.grid.GRIDHEIGHT - winGrid.h)) then
+    if(winGrid.y == (m.config.grid.GRIDHEIGHT - winGrid.h)) then
       -- make window shorter if we are at the top
       result = hs.grid.resizeWindowShorter(win)
     end
