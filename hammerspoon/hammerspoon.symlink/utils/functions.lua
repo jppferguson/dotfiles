@@ -2,6 +2,7 @@
 -- Helper functions
 -----------------------------------------------
 local fn = {}
+local strUtil = require('utils.string')
 
 
 -- Deep merge a table
@@ -34,6 +35,16 @@ function fn.configOveride(defaults)
     config = require(configFile)
   end
   return fn.merge(defaults, config)
+end
+
+-- Print a block in the console
+-----------------------------------------------
+function fn.printBlock(str)
+  local strLen = string.len(str) + 2
+  local hr = strUtil.lpad('', strLen, '-')
+  print("\n" .. hr)
+  print(" " .. str)
+  print(hr .. "\n")
 end
 
 ----------------------------------------------------------------------------

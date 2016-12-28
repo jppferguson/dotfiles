@@ -8,9 +8,7 @@ jspoon.loadedModules = {}
 jspoon.fn = require("utils.functions")
 
 -- Add break in console
-print("\n--------------------------")
-print(" →  (Re)loading JSpoon  ←")
-print("--------------------------\n")
+jspoon.fn.printBlock("(Re)loading JSpoon")
 
 -- Config
 ---- Load default first, overrides second
@@ -58,6 +56,11 @@ local modules = {
   "window.management",
 }
 
+
+-- Adjust some modules default logging
+-----------------------------------------------
+require("hs.hotkey").setLogLevel("warning")
+
 -- Load, configure, and start each module
 -----------------------------------------------
 jspoon.loadedModules = jspoon.utils.load.all(modules)
@@ -78,4 +81,5 @@ jspoon.utils.watch.configPath("utils/")
 
 -- Let us know we've got the latest and greatest
 ------------------------------------------------
-jspoon.utils.alert.onScreen("(Re)loaded Hammerspoon config")
+jspoon.utils.alert.onScreen("(Re)loaded JSpoon")
+jspoon.fn.printBlock("JSpoon Loaded")
