@@ -5,7 +5,6 @@ jspoon = {}
 jspoon.utils = {}
 jspoon.loadedModules = {}
 
-jspoon.log = require("utils.log")
 jspoon.fn = require("utils.functions")
 
 

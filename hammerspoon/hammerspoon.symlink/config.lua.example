@@ -9,7 +9,7 @@ config.bindings = {} -- Key bindings
 
 
 -- Logging
-config.global.loglevel = 'debug'
+config.global.loglevel = 'warning'
 
 
 -- Overide messages
