@@ -6,6 +6,7 @@ jspoon.utils = {}
 jspoon.loadedModules = {}
 
 jspoon.fn = require("utils.functions")
+jspoon.utils.file = require("utils.file")
 
 -- Add break in console
 jspoon.fn.printBlock("(Re)loading JSpoon")
@@ -13,10 +14,21 @@ jspoon.fn.printBlock("(Re)loading JSpoon")
 -- Config
 ---- Load default first, overrides second
 -----------------------------------------------
-local config = {
-  bindings = require('bindings'),
-  global = {},
-}
+local config = {}
+config.bindings = require('bindings')
+config.global = {}
+
+-- File paths
+config.global.paths = {}
+config.global.paths.base   = os.getenv('HOME')
+config.global.paths.tmp    = os.getenv('TMPDIR')
+config.global.paths.cloud  = jspoon.utils.file.toPath(config.global.paths.base, 'Dropbox')
+config.global.paths.dump   = jspoon.utils.file.toPath(config.global.paths.cloud, 'Actions/Dump')
+config.global.paths.hs     = jspoon.utils.file.toPath(config.global.paths.base, '.hammerspoon')
+config.global.paths.assets = jspoon.utils.file.toPath(config.global.paths.hs,   'assets')
+
+-- Default log level
+config.global.loglevel = 'warning'
 
 -- Overide config with local file
 jspoon.fn.configOveride(config)

@@ -18,6 +18,23 @@ function fn.merge(t1, t2)
     return t1
 end
 
+-- Deep merge a table without overriding the first
+--------------------------------------------------
+function fn.mergeNoOveride(t1, t2)
+  local merged = {}
+  for k, v in pairs(t1) do
+    merged[k] = v
+  end
+  for k, v in pairs(t2) do
+    if (type(v) == "table") and (type(merged[k] or false) == "table") then
+      fn.mergeNoOveride(merged[k], t2[k])
+    else
+      merged[k] = v
+    end
+  end
+  return merged
+end
+
 -- Get the length of a table
 -----------------------------------------------
 function fn.tablelength(T)
@@ -46,6 +63,14 @@ function fn.printBlock(str)
   print(" " .. str)
   print(hr .. "\n")
 end
+
+-- Inspect a variable
+-----------------------------------------------
+function fn.inspect(v)
+  print(hs.inspect(v))
+end
+
+
 
 ----------------------------------------------------------------------------
 return fn

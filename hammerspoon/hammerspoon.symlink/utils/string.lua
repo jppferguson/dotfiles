@@ -44,7 +44,7 @@ lib.beginsWith = function(str, other)
    return string.sub(str, 1, string.len(other)) == other
 end
 
--- Does a s ends with another string?
+-- Does a string ends with another string?
 -- @returns Boolean
 lib.endsWith = function(str, other)
    return string.sub(str, -string.len(other)) == other

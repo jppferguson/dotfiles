@@ -7,6 +7,7 @@ local m = {}
 
 local ufile = require('utils.file')
 local alert = require('hs.alert')
+local config = jspoon.config
 
 local lastApp = nil
 local chooser = nil
@@ -17,8 +18,8 @@ m.config = {
   -- menubar priority (lower is lefter)
   menupriority = 1400,
   width = 60,
-  file = ufile.toPath(jspoon.config.paths.base, 'scratchpad.md'),
-  fileTmp = ufile.toPath(jspoon.config.paths.tmp, 'scratchpad.md'),
+  file = ufile.toPath(config.paths.base, 'scratchpad.md'),
+  fileTmp = ufile.toPath(config.paths.tmp, 'scratchpad.md'),
   menubar = {
     icon = 'assets/icons/scratchpad/icon.pdf',
     tooltip = 'Scratchpad',
