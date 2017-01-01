@@ -9,6 +9,10 @@ local wifi = require('hs.wifi')
 -- keep track of the previously connected network
 local lastNetwork = wifi.currentNetwork()
 
+m.config = {
+  icon = 'assets/icons/wifi/airport.png'
+}
+
 -- callback called when wifi network changes
 local function ssidChangedCallback()
     local newNetwork = wifi.currentNetwork()
@@ -19,7 +23,7 @@ local function ssidChangedCallback()
         title = 'Wi-Fi Status',
         subTitle = newNetwork and 'Network:' or 'Disconnected',
         informativeText = newNetwork,
-        contentImage = m.cfg.icon,
+        contentImage = m.config.icon,
         autoWithdraw = true,
         hasActionButton = false,
       }):send()
