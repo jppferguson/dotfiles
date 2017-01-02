@@ -22,6 +22,7 @@ local watch = {}
 
 local paths = globals.paths
 paths.desktop = ufile.toPath(globals.paths.base, 'Desktop')
+paths.desktopArchive = ufile.toPath(paths.desktop, 'Archive')
 paths.downloads = ufile.toPath(globals.paths.base, 'Downloads')
 paths.downloadsArchive = ufile.toPath(paths.downloads, 'Archive')
 
@@ -34,6 +35,17 @@ m.config = {
   waitTime = 5,
   -- paths to watch
   watchers = {
+    -- clean up desktop every week
+    desktop = {
+      dir = paths.desktop,
+      enabled = true,
+      oldFiles = {
+        excludeColourTagged = true,
+        move = paths.desktopArchive,
+        time = TIME.WEEK,
+      },
+    },
+    -- clean up downloads every week
     downloads = {
       dir = paths.downloads,
       enabled = false,
@@ -43,6 +55,7 @@ m.config = {
         time = TIME.WEEK,
       },
     },
+    -- sort out downloads archive
     downloadsArchive = {
       dir = paths.downloadsArchive,
       enabled = false,
@@ -89,6 +102,7 @@ m.config = {
         },
       },
     },
+    -- move stuff in dump to desktop after 6 weeks
     dump = {
       dir = paths.dump,
       enabled = false,

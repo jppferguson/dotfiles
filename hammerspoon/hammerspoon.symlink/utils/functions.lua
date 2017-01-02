@@ -26,7 +26,7 @@ function fn.mergeNoOveride(t1, t2)
   end
   for k, v in pairs(t2) do
     if (type(v) == "table") and (type(merged[k] or false) == "table") then
-      fn.mergeNoOveride(merged[k], t2[k])
+      merged[k] = fn.mergeNoOveride(merged[k], t2[k])
     else
       merged[k] = v
     end

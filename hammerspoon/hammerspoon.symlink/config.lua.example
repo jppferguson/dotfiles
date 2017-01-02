@@ -49,6 +49,7 @@ config.global['window.management'] = {
 -- Hazel
 config.global['system.hazel'] = {
   watchers = {
+    desktop = { enabled = true },
     downloads = { enabled = true },
     downloadsArchive = { enabled = true },
   }
