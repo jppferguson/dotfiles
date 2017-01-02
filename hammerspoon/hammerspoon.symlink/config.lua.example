@@ -7,13 +7,12 @@ local config = {}
 config.global = {}   -- Accessible to modules
 config.bindings = {} -- Key bindings
 
-
 -- Logging
 config.global.loglevel = 'warning'
 
-
--- Overide messages
+-- Module overides
 -----------------------------------------------
+-- caffeine
 config.global['system.caffeine'] = {
   message = {
     caffinated = '(ʘ‿ʘ) Wired',
@@ -21,13 +20,20 @@ config.global['system.caffeine'] = {
   }
 }
 
-config.global['window.management'] = {}
-config.global['window.management'].animationDuration = .1
+-- Nightwatch
+config.global['system.nightshift'] = {
+  nightStart = '18:00',
+}
 
+-- Weather location
 config.global['misc.weather'] = {
   location = 'Edinburgh, UK',
 }
 
+-- Window Management
+config.global['window.management'] = {
+  animationDuration = .1,
+}
 
 -- Hazel
 config.global['system.hazel'] = {
@@ -43,7 +49,7 @@ config.bindings.keys = { triggers = {} }
 config.bindings.keys.triggers["Spotify What Track"] = { "mash", "y" }
 
 
--- Overide hammerspoon settings
+-- Overide Hammerspoon settings
 -----------------------------------------------
 -- Disable all window animations
 hs.window.animationDuration = 0
