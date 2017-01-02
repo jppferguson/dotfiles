@@ -62,6 +62,7 @@ local modules = {
   "system.caffeine",
   "system.clipboard",
   "system.controls",
+  "system.hazel",
   "system.misc",
   "system.nightshift",
   "system.wifi",

@@ -4,8 +4,21 @@
 -----------------------------------------------
 local lib = {}
 
+local function handleExists(path)
+  if not path then
+    hs.logger.new('file utils','warning').w('Nil path')
+    return false
+  elseif not lib.exists(path) then
+    hs.logger.new('file utils','warning').w(path .. ' doesn\'t exist')
+    return false
+  end
+  return true
+end
+
+
 -- Return true if the file exists, else false
 lib.exists = function(name)
+  if not name then return false end
   local f = io.open(name,'r')
   if f ~= nil then
     io.close(f)
@@ -73,6 +86,12 @@ lib.move = function(from, to, force, onSuccess, onFailure)
     end
   end
 
+  if not lib.exists(to) then
+    local _, filename, _ = lib.splitPath(from)
+    local path = lib.toPath(to, filename)
+    lib.makeParentDir(path)
+  end
+
   if lib.exists(from) then
     hs.task.new('/bin/mv', callback, {force, from, to}):start()
   end
@@ -97,13 +116,17 @@ end
 -- If any files are found in the given path, make a list of them and call the
 -- given callback function with that list.
 lib.runOnFiles = function(path, callback)
-  local iter, data = hs.fs.dir(path)
-  local files = {}
-  repeat
-    local item = iter(data)
-    if item ~= nil then table.insert(files, lib.toPath(path, item)) end
-  until item == nil
-  if #files > 0 then callback(files) end
+  if not handleExists(path) then
+    return false
+  else
+    local iter, data = hs.fs.dir(path)
+    local files = {}
+    repeat
+      local item = iter(data)
+      if item ~= nil then table.insert(files, lib.toPath(path, item)) end
+    until item == nil
+    if #files > 0 then callback(files) end
+  end
 end
 
 -- Unhide the extension on the given file, if it matches the extension given,

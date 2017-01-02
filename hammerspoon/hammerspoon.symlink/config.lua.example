@@ -29,6 +29,13 @@ config.global['misc.weather'] = {
 }
 
 
+-- Hazel
+config.global['system.hazel'] = {
+  watchers = {
+    downloads = { enabled = true },
+    downloadsArchive = { enabled = true },
+  }
+}
 
 -- Overide key bindings
 -----------------------------------------------
