@@ -10,6 +10,17 @@ config.bindings = {} -- Key bindings
 -- Logging
 config.global.loglevel = 'warning'
 
+-- Modules
+-----------------------------------------------
+-- Include extra modules
+config.modulesInclude = {
+  "nonexistant.module",
+}
+-- Exclude modules
+config.modulesExclude = {
+  "nonexistant.module",
+}
+
 -- Module overides
 -----------------------------------------------
 -- caffeine

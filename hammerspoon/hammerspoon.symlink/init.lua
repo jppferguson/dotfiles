@@ -68,7 +68,9 @@ local modules = {
   "system.wifi",
   "window.management",
 }
-
+-- Include/Exclude extra modules
+jspoon.fn.arrayAdd(modules, config.modulesInclude)
+jspoon.fn.arrayRemove(modules, config.modulesExclude)
 
 -- Adjust some modules default logging
 -----------------------------------------------
