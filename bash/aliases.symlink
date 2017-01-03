@@ -169,3 +169,6 @@ alias ssh-fix="ssh-keygen -R ${1}"
 
 # Edit hosts file
 alias hostsfile="sudo nano /etc/hosts"
+
+# Print each PATH entry on a separate line
+alias path='echo -e ${PATH//:/\\n}'
