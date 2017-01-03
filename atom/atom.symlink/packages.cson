@@ -3,8 +3,13 @@ packages: [
   "atom-material-syntax"
   "atom-material-syntax-dark"
   "atom-material-ui"
+  "language-lua"
+  "linter"
+  "linter-eslint"
+  "linter-sass-lint"
   "minimap"
   "package-sync"
   "save-session"
   "Sublime-Style-Column-Selection"
+  "wakatime"
 ]
