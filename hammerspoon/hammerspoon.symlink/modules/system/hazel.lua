@@ -43,7 +43,6 @@ m.config = {
       dir = paths.desktop,
       enabled = true,
       oldFiles = {
-        excludeColourTagged = true,
         move = paths.desktopArchive,
         time = TIME.WEEK,
       },
@@ -53,7 +52,6 @@ m.config = {
       dir = paths.downloads,
       enabled = false,
       oldFiles = {
-        excludeColourTagged = true,
         move = paths.downloadsArchive,
         time = TIME.WEEK,
       },
@@ -120,14 +118,14 @@ m.config = {
   defaultConfig = {
     dir = false,
     enabled = true,
+    excludeColourTagged = true,
+    moveFiles = false,
     oldFiles = {
       time = TIME.DAY,
       move = false,
       tag = false,
       notify = false,
-      excludeColourTagged = false,
     },
-    moveFiles = false,
     unhideExtension = false,
   },
 }
@@ -213,7 +211,6 @@ end
 
 -- callback for watching a directory
 local function watchDirectory(key, cfg, files)
-  local skipOldFiles = false
   local config = ufunctions.mergeNoOveride(m.config.defaultConfig, cfg)
 
   -- Check watcher is enabled and dir is set and exists
@@ -223,6 +220,9 @@ local function watchDirectory(key, cfg, files)
 
   watchPath(config.dir, files, function(data)
     -- m.log.w('Watch: ' .. key ..' processing', hs.inspect(data))
+
+    -- skip if files are colour tagged
+    if config.excludeColourTagged and ufile.isColorTagged(data.file) then return false end
 
     -- unhide extensions for files written here
     if config.unhideExtension then
@@ -245,20 +245,14 @@ local function watchDirectory(key, cfg, files)
     -- for files that are older than
     if config.oldFiles.move or config.oldFiles.tag then
 
-      -- skip if files are colour tagged
-      -- if config.oldFiles.excludeColourTagged and ufile.isColorTagged(data.file) then skipOldFiles = true end
-
-      if not skipOldFiles and ufile.isOlderThan(data.file, config.oldFiles.time) then
-
+      if ufile.isOlderThan(data.file, config.oldFiles.time) then
         -- tag the file
-        -- if config.oldFiles.tag then
-          -- ufile.setTag(data.file, config.oldFiles.tag)
-        -- end
+        if config.oldFiles.tag then
+          ufile.setTag(data.file, config.oldFiles.tag)
+        end
 
         -- move file
         if config.oldFiles.move then
-          print('[' .. key .. ']' .. data.file .. ' <-----> ' .. config.oldFiles.move)
-          print(hs.inspect(m.config.defaultConfig))
           moveFileToPath(key, data.file, config.oldFiles.move)
         end
         -- send a notification

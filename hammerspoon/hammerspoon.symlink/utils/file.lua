@@ -142,6 +142,31 @@ lib.unhideExtension = function(file, ext, hiddenExtensions)
   end
 end
 
+
+-- Returns true if the file has any default OS X color tag enabled.
+lib.isColorTagged = function(file)
+  local colors = {
+    Red = true,
+    Orange = true,
+    Yellow = true,
+    Green = true,
+    Blue = true,
+    Purple = true,
+    Gray = true,
+  }
+  local tags = hs.fs.tagsGet(file)
+
+  if tags ~= nil then
+    for _,tag in ipairs(tags) do
+      if colors[tag] then return true end
+    end
+  end
+  return false
+end
+
+-- Simply set a single tag on a file
+lib.setTag = function(file, tag) hs.fs.tagsAdd(file, {tag}) end
+
 -- Return a string that ensures the given file ends with the given extension.
 lib.withExtension = function(filePath, ext)
   local path = filePath
