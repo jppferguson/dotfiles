@@ -19,6 +19,7 @@ TIME.WEEK = TIME.DAY * 7
 
 -- directory watchers
 local watch = {}
+local timer = nil
 
 local paths = globals.paths
 paths.desktop = ufile.toPath(globals.paths.base, 'Desktop')
@@ -33,6 +34,8 @@ m.config = {
   },
   -- seconds to wait after file changed, before running rules
   waitTime = 5,
+  -- interval to run check paths timer
+  timerInterval = TIME.HOUR,
   -- paths to watch
   watchers = {
     -- clean up desktop every week
@@ -274,7 +277,7 @@ local function checkPaths()
     if canRunWatcherModule(value) then
       ufile.runOnFiles( value.dir, function(files) watchDirectory(key, value, files) end)
     else
-        m.log.d('Could\'t check "' .. key .. '" watcher. Either module is not enabled or the '.. value.dir ..' directory doesn\'t exist.')
+      m.log.d('Could\'t check "' .. key .. '" watcher. Either module is not enabled or the '.. value.dir ..' directory doesn\'t exist.')
     end
   end
 end
@@ -293,6 +296,10 @@ end
 
 -- start the module
 m.start = function()
+  -- run checkPaths every {timerInterval}
+  timer = hs.timer.new(m.config.timerInterval, checkPaths)
+  timer:start()
+
   for key,_ in pairs(m.config.watchers) do
     local value = m.config.watchers[key]
     if ufile.exists(value.dir) then
@@ -304,6 +311,9 @@ m.start = function()
 end
 
 m.stop = function()
+  if timer then timer:stop() end
+  timer = nil
+
   for key,_ in pairs(watch) do stopWatcher(key, true) end
 end
 
