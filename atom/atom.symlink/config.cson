@@ -25,12 +25,37 @@
     softWrap: true
   "exception-reporting":
     userId: "b0906014-73da-d10c-12de-a343fd7f4e2a"
+  linter:
+    errorPanelHeight: 26
+  "linter-eslint":
+    eslintrcPath: "~/.eslintrc"
+  "linter-sass-lint":
+    globalSassLint: true
+    noConfigDisable: true
   minimap:
-    absoluteMode: true
+    plugins:
+      "highlight-selected": true
+      "highlight-selectedDecorationsZIndex": 0
   "release-notes":
     viewedVersion: "0.81.0"
   "save-session":
     dataSaveFolder: "~/.atom/packages/save-session/projects"
+  tabs:
+    addNewTabsAtEnd: true
+    enableVcsColoring: true
+  "terminal-plus":
+    ansiColors:
+      normal:
+        blue: "#268bd2"
+        cyan: "#2aa198"
+        green: "#859900"
+        magenta: "#d33682"
+        orange: "#cb4b16"
+        red: "#dc322f"
+        violet: "#6c71c4"
+        yellow: "#b58900"
+  "todo-show":
+    sortBy: "Path"
   wakatime:
     apikey: "Saved in your ~/.wakatime.cfg file"
   welcome:
