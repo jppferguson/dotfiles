@@ -26,3 +26,6 @@ atom/atom.symlink/themes
 
 # hammerspoon settings
 hammerspoon/hammerspoon.symlink/config.lua
+
+# visual studio code settings
+vs-code/User/workspaceStorage
