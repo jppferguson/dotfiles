@@ -1,0 +1,13 @@
+#!../test/libs/bats/bin/bats
+#
+# Watch files and run dotfiles test suite on change.
+#
+###############################################################################
+
+# files to watch
+filesToWatch=()
+filesToWatch+=(test/*.bats)      # test files
+filesToWatch+=(functions/*)     # functions
+
+# watch all the files
+ls -d ${filesToWatch[@]} | entr sh ./script/test

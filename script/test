@@ -1,0 +1,8 @@
+#!../test/libs/bats/bin/bats
+#
+# Run dotfiles test suite.
+#
+###############################################################################
+
+# run the test suite
+bats test/*.bats

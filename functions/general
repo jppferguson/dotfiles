@@ -69,6 +69,13 @@ print_error () {
   printf "$cRed$1 $cYellow$2$cNo\n"
 }
 
+# echo each item of array on new line
+print_array () {
+  for item in "${@:1}"; do
+    echo $item
+  done
+}
+
 # check if a command exists
 command_exists () {
   type "$1" &> /dev/null ;
