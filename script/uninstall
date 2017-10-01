@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#
+# Uninstall something from dotfiles
+set -e
+
+# Include the general functions
+. functions/general
