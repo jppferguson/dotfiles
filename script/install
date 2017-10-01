@@ -115,7 +115,7 @@ install_run () {
     if [ ! "$dryRunFlag" == "true" ]; then
       sh -c "${installer}"
     fi
-    success "Installed $script"
+    print_success "Installed $script"
   fi
 
   if [ "$always_skip" == "true" ]; then
@@ -123,11 +123,11 @@ install_run () {
       # add to DOTFILES_IGNORE array
       _DOTFILES_IGNORE=("${_DOTFILES_IGNORE[@]}" "$script")
     fi
-    success "Will never install $script"
+    print_success "Will never install $script"
   fi
 
   if [ "$skip" == "true" ]; then
-    success "Skipped $script"
+    print_success "Skipped $script"
   fi
 
 }

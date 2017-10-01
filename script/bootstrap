@@ -19,16 +19,16 @@ create_localrc () {
   LOCALRC=~/.localrc
   if [ -f "$LOCALRC" ]
   then
-    success "skipped $LOCALRC (already exists)"
+    print_success "skipped $LOCALRC (already exists)"
   else
     touch "$LOCALRC"
-    success "created $LOCALRC"
+    print_success "created $LOCALRC"
   fi
 }
 
 backup () {
   mkdir -p "$BACKUP_DIR"; mv "$1" "$_"
-  success "backed up $1"
+  print_success "backed up $1"
 }
 
 setup_gitconfig () {
@@ -49,7 +49,7 @@ setup_gitconfig () {
 
     sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.symlink.example > git/gitconfig.symlink
 
-    success 'gitconfig'
+    print_success 'gitconfig'
   fi
 }
 
@@ -93,26 +93,26 @@ link_file () {
     if [ "$overwrite" == "true" ]
     then
       rm -rf "$dst"
-      success "removed $dst"
+      print_success "removed $dst"
     fi
 
     if [ "$backup" == "true" ]
     then
       # mv "$dst" "${dst}.backup"
-      # success "moved $dst to ${dst}.backup"
+      # print_success "moved $dst to ${dst}.backup"
       backup "$dst"
     fi
 
     if [ "$skip" == "true" ]
     then
-      success "skipped $src"
+      print_success "skipped $src"
     fi
   fi
 
   if [ "$skip" != "true" ]  # "false" or empty
   then
     ln -s "$1" "$2"
-    success "linked $1 to $2"
+    print_success "linked $1 to $2"
   fi
 }
 

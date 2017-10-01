@@ -174,19 +174,25 @@ assert_white_text   () { assert_output --partial "37"; }
 }
 
 
-# success()
+# print_success()
 #######################################
 
-@test "success(): TBC" {
-  skip
+@test "print_success(): outputs string with colouring" {
+    run print_success "all systems go"
+    assert_line --partial "OK"
+    assert_line --partial "all systems go"
+    assert_green_text
 }
 
 
-# fail()
+# print_fail()
 #######################################
 
-@test "fail(): TBC" {
-  skip
+@test "print_fail(): outputs string with colouring" {
+    run print_fail "something went wrong"
+    assert_line --partial "FAIL"
+    assert_line --partial "something went wrong"
+    assert_red_text
 }
 
 
