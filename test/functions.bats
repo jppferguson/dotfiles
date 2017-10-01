@@ -121,11 +121,22 @@ assert_white_text   () { assert_output --partial "37"; }
 }
 
 
-# filter_array()
+# filter_array_include() <string> <array>
 #######################################
 
-@test "filter_array(): TBC" {
-  skip
+@test "filter_array_include(): Removes items from array which do NOT contain substring when exclude is true" {
+  arrayUnderTest=(aaa bbb ccc ddd)
+  run filter_array_include "c" "${arrayUnderTest[@]}"
+  assert_output "ccc"
+}
+
+# filter_array_exclude() <string> <array>
+#######################################
+
+@test "filter_array_exclude(): Removes items from array which contain substring when exclude is false" {
+  arrayUnderTest=(item1 item2 item3)
+  run filter_array_exclude "item1" "${arrayUnderTest[@]}"
+  assert_output "item2 item3"
 }
 
 
