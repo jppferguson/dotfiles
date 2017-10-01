@@ -1,57 +1,48 @@
+#!/bin/bash
 
+# uncomment for more verbose output
+# export verbose=true
 
-# Base16 Shell
-# BASE16_SHELL="$DOTFILES/zsh/base16-ocean.dark.sh"
-# [[ -s $BASE16_SHELL ]] && . $BASE16_SHELL
-
-
-# use .localrc for SUPER SECRET CRAP that you don't
-# want in your public, versioned repo.
-if [[ -a ~/.localrc ]]
+# add default $DOTFILES
+if [[ ! $DOTFILES ]]
 then
-  source ~/.localrc
+  DOTFILES="${HOME}/.dotfiles/"
 fi
+# shellcheck source=$DOTFILES/functions/general
+. $DOTFILES/functions/general
+
+# use .localrc for SUPER SECRET CRAP that you don't # want in your public, versioned repo.
+source_file ~/.localrc
 
 # using .commonrc for stuff you want shared between zsh and bash
-if [[ -a ~/.commonrc ]]
-then
-  source ~/.commonrc
-fi
-
+source_file ~/.commonrc
 
 # all of our zsh files
 typeset -U config_files
-# setopt extended_glob
-# config_files=($DOTFILES/(^vendor/)#/*.zsh) # with extended glob
-config_files=($DOTFILES/(**|^vendor)/*.zsh)
+config_files=($DOTFILES/**/*.zsh)
+config_files_misc=("${config_files[@]}")
 
 # load the path files
-for file in ${(M)config_files:#*/path.zsh}
-do
-  source $file
-done
+# source_files ${(M)config_files:#*/path.zsh}
+config_files_path=($(filter_array_include "/path.zsh" "${config_files[@]}"))
+source_files "${config_files_path[@]}"
 
 # load everything but the path and completion files
-for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
-do
-  source $file
-done
+config_files_misc=($(filter_array_exclude "/path.zsh" "${config_files_misc[@]}"))
+config_files_misc=($(filter_array_exclude "/completion.zsh" "${config_files_misc[@]}"))
+source_files "${config_files_misc[@]}"
 
 # initialize autocomplete here, otherwise functions won't be loaded
-autoload -U compinit
-compinit
+# autoload -U compinit
+# compinit
 
 # load every completion after autocomplete loads
-for file in ${(M)config_files:#*/completion.zsh}
-do
-  source $file
-done
-
-unset config_files
-
-
+config_files_completion=($(filter_array_include "/completion.zsh" "${config_files[@]}"))
+source_files "${config_files_completion[@]}"
 
 # include bash aliases & functions
-. ~/.aliases
-. ~/.functions
+source_file ~/.aliases
+source_file ~/.functions
 
+# cleanup variables
+unset config_files config_files_misc config_files_path config_files_completion verbose
