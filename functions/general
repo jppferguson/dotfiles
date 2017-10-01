@@ -142,7 +142,7 @@ cask_install() {
 }
 
 cask_reinstall() {
-  print_task "Installing ${@} (with force)"
+  print_task "Installing" "${@}" "(with force)"
   brew cask install --force "${@}"
 }
 

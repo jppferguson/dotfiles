@@ -85,13 +85,12 @@ lib.move = function(from, to, force, onSuccess, onFailure)
       onFailure(stdErr)
     end
   end
-
+  local _, filename, _ = lib.splitPath(from)
+  local path = lib.toPath(to, filename)
   if not lib.exists(to) then
-    local _, filename, _ = lib.splitPath(from)
-    local path = lib.toPath(to, filename)
     lib.makeParentDir(path)
   end
-
+  if(handleExists(path)) then print(path ..'exists') end
   if lib.exists(from) then
     hs.task.new('/bin/mv', callback, {force, from, to}):start()
   end

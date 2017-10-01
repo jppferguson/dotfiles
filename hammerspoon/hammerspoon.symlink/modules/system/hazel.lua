@@ -2,7 +2,8 @@
 -- (Inspired by the Hazel app, by noodlesoft)
 --
 
--- TODO: dont override file by default, rename + 1?
+-- TODO: if file exists in destination, rename + 1?
+-- TODO: move directories, exclude based on pattern
 
 local m = {}
 
