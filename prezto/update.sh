@@ -1,10 +1,8 @@
 #!/bin/zsh
 #
-# Update oh-my-zsh
+# Update prezto
 #
 ###############################################################################
 set -e
 
-. $ZSH/oh-my-zsh.sh
-
-upgrade_oh_my_zsh
+zprezto-update
