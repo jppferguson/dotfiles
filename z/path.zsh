@@ -1,3 +1,3 @@
 
 # init z   https://github.com/rupa/z
-. $VENDOR/z/z.sh
+. $DOTFILES/z/lib/z.sh
