@@ -35,7 +35,7 @@ sudo sh -c "cat ${httpdvhosts}.bak ${DOTFILES}/apache/vhosts > ${httpdvhosts}"
 httpdconf="/private/etc/apache2/httpd.conf"
 uncomment 'LoadModule vhost_alias_module libexec/apache2/mod_vhost_alias.so' $httpdconf
 # enable php
-uncomment 'LoadModule php5_module libexec/apache2/libphp5.so' $httpdconf
+uncomment 'LoadModule php7_module libexec/apache2/libphp7.so' $httpdconf
 # enable mod_rewrite
 uncomment 'LoadModule rewrite_module libexec/apache2/mod_rewrite.so' $httpdconf
 uncomment 'Include /private/etc/apache2/extra/httpd-vhosts.conf' $httpdconf
