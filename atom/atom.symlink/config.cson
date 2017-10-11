@@ -4,6 +4,8 @@
     screenShake: {}
   "atom-material-ui":
     panelContrast: true
+  "autocomplete-paths":
+    enableHtmlSupport: true
   core:
     hideGitIgnoredFiles: true
     ignoredNames: [
@@ -16,6 +18,8 @@
       "atom-material-ui"
       "atom-material-syntax"
     ]
+  "custom-title":
+    template: "<%= projectName %><% if (relativeFilePath) { %> • <%= relativeFilePath %> <% } %> <% if (gitHead) { %> ‹<%= gitHead %>›<% } %>"
   editor:
     fontFamily: "Operator Mono, Fira Sans, Source Code Pro"
     fontSize: 15
@@ -25,8 +29,8 @@
     softWrap: true
   "exception-reporting":
     userId: "b0906014-73da-d10c-12de-a343fd7f4e2a"
-  linter:
-    errorPanelHeight: 26
+  "file-icons": {}
+  linter: {}
   "linter-eslint":
     eslintrcPath: "~/.eslintrc"
   "linter-sass-lint":
@@ -36,10 +40,15 @@
     plugins:
       "highlight-selected": true
       "highlight-selectedDecorationsZIndex": 0
+      pigments: true
+      pigmentsDecorationsZIndex: 0
   "release-notes":
     viewedVersion: "0.81.0"
   "save-session":
     dataSaveFolder: "~/.atom/packages/save-session/projects"
+  swackets:
+    colorParens: true
+    colorSquareBrackets: true
   tabs:
     addNewTabsAtEnd: true
     enableVcsColoring: true
