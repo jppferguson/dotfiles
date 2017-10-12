@@ -46,8 +46,6 @@ packages: [
   "sort-lines"
   "Sublime-Style-Column-Selection"
   "swackets"
-  "term3"
-  "terminal-plus"
   "todo-show"
   "wakatime"
 ]

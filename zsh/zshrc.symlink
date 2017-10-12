@@ -1,7 +1,13 @@
 #!/bin/bash
 
-# uncomment for more verbose output
-# export verbose=true
+# uncomment for debugging:
+# export profiling=true     # profile zsh startup
+# export verbose=true       # more verbose output
+
+# start profiling if enabled
+if [ "$profiling" = true ]; then
+  zmodload zsh/zprof
+fi
 
 # add default $DOTFILES
 if [[ ! $DOTFILES ]]
@@ -44,5 +50,10 @@ source_files "${config_files_completion[@]}"
 source_file ~/.aliases
 source_file ~/.functions
 
+# end profiling if profiling is enabled
+if [ "$profiling" = true ]; then
+  zprof
+fi
+
 # cleanup variables
-unset config_files config_files_misc config_files_path config_files_completion verbose
+unset config_files config_files_misc config_files_path config_files_completion verbose profiling

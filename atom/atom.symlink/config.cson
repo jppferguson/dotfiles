@@ -7,17 +7,24 @@
   "autocomplete-paths":
     enableHtmlSupport: true
   core:
+    customFileTypes:
+      "source.shell": [
+        "symlink"
+        "zsh"
+      ]
     hideGitIgnoredFiles: true
     ignoredNames: [
       ".git"
       ".svn"
       ".DS_Store"
     ]
+    projectHome: "~/Sites"
     telemetryConsent: "limited"
     themes: [
       "atom-material-ui"
       "atom-material-syntax"
     ]
+    titleBar: "custom"
   "custom-title":
     template: "<%= projectName %><% if (relativeFilePath) { %> • <%= relativeFilePath %> <% } %> <% if (gitHead) { %> ‹<%= gitHead %>›<% } %>"
   editor:
@@ -37,6 +44,8 @@
   "linter-sass-lint":
     globalSassLint: true
     noConfigDisable: true
+  "linter-shellcheck":
+    userParameters: "-e SC1071"
   minimap:
     plugins:
       "highlight-selected": true
