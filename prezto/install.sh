@@ -11,7 +11,7 @@ PREZTO_DIR="${ZDOTDIR:-$HOME}/.zprezto"
 
 if [ ! -d "${PREZTO_DIR}" ]; then
   print_block "Installing prezto"
-  cd $VENDOR
+  cd $HOME
   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${PREZTO_DIR}"
 
 else

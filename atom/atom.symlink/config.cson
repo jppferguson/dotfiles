@@ -24,6 +24,7 @@
     fontFamily: "Operator Mono, Fira Sans, Source Code Pro"
     fontSize: 15
     invisibles: {}
+    preferredLineLength: 160
     showIndentGuide: true
     showInvisibles: true
     softWrap: true
