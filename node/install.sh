@@ -14,7 +14,9 @@ print_block "Installing Node.js"
 brew install node
 
 # Install nvm
-brew install nvm
+git clone https://github.com/creationix/nvm.git ~/.nvm
+cd ~/.nvm
+git checkout v0.33.5
 
 # Install yarn
 brew install yarn
