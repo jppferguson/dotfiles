@@ -36,6 +36,7 @@ packages: [
   "linter-ui-default"
   "minimap"
   "minimap-highlight-selected"
+  "minimap-linter"
   "minimap-pigments"
   "open-recent"
   "package-sync"
