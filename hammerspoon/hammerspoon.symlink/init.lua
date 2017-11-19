@@ -7,6 +7,10 @@ jspoon.loadedModules = {}
 
 jspoon.fn = require("utils.functions")
 jspoon.utils.file = require("utils.file")
+jspoon.utils.spoons = require("utils.spoons")
+
+-- Map spoons installer to shorter path
+jspoon.install = jspoon.utils.spoons.install
 
 -- Add break in console
 jspoon.fn.printBlock("(Re)loading JSpoon")
