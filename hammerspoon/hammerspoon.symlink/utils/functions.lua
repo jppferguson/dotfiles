@@ -58,7 +58,7 @@ end
 function fn.printBlock(str)
   local strLen = string.len(str) + 2
   local hr = strUtil.lpad('', strLen, '-')
-  print("\n" .. hr)
+  print(hr)
   print(" " .. str)
   print(hr .. "\n")
 end

@@ -6,14 +6,16 @@ jspoon.utils = {}
 jspoon.loadedModules = {}
 
 jspoon.fn = require("utils.functions")
+
+-- Add break in console
+jspoon.fn.printBlock("(Re)loading JSpoon")
+
+-- Load initial utils
 jspoon.utils.file = require("utils.file")
 jspoon.utils.spoons = require("utils.spoons")
 
 -- Map spoons installer to shorter path
 jspoon.install = jspoon.utils.spoons.install
-
--- Add break in console
-jspoon.fn.printBlock("(Re)loading JSpoon")
 
 -- Config
 ---- Load default first, overrides second
@@ -61,6 +63,13 @@ jspoon.fn.arrayRemove(modules, config.modulesExclude)
 -----------------------------------------------
 require("hs.hotkey").setLogLevel("warning")
 
+-- Optional local-only file
+-----------------------------------------------
+local localOnly=loadfile(hs.configdir .. "/init-local.lua")
+if localOnly then
+   localOnly()
+end
+
 -- Load, configure, and start each module
 -----------------------------------------------
 jspoon.loadedModules = jspoon.utils.load.all(modules)
@@ -76,6 +85,7 @@ jspoon.utils.keys.activate()
 jspoon.utils.watch.configPath("bindings.lua")
 jspoon.utils.watch.configPath("config.lua")
 jspoon.utils.watch.configPath("init.lua")
+jspoon.utils.watch.configPath("init-local.lua")
 jspoon.utils.watch.configPath("modules/")
 jspoon.utils.watch.configPath("utils/")
 
