@@ -1,5 +1,6 @@
 local load = {}
 local config = jspoon.config
+local strUtil = require('utils.string')
 
 -- load a module from modules/ dir, and set up a logger for it
 function load.moduleByName(moduleName)
@@ -22,6 +23,26 @@ end
 --   end
 --   jspoon.loadedModules[moduleName] = module
 -- end
+
+-- recursively loop through directory to get array of available modules
+function load.allFromDirectory(dir)
+  local modules = {}
+
+  for file in require("hs.fs").dir(os.getenv("HOME") .. "/.hammerspoon/modules/" .. dir) do
+    if not strUtil.beginsWith(file, '.') then
+      local filepath = dir .. "/" .. file
+      if file:find(".lua") then
+        filepath = strUtil.chopEnding(filepath, ".lua")
+        filepath = strUtil.chopBeginning(filepath, "/")
+        filepath = string.gsub(filepath, "/", ".")
+        table.insert(modules, filepath)
+      else
+        jspoon.fn.arrayAdd(modules, load.allFromDirectory(filepath))
+      end
+    end
+  end
+  return modules
+end
 
 -- save the configuration of a module in the module object
 function load.moduleConfig(module)

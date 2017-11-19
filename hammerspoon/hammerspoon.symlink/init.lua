@@ -47,27 +47,8 @@ jspoon.utils.watch = require("utils.watch")
 
 -- Modules to load
 -----------------------------------------------
-local modules = {
-  "application.autohide",
-  "application.toggle",
-  "audio.headphones",
-  "audio.music",
-  "keyboard.shortcuts",
-  "misc.anycomplete",
-  "misc.playground",
-  "misc.scratchpad",
-  "misc.triggers",
-  "misc.weather",
-  "misc.url",
-  "system.caffeine",
-  "system.clipboard",
-  "system.controls",
-  "system.hazel",
-  "system.misc",
-  "system.nightshift",
-  "system.wifi",
-  "window.management",
-}
+local modules = jspoon.utils.load.allFromDirectory('')
+
 -- Include/Exclude extra modules
 jspoon.fn.arrayAdd(modules, config.modulesInclude)
 jspoon.fn.arrayRemove(modules, config.modulesExclude)

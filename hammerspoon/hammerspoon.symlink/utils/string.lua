@@ -54,11 +54,19 @@ end
 -- @returns String
 lib.chopBeginning = function(str, beginning)
   if lib.beginsWith(str, beginning) then
-    return string.sub(str, string.len(beginning))
+    return string.sub(str, string.len(beginning)+1)
   end
   return str
 end
 
+-- Chop off the end of a string if it matches the other string
+-- @returns String
+lib.chopEnding = function(str, ending)
+  if lib.endsWith(str, ending) then
+    return string.sub(str, 0, -string.len(ending)-1)
+  end
+  return str
+end
 
 -- Pads str to length len with char from right
 lib.lpad = function(str, len, char)
