@@ -69,12 +69,6 @@ function fn.inspect(v)
   print(hs.inspect(v))
 end
 
--- Inspect a variable
------------------------------------------------
-function fn.inspect(v)
-  print(hs.inspect(v))
-end
-
 -- Find in a table
 -----------------------------------------------
 function fn.tablefind(tab, el)
@@ -90,7 +84,7 @@ end
 function fn.arrayAdd(arr, add)
   if type(add) == "string" then add = { add } end
   if type(add) == "table" then
-    for k, v in pairs(add) do
+    for _, v in pairs(add) do
       table.insert(arr, v)
     end
   end
@@ -102,7 +96,7 @@ end
 function fn.arrayRemove(arr, remove)
   if type(remove) == "string" then remove = { remove } end
   if type(remove) == "table" then
-    for k, v in pairs(remove) do
+    for _, v in pairs(remove) do
       table.remove( arr, fn.tablefind(arr, v) )
     end
   end
