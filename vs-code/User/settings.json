@@ -1,10 +1,12 @@
 {
-    "editor.fontFamily": "'Fira Code', Monaco, monospace",
-    "editor.fontSize": 14,
+    "editor.fontFamily": "'Operator Mono', 'Fira Code', Monaco, monospace",
+    "editor.fontSize": 12,
     "editor.fontLigatures": true,
     "editor.lineHeight": 24,
     "editor.minimap.enabled": true,
+    "editor.scrollBeyondLastLine": false,
     "editor.tabSize": 2,
-    "workbench.colorTheme": "Material Theme Darker",
-    "workbench.iconTheme": "material-theme-icons"
+    "workbench.colorTheme": "Material Theme",
+    "workbench.iconTheme": "file-icons",
+    "window.zoomLevel": 1,
 }

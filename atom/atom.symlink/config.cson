@@ -29,7 +29,7 @@
   "custom-title":
     template: "<%= projectName %><% if (relativeFilePath) { %> • <%= relativeFilePath %> <% } %> <% if (gitHead) { %> ‹<%= gitHead %>›<% } %>"
   editor:
-    fontFamily: "Operator Mono, Fira Sans, Source Code Pro"
+    fontFamily: "\"Operator Mono\", \"Fira Sans\", \"Source Code Pro\""
     fontSize: 15
     invisibles: {}
     preferredLineLength: 160
