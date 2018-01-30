@@ -161,7 +161,9 @@ local function moveFileToPath(key, file, toPath)
   local function onFileMoveFailure(stdErr)
     m.log.e('Error moving '..file..' to '..toPath..': '..stdErr)
   end
-  -- TODO: also dont override file by default, eg if you had an download.pdf file in downloads, everytime you downloaded another of the same name it would overwrite it
+  -- TODO: also dont override file by default.
+  -- eg if you had an download.pdf file in downloads, everytime you
+  -- downloaded another of the same name it would overwrite it
   if not isMovingToSameDirectory(key, file, toPath) then
     ufile.move(file, toPath, false, onFileMoveSuccess, onFileMoveFailure)
   end

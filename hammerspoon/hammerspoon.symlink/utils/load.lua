@@ -1,14 +1,36 @@
 local load = {}
 local config = jspoon.config
 local strUtil = require('utils.string')
+local fileUtil = require('utils.file')
+local hsModulesDir = os.getenv("HOME") .. "/.hammerspoon/modules/"
 
 -- load a module from modules/ dir, and set up a logger for it
 function load.moduleByName(moduleName)
-  -- TODO: check if module file actually exists, and warn but dont fall over
-  jspoon.loadedModules[moduleName] = require('modules.' .. moduleName)
-  jspoon.loadedModules[moduleName].name = moduleName
-  jspoon.loadedModules[moduleName].log = hs.logger.new(moduleName, config.loglevel)
-  jspoon.loadedModules[moduleName].log.i(jspoon.loadedModules[moduleName].name .. ': module loaded')
+  local moduleFilePath = hsModulesDir .. moduleName:gsub("%.", "/") .. ".lua"
+  local moduleFileExists = fileUtil.exists(moduleFilePath)
+  local log = hs.logger.new(moduleName, config.loglevel)
+  local moduleError
+
+  -- module file does not exist
+  if not moduleFileExists then
+    moduleError = "Could not load " .. moduleName .. " module."
+    moduleError = moduleError .. "\nModule file does not exist: " .. moduleFilePath
+    log.e(moduleError)
+  else
+    local module = require('modules.' .. moduleName)
+
+    -- module did not return anything
+    if module == true then
+      moduleError = "Could not load " .. moduleName .. ". "
+      moduleError = moduleError .. "This could be caused by the module not returning anything."
+      log.e(moduleError)
+    else
+      jspoon.loadedModules[moduleName] = module
+      module.name = moduleName
+      module.log = hs.logger.new(moduleName, config.loglevel)
+      module.log.i(module.name .. ': module loaded')
+    end
+  end
 end
 
 -- function load.moduleByName(moduleName, moduleParent)
@@ -28,7 +50,7 @@ end
 function load.allFromDirectory(dir)
   local modules = {}
 
-  for file in require("hs.fs").dir(os.getenv("HOME") .. "/.hammerspoon/modules/" .. dir) do
+  for file in require("hs.fs").dir(hsModulesDir .. dir) do
     if not strUtil.beginsWith(file, '.') then
       local filepath = dir .. "/" .. file
       if file:find(".lua") then
