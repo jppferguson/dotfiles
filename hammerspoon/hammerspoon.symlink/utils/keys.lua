@@ -74,7 +74,7 @@ end
 
 function keys.bindKey(keyName, keyBinding, fn)
   if(keys.getModifier(keyBinding[1])) then
-    keys.bound[keyName] = hotkey.new(keys.getModifier(keyBinding[1]), keyBinding[2], fn)
+    keys.bound[keyName] = hotkey.new(keys.getModifier(keyBinding[1]), keyBinding[2], nil, fn)
     keys.shortcuts[keyName] = keyBinding
   end
 end
