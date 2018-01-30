@@ -18,6 +18,7 @@ sublime/User/*
 # atom settings
 atom/atom.symlink/.apm
 atom/atom.symlink/.node-gyp
+atom/atom.symlink/projects.cson
 atom/atom.symlink/blob-store
 atom/atom.symlink/compile-cache
 atom/atom.symlink/packages
