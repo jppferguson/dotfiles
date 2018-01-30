@@ -2,8 +2,18 @@
   "activate-power-mode":
     autoToggle: false
     screenShake: {}
+  "atom-beautify":
+    general:
+      _analyticsUserId: "false"
   "atom-material-ui":
+    colors: {}
     panelContrast: true
+    tabs:
+      compactTabs: true
+      noTabMinWidth: true
+    ui:
+      panelContrast: true
+      panelShadows: true
   "autocomplete-paths":
     enableHtmlSupport: true
   core:
@@ -47,10 +57,13 @@
     noConfigDisable: true
   "linter-shellcheck":
     userParameters: "-e SC1071"
+  "linter-ui-default": {}
   minimap:
     plugins:
       "highlight-selected": true
       "highlight-selectedDecorationsZIndex": 0
+      linter: true
+      linterDecorationsZIndex: 0
       pigments: true
       pigmentsDecorationsZIndex: 0
   "release-notes":
@@ -76,6 +89,7 @@
         yellow: "#b58900"
   "todo-show":
     sortBy: "Path"
+  "tree-view": {}
   wakatime:
     apikey: "Saved in your ~/.wakatime.cfg file"
   welcome:
