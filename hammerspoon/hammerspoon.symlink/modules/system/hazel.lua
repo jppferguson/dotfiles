@@ -64,43 +64,156 @@ m.config = {
       moveFiles = {
         apps = {
           dir = ufile.toPath(paths.downloadsArchive, 'Applications'),
-          ext = { app = true },
+          ext = {
+            app = true,
+            ipa = true
+          },
         },
         audio = {
           dir = ufile.toPath(paths.downloadsArchive, 'Audio'),
-          ext = { mp3 = true, wav = true },
+          ext = {
+            mp3 = true,
+            wav = true
+          },
+        },
+        books = {
+          dir = ufile.toPath(paths.downloadsArchive, 'Books'),
+          ext = {
+            epub = true,
+            mobi = true
+          },
+        },
+        calendar = {
+          dir = ufile.toPath(paths.downloadsArchive, 'Calendar'),
+          ext = {
+            ics = true,
+            pkpass = true,
+          },
         },
         databases = {
           dir = ufile.toPath(paths.downloadsArchive, 'Databases'),
-          ext = { sql = true },
+          ext = {
+            sql = true
+          },
+        },
+        design = {
+          dir = ufile.toPath(paths.downloadsArchive, 'Design'),
+          ext = {
+            ai = true,
+            eps = true,
+            indd = true,
+            psd = true,
+            psb = true,
+            tif = true,
+            tiff = true,
+            sketch = true
+          }
+        },
+        development = {
+          dir = ufile.toPath(paths.downloadsArchive, 'Development'),
+          ext = {
+            alfredworkflow = true,
+            diff = true,
+            deb = true,
+            lua = true,
+            phar = true,
+            plist = true
+          },
         },
         diskImages = {
           dir = ufile.toPath(paths.downloadsArchive, 'Disk Images'),
-          ext = { dmg = true },
+          ext = {
+            dmg = true,
+            pkg = true
+          },
+        },
+        fonts = {
+          dir = ufile.toPath(paths.downloadsArchive, 'Fonts'),
+          ext = {
+            otf = true,
+            ttf = true,
+            woff = true,
+            woff2 = true
+          },
         },
         images = {
           dir = ufile.toPath(paths.downloadsArchive, 'Images'),
-          ext = { gif = true, jpg = true, jpeg = true, png = true, svg = true },
+          ext = {
+            favicon = true,
+            gif = true,
+            icns = true,
+            jpg = true,
+            jpeg = true,
+            png = true,
+            svg = true
+          },
         },
         pdfs = {
           dir = ufile.toPath(paths.downloadsArchive, 'PDFs'),
           ext = 'pdf',
         },
+        slides = {
+          dir = ufile.toPath(paths.downloadsArchive, 'Slides'),
+          ext = {
+            ppt = true,
+            pptx = true,
+            keynote = true
+          }
+        },
         sheets = {
           dir = ufile.toPath(paths.downloadsArchive, 'Spreadsheets'),
-          ext = { csv = true, xls = true, xlsx = true },
+          ext = {
+            csv = true,
+            sheets = true,
+            tsv = true,
+            xls = true,
+            xlsx = true
+          },
         },
         text = {
           dir = ufile.toPath(paths.downloadsArchive, 'Text'),
-          ext = { doc = true, docx = true, md = true, odt = true },
+          ext = {
+            doc = true,
+            docx = true,
+            md = true,
+            odt = true,
+            odp = true,
+            pages = true,
+            rtf = true,
+            txt = true
+          },
         },
         video = {
           dir = ufile.toPath(paths.downloadsArchive, 'Videos'),
-          ext = { mov = true, mp4 = true },
+          ext = {
+            avi = true,
+            mov = true,
+            mp4 = true
+          },
+        },
+        web = {
+          dir = ufile.toPath(paths.downloadsArchive, 'Web'),
+          ext = {
+            css = true,
+            html = true,
+            js = true,
+            json = true,
+            jsx = true,
+            php = true,
+            xml = true,
+            yaml = true
+          },
         },
         zips = {
           dir = ufile.toPath(paths.downloadsArchive, 'ZIP'),
-          ext = { gz = true, zip = true },
+          ext = {
+            bz2 = true,
+            gz = true,
+            rar = true,
+            tar = true,
+            tbz2 = true,
+            zip = true
+          },
         },
       },
     },
