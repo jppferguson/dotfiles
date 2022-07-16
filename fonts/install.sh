@@ -15,7 +15,7 @@ if ! command_exists brew; then
 else
 
   # Install homebrew cask fonts
-  brew tap caskroom/fonts
+  brew tap homebrew/cask-fonts
 
 fi
 

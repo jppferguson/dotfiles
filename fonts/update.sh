@@ -15,7 +15,7 @@ DOTFILES_FONTS_DIR="$DOTFILES/fonts"
 rsync -avz --exclude-from $DOTFILES_FONTS_DIR/rsync-exclude $DOTFILES_FONTS_DIR/ $OSX_FONTS_DIR
 
 # Get currently installed homebrew cask fonts
-installedFonts=( $(brew cask list | grep font) )
+installedFonts=( $(brew list --cask | grep font) )
 
 # Load list of applications to update from the fonts file
 OLDIFS=$IFS; IFS=$'\n' fonts=($(egrep -v '(^#|^$)' $DOTFILES_FONTS_DIR/fonts)); IFS=$OLDIFS
