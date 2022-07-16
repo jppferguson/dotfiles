@@ -1,13 +1,12 @@
 #!/bin/sh
 #
-# tmux
-#   a terminal multiplexer
+# Install tmux
 #
 ###############################################################################
+set -e
 
 # Include the general functions
-. ./functions/general
-
+. $DOTFILES/functions/general
 
 print_block "Installing tmux"
 

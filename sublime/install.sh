@@ -1,16 +1,17 @@
 #!/bin/sh
 #
-# Setup a machine for Sublime Text 3
+# Install Sublime Text Preferences
 #
 ###############################################################################
+set -e
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
 
 print_block "Installing Sublime Text Preferences";
 
 # symlink settings in
-SUBLIME_DIR="${HOME}/Library/Application Support/Sublime Text 3"
+SUBLIME_DIR="${HOME}/Library/Application Support/Sublime Text"
 SUBLIME_PACKAGES_DIR="${SUBLIME_DIR}/Packages"
 
 # make sure file exists first

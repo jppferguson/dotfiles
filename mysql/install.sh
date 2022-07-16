@@ -1,8 +1,14 @@
 #!/bin/sh
 #
-# Set up a lamp environment on your mac
+# Install MySQL
 #
 ###############################################################################
+set -e
+
+# Include the general functions
+. $DOTFILES/functions/general
+
+print_block "Installing MySQL"
 
 brew install -v mysql
 
@@ -26,3 +32,5 @@ sed -i '' 's/^# \(innodb_buffer_pool_size\)/\1/' $(brew --prefix mysql)/my.cnf
 
 # at least set a password for the root user
 $(brew --prefix mysql)/bin/mysql_secure_installation
+
+print_block_end

@@ -1,11 +1,12 @@
 #!/bin/sh
 #
-# Setup a machine for Visual Studio Code
+# Install VS Code Preferences
 #
 ###############################################################################
+set -e
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
 
 print_block "Installing VS Code Preferences";
 

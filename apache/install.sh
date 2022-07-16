@@ -1,11 +1,14 @@
 #!/bin/sh
 #
-# Set up apache
+# Install apache
 #
 ###############################################################################
+set -e
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
+
+print_block "Installing apache"
 
 # install dnsmasq and forward all requests to *.dev to localhost
 brew install dnsmasq

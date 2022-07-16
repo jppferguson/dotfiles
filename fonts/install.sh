@@ -2,21 +2,16 @@
 #
 # Install required fonts
 #
+###############################################################################
 set -e
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
+
+print_block "Installing Fonts"
 
 if ! command_exists brew; then
-
-  # No Homebrew :(
-  print_error "Please install homebrew and homebrew cask to install homebrew fonts!"
-
-else
-
-  # Install homebrew cask fonts
-  brew tap homebrew/cask-fonts
-
+  print_error "Please install homebrew to install homebrew fonts!"
 fi
 
 # Install the fonts

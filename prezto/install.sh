@@ -1,11 +1,14 @@
 #!/bin/sh
 #
-# Prezto is the configuration framework for Zsh; it enriches the command line interface environment
-# with sane defaults, aliases, functions, auto completion, and prompt themes.
+# Install Prezto
 #
+###############################################################################
+set -e
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
+
+print_block "Installing Prezto"
 
 PREZTO_DIR="${ZDOTDIR:-$HOME}/.zprezto"
 

@@ -1,14 +1,14 @@
 #!/bin/sh
 #
-# Node.js & NPM
-# Installs Node.js & NPM
+# Install Node.js, NPM, NVM and Yarn
 #
 ###############################################################################
+set -e
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
 
-print_block "Installing Node.js"
+print_block "Installing Node.js and friends"
 
 # Install with homebrew
 brew install node

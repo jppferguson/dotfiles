@@ -1,13 +1,14 @@
 #!/bin/sh
 #
-# Setup Übersicht widgets
+# Install Übersicht
 #
 ###############################################################################
+set -e
 
 # Include the general functions
 . $DOTFILES/functions/general
 
-print_block "Installing Übersicht";
+print_block "Installing Übersicht"
 
 # symlink widgets in
 UBERSICHT_DIR="${HOME}/Library/Application Support/Übersicht"
