@@ -1,0 +1,1 @@
+git clone https://github.com/agkozak/zsh-z.git ~/.zprezto-contrib/zsh-z
