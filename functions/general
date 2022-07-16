@@ -35,7 +35,12 @@ print_block () {
 print_fancy () {
   local font=${2}
   printf "$cGreen"
-  figlet -f ${font:=$(printf "small")} ${1}
+  if command -v figlet &> /dev/null; then
+    figlet -f ${font:=$(printf "small")} ${1}
+  else
+    print_block "${1}"
+  fi
+  
   printf "$cNo\n"
 }
 
