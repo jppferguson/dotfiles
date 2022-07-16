@@ -10,6 +10,8 @@
 # Let the user know what's happening
 print_block "Updating Homebrew"
 
+brew bundle --global
+
 brew update && brew upgrade
 
 # And we're done

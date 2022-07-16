@@ -1,0 +1,75 @@
+tap 'homebrew/bundle'
+tap 'homebrew/cask'
+tap 'homebrew/cask-versions'
+tap "homebrew/core"
+tap 'homebrew/services'
+
+# Allow installing from Mac App Store
+brew "mas"
+
+# System tools
+brew 'coreutils'
+brew 'jq'
+
+# Other stuff
+brew 'figlet'
+brew 'git-extras'
+brew 'grc'
+brew 'spark'
+
+# Communication
+cask 'skype'
+cask 'slack'
+mas "WhatsApp", id: 1147396723
+
+# Cloud
+cask 'dropbox'
+cask 'google-drive'
+
+# Media
+# cask 'amazon-music' # Doesnt work on M1 Macs
+cask 'spotify'
+cask 'vlc'
+
+# Productivity
+cask '1password'
+cask 'alfred'
+cask 'evernote'
+cask 'notion'
+mas 'Things 3', id: 904280696
+
+# System
+cask 'hammerspoon'
+
+# Dev
+cask 'android-studio'
+cask 'iterm2'
+cask 'cakebrew'
+cask 'kaleidoscope'
+cask 'reggy'
+cask 'sequel-pro'
+cask 'sourcetree'
+cask 'sublime-text'
+cask 'transmit'
+cask 'visual-studio-code'
+mas "Xcode", id: 497799835
+
+# Design
+cask 'figma'
+cask 'skyfonts'
+cask 'rightfont'
+
+# Browsers
+cask 'firefox'
+cask 'firefox-developer-edition'
+cask 'google-chrome'
+cask 'google-chrome-canary'
+cask 'opera'
+
+# Utilities
+cask 'the-unarchiver'
+
+# Mac Apps
+mas "Keynote", id: 409183694
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541

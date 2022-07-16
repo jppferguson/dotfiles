@@ -26,13 +26,10 @@ else
 
 fi
 
-print_line "Installing Homebrew packages"
+print_line "Update and Install Homebrew packages"
 
-# Install Homebrew packages
-brew install grc coreutils spark git-extras figlet
-
-# Install services
-brew tap homebrew/services
+# Run updates
+$DOTFILES/homebrew/update.sh
 
 # And we're done
 print_block_end
