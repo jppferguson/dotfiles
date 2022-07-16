@@ -4,7 +4,7 @@
 #  http://jppf.me/osx
 #
 #    The original idea (and a 99% of the settings) were grabbed from:
-#    http://mths.be/osx
+#    https://mths.be/macos
 #
 #
 # Run `dot` and this will get automatically run.
@@ -51,7 +51,7 @@ do
   # create an array of the apps we should now kill
   if [[ $file == *Applications/* ]]
   then
-    app=${file//.macos/}          # remove the .macos extension
+    app=${file//.macos/}        # remove the .macos extension
     app=${app//_/ }             # remove app- prefix
     app=${app##*/}              # remove the path
     apps=("${apps[@]}" "$app")  # add to the apps array
