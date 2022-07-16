@@ -5,13 +5,18 @@
 ###############################################################################
 set -e
 
+# Don't try to update non-Macs
+if test ! "$(uname)" = "Darwin"
+  then
+  exit 0
+fi
+
 # Include the general functions
 . $DOTFILES/functions/general
 
 print_block "Checking for macOS updates";
 
-softwareupdate -l
-# we're not really doing anything for now, so just list them out
+sudo softwareupdate -i -a
 
 print_block_end
 
