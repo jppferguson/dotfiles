@@ -1,9 +1,12 @@
 #!/bin/sh
+#
 # Update node
+#
+###############################################################################
 set -e
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
 
 print_block "Updating node"
 

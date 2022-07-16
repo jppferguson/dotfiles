@@ -3,11 +3,11 @@
 # Update homebrew
 #
 ###############################################################################
+set -e
 
 # Include the general functions
 . $DOTFILES/functions/general
 
-# Let the user know what's happening
 print_block "Updating Homebrew"
 
 brew bundle --global

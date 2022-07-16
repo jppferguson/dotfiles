@@ -1,9 +1,12 @@
 #!/bin/sh
+#
 # Update required fonts
+#
+###############################################################################
 set -e
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/functions/general
 
 print_block "Updating fonts"
 

@@ -5,16 +5,16 @@
 ###############################################################################
 set -e
 
-# Don't try to update non-Macs
-if test ! "$(uname)" = "Darwin"
-  then
-  exit 0
-fi
-
 # Include the general functions
 . $DOTFILES/functions/general
 
 print_block "Checking for macOS updates";
+
+# Don't try to update non-Macs
+if test ! "$(uname)" = "Darwin"; then
+  print_line "Not a Mac... exiting!"
+  exit 0
+fi
 
 sudo softwareupdate -i -a
 
