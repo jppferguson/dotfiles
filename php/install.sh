@@ -8,9 +8,15 @@
 # Include the general functions
 . ./functions/general
 
-
 print_block "Installing Composer"
 
+brew install php@7.1
 
-brew tap homebrew/php
 brew install composer --ignore-dependencies
+
+print_block "Installing Valet+"
+
+# install Valet+
+composer global require weprovide/valet-plus
+
+valet fix && valet install --with-mariadb
