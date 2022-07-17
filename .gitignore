@@ -32,4 +32,7 @@ hammerspoon/hammerspoon.symlink/init-local.lua
 hammerspoon/hammerspoon.symlink/Spoons
 
 # visual studio code settings
+vs-code/User/globalStorage
+vs-code/User/History
+vs-code/User/syncLocalSettings.json
 vs-code/User/workspaceStorage
