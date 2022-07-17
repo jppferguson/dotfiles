@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>albumName</key>
+	<string>Flashback Romance</string>
+	<key>artistName</key>
+	<string>Lucy Mason</string>
+	<key>coverURL</key>
+	<string>https://lastfm.freetls.fastly.net/i/u/300x300/4d03040ff889e2981685adf5e815956e.png</string>
+	<key>currentPosition</key>
+	<string>209</string>
+	<key>isLoved</key>
+	<string>false</string>
+	<key>oldFilename</key>
+	<string>/Users/piotr/Dropbox/Ubersicht/Playbox.Widget/Playbox.widget/lib/cover345.jpg</string>
+	<key>songChanged</key>
+	<string>false</string>
+	<key>songDuration</key>
+	<string>209</string>
+	<key>songName</key>
+	<string>Runway</string>
+</dict>
+</plist>
