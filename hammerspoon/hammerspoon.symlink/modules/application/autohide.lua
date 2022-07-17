@@ -12,7 +12,7 @@ m.config = {
   isActiveKey = 'jspoon_autohide',
   applications = {
     "Calendar",
-    "Finder",
+    -- "Finder",
   },
   message = {
     enabled = 'Application Auto Hide Enabled',

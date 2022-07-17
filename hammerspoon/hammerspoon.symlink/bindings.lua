@@ -87,7 +87,7 @@ keys.triggers = {
   ["Window Resize Shorter"] = { "mash", "'" },
 
   -- Move current window to next/prev display
-  ["Window Next Screen"] = { "mash", "0" },
+  ["Window Previous Screen"] = { "mash", "0" },
 
   -- Show interactive grid
   ["Window Show Grid"] = { "mash", "§" },
