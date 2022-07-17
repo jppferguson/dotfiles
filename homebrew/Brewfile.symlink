@@ -43,9 +43,10 @@ cask 'hammerspoon'
 
 # Dev
 cask 'android-studio'
-cask 'iterm2'
 cask 'cakebrew'
+cask 'iterm2'
 cask 'kaleidoscope'
+cask 'local'
 cask 'reggy'
 cask 'sequel-pro'
 cask 'sourcetree'
