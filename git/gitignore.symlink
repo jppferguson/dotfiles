@@ -9,7 +9,7 @@ Desktop.ini
 Thumbs.db
 
 # Icon must ends with two \r.
-Icon
+# Icon
 
 # Files that might appear on external disks
 .Spotlight-V100
@@ -36,6 +36,9 @@ cache/*
 # SublimeText workspace files are user-specific
 *.sublime-workspace
 
+# VSCode
+.vscode
+
 # Dreamweaver (*shudder*)
 _notes
 dwsync.xml
@@ -43,6 +46,8 @@ dwsync.xml
 # Misc project files
 timesheet.md
 todo.md
+NOTES.md
+TODO.md
 *.tmp
 *.tmp*
-*__*
+# *__*
