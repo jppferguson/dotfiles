@@ -15,6 +15,7 @@ then
   DOTFILES="${HOME}/.dotfiles/"
 fi
 # shellcheck source=$DOTFILES/functions/general
+. $DOTFILES/functions/common
 . $DOTFILES/functions/general
 
 # use .localrc for SUPER SECRET CRAP that you don't # want in your public, versioned repo.
@@ -47,6 +48,7 @@ config_files_completion=($(filter_array_include "/completion.zsh" "${config_file
 source_files "${config_files_completion[@]}"
 
 # include bash aliases & functions
+loadAllAliases
 source_file ~/.aliases
 source_file ~/.functions
 

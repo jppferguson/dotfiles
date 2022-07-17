@@ -5,8 +5,12 @@ for file in ~/.{localrc,bash_prompt,exports,aliases,functions}; do
 done
 unset file
 
+. $DOTFILES/functions/common
+
+loadAllAliases
+
 # init z   https://github.com/rupa/z
-. $VENDOR/z/z.sh
+#. $VENDOR/z/z.sh
 
 # init rvm
 #source ~/.rvm/scripts/rvm
