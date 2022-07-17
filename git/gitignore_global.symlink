@@ -1,16 +1,46 @@
-# Folder view configuration files
+# macOS - Folder view configuration files
 .DS_Store
+Desktop.ini
+.AppleDouble
+.LSOverride
 
-# Files that might appear on external disks
+# macOS - Files that might appear on external disks
 .Spotlight-V100
 .Trashes
 
-# SublimeText workspace files are user-specific
+# macOS - Thumbnail cache files
+._*
+Thumbs.db
+
+# IDE - SublimeText workspace files are user-specific
 *.sublime-workspace
+
+# IDE - VSCode
+.vscode
+
+# Cache files
+cache/*
+*.sass-cache*
+
+# Log Files
+logs
+logs/*
+error.log
+access.log
 
 # Misc project files
 timesheet.md
 todo.md
+NOTES.md
+TODO.md
 *.tmp
 *.tmp*
-*__*
+*___*
+
+# PHP - Composer
+/vendor
+/vendor/*
+composer.phar
+
+# Python - compiled files
+*.pyc
