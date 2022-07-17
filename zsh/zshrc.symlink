@@ -57,3 +57,8 @@ fi
 
 # cleanup variables
 unset config_files config_files_misc config_files_path config_files_completion verbose profiling
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
