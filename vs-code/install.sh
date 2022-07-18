@@ -12,16 +12,28 @@ print_block "Installing VS Code Preferences";
 
 # symlink settings in
 VS_CODE_DIR="${HOME}/Library/Application Support/Code"
+VS_CODE_INSIDERS_DIR="${HOME}/Library/Application Support/Code - Insiders"
+CUR_UNIX="`date +%s`"
 
-# make sure file exists first
-mkdir -p "${VS_CODE_DIR}"
+installVSCode () {
+	# make sure file exists first
+	mkdir -p "${1}"
 
-# backup old settings folder
-if [ -f "${VS_CODE_DIR}/User" ]; then
-	mv "${VS_CODE_DIR}/User" "${VS_CODE_DIR}/User.backup"
-fi
+	links=("User/settings.json" "User/keybindings.json")
+	for link in "${links[@]}"; do
+		# Backup
+		FILE_PATH="${1}/${link}"
+		FILE_BACKUP="${1}/_backup/${CUR_UNIX}/${link}"
+		if [[ -f "$FILE_PATH" ]]; then
+			mkdir -p "${FILE_BACKUP}"
+			mv "${1}/${link}" "${FILE_BACKUP}"
+		fi
+		# Link
+		ln -s "${DOTFILES}/vs-code/${link}" "${1}/${link}"
+	done
+}
 
-# symlink the User folder
-ln -s "${DOTFILES}/vs-code/User" "${VS_CODE_DIR}"
+installVSCode "${VS_CODE_DIR}"
+installVSCode "${VS_CODE_INSIDERS_DIR}"
 
 print_block_end
