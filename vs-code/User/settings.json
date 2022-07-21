@@ -1,17 +1,40 @@
 {
-    "editor.fontFamily": "'Operator Mono', 'Fira Code', Monaco, monospace",
-    "editor.fontLigatures": true,
-    "editor.fontSize": 12,
-    "editor.lineHeight": 24,
-    "editor.minimap.enabled": true,
-    "editor.scrollBeyondLastLine": false,
-    "editor.tabSize": 2,
-    "explorer.confirmDelete": false,
-    "projectManager.confirmSwitchOnActiveWindow": "always",
-    "projectManager.groupList": true,
-    "projectManager.openInNewWindowWhenClickingInStatusBar": true,
-    "projectManager.projectsLocation": "~/Sites/Workspaces/",
-    "window.zoomLevel": 1,
-    "workbench.colorTheme": "Night Owl",
-    "workbench.iconTheme": "file-icons",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.fontFamily": "'Operator Mono', 'Fira Code', Monaco, monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 12,
+  "editor.lineHeight": 24,
+  "editor.minimap.enabled": true,
+  "editor.renderWhitespace": "all",
+  "editor.scrollBeyondLastLine": false,
+  "editor.tabSize": 2,
+  "explorer.confirmDelete": false,
+  "projectManager.confirmSwitchOnActiveWindow": "always",
+  "projectManager.groupList": true,
+  "projectManager.openInNewWindowWhenClickingInStatusBar": true,
+  "projectManager.projectsLocation": "~/Sites/Workspaces/",
+  "workbench.colorTheme": "Night Owl",
+  "workbench.iconTheme": "file-icons",
+  "window.zoomLevel": 1,
+  "workbench.startupEditor": "none",
+  "eslint.format.enable": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "peacock.affectSashHover": false,
+  "peacock.affectActivityBar": false,
+  "peacock.affectTitleBar": false,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "scm.diffDecorationsGutterPattern": {
+    "added": true
+  }
 }
