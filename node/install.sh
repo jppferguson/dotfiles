@@ -10,13 +10,19 @@ set -e
 
 print_block "Installing Node.js and friends"
 
-# Install with homebrew
-brew install node
+# Uninstall node if installed
+brew uninstall --ignore-dependencies node
+brew uninstall --force node
 
 # Install nvm
-git clone https://github.com/creationix/nvm.git ~/.nvm
-cd ~/.nvm
-git checkout v0.33.5
+brew install nvm
+ln -s /opt/homebrew/opt/nvm ~/.nvm
+
+# Reload terminal
+source ~/.zshrc
+
+# Install latest LTS Version
+nvm install --lts
 
 # Install yarn
 brew install yarn
