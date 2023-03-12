@@ -168,7 +168,7 @@ function m.hide()
 end
 
 function m.start()
-  menu = hs.menubar.newWithPriority(m.config.menupriority)
+  menu = hs.menubar.new(true, 'scratchpad')
   -- menu:setTitle(m.config.menubar.icon)
   menu:setIcon(hs.image.imageFromPath(m.config.menubar.icon):setSize({w=16,h=16}))
   menu:setTooltip(m.config.menubar.tooltip)

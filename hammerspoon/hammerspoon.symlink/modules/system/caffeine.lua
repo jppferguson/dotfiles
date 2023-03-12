@@ -48,7 +48,7 @@ end
 
 -- Start the module
 m.start = function()
-  m.menubar = hs.menubar.newWithPriority(m.config.menupriority)
+  m.menubar = hs.menubar.new(true, 'caffeine')
   -- Get the persistant state
   local persistedState = hs.settings.get(m.config.isActiveKey)
   if m.menubar then

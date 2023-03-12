@@ -93,7 +93,7 @@ end
 -- Start the module
 m.start = function()
   local copy
-  m.menubar = hs.menubar.newWithPriority(m.config.menupriority)
+  m.menubar = hs.menubar.new(true, 'clipboard')
   m.menubar:setTooltip(m.config.menubar.tooltip)
   m.menubar:setTitle(m.config.menubar.title)
   m.menubar:setMenu(m.populateMenu)
