@@ -111,6 +111,7 @@ m.showHelpOverlay = function(message)
   }, 0)
   local textStyle = {
     font = font,
+    color = {["red"]=255,["blue"]=255,["green"]=255,["alpha"]=0.8},
     paragraphStyle = {
       alignment = "left",
       lineSpacing = fontSize * .6,
