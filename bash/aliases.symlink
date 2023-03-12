@@ -23,7 +23,7 @@ alias cl="clear"
 alias o="open ."
 
 # Enable aliases to be sudo’ed
-alias sudo='sudo '
+alias sudo=$'nocorrect sudo\t'
 
 # Gzip-enabled `curl`
 alias gurl='curl --compressed'
