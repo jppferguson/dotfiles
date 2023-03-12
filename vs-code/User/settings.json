@@ -2,29 +2,41 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.fontFamily": "'Operator Mono', 'Fira Code', Monaco, monospace",
   "editor.fontLigatures": true,
   "editor.fontSize": 12,
+  "editor.formatOnSave": true,
   "editor.lineHeight": 24,
   "editor.minimap.enabled": true,
   "editor.renderWhitespace": "all",
   "editor.scrollBeyondLastLine": false,
   "editor.tabSize": 2,
+  "eslint.format.enable": true,
+  "eslint.options": {
+    "extensions": [".js", ".jsx", ".md", ".mdx", ".ts", ".tsx"]
+  },
+  "eslint.validate": [
+    "markdown",
+    "mdx",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
   "explorer.confirmDelete": false,
+  "peacock.affectActivityBar": false,
+  "peacock.affectSashHover": false,
+  "peacock.affectTitleBar": false,
   "projectManager.confirmSwitchOnActiveWindow": "always",
   "projectManager.groupList": true,
   "projectManager.openInNewWindowWhenClickingInStatusBar": true,
   "projectManager.projectsLocation": "~/Sites/Workspaces/",
+  "window.title": "${dirty}${activeEditorShort}${separator}${rootName}",
+  "window.commandCenter": true,
   "workbench.colorTheme": "Night Owl",
   "workbench.iconTheme": "file-icons",
-  "window.zoomLevel": 1,
   "workbench.startupEditor": "none",
-  "eslint.format.enable": true,
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "peacock.affectSashHover": false,
-  "peacock.affectActivityBar": false,
-  "peacock.affectTitleBar": false,
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -36,5 +48,17 @@
   },
   "scm.diffDecorationsGutterPattern": {
     "added": true
-  }
+  },
+  "cSpell.userWords": ["dotfiles", "jppferguson", "Ooni"],
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "terminal.external.osxExec": "iTerm.app",
+  "terminal.integrated.automationProfile.osx": {},
+  "editor.accessibilitySupport": "off",
+  "[css]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  },
+  "window.zoomLevel": 1
 }
