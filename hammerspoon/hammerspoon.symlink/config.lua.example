@@ -18,7 +18,8 @@ config.modulesInclude = {
 }
 -- Exclude modules
 config.modulesExclude = {
-  "nonexistant.module",
+  "misc.weather",
+  "system.nightshift",
 }
 
 -- Module overides

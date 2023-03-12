@@ -205,7 +205,7 @@ end
 
 -- Start the module
 m.start = function(conf)
-  m.app = hs.menubar.newWithPriority(m.config.menupriority)
+  m.app = hs.menubar.new(true, 'weather')
   -- refresh on click
   m.app:setClickCallback(m.update)
   -- update weather every so often
