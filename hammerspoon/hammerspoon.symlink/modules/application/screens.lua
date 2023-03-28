@@ -4,15 +4,17 @@
 -----------------------------------------------
 local m = {}
 
-local isActive = true
+local hotkey = require "hs.hotkey"
 local alert = require "hs.alert"
+local isActive = true
 
 m.config = {
   isActiveKey = 'jspoon_app_screens',
   applications = {
-    Code = "U2713HM",
+    Code = "0,0",
+    Simulator = 'Built%-in',
+    Slack = '-1,0',
     Spotify = "Built%-in",
-    Slack = "P2217H",
   },
   message = {
     enabled = 'App Screens Enabled',
@@ -44,15 +46,19 @@ m.appWatcher = hs.application.watcher.new(function(appName, appEvent, app)
     m.handleMovingWindows(appName, app)
   end
 end)
--- Watch screens
-m.screenWatcher = hs.screen.watcher.new(function()
+
+-- Reset positions
+m.resetAppPositions = function()
   for appName in pairs(m.config.applications) do
     local app = hs.application.find(appName)
     if app.isRunning then
       m.handleMovingWindows(appName, app)
     end
   end
-end)
+end
+
+-- Watch screens
+m.screenWatcher = hs.screen.watcher.new(m.resetAppPositions)
 
 -- Set the autohide state
 m.setState = function(state)
@@ -75,6 +81,11 @@ m.start = function()
   m.screenWatcher:start()
   m.setState(isActive)
 end
+
+-- Add triggers
+-----------------------------------------------
+m.triggers = {}
+m.triggers["Reset App Locations"] = m.resetAppPositions
 
 ----------------------------------------------------------------------------
 return m

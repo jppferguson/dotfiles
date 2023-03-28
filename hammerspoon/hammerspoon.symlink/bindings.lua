@@ -21,6 +21,7 @@ keys.triggers = {
   -- Apps
   -----------------------------------------------
   ["Autohide Toggle"] = { "mash", "F13" },
+  ["Reset App Locations"] = { "mash", "F14" },
 
   ["Hammerspoon Console"] = { "mash", "\\" },
   ["Hammerspoon Reload"] = { "mash", "R", false },
