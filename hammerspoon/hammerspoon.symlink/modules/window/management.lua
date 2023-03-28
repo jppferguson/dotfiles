@@ -173,11 +173,11 @@ m.moveToScreen = function(screen)
     if screen == 'prev' then
       local prevScreen = win:screen():previous()
       win:moveToScreen(prevScreen)
-      alert("Previous Monitor")
+      alert("Previous Monitor - "..nextScreen:name().." ("..prevScreen:id()..")")
     elseif screen == 'next' then
       local nextScreen = win:screen():next()
       win:moveToScreen(nextScreen)
-      alert("Next Monitor")
+      alert("Next Monitor - "..nextScreen:name().." ("..nextScreen:id()..")")
     end
   else
     alert("There's only one monitor...")
