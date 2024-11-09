@@ -1,6 +1,6 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.fontFamily": "'Operator Mono', 'Fira Code', Monaco, monospace",
@@ -60,5 +60,44 @@
   "[css]": {
     "editor.defaultFormatter": "vscode.css-language-features"
   },
-  "window.zoomLevel": 1
+  "git.autofetch": true,
+  "git.openRepositoryInParentFolders": "never",
+  "githubPullRequests.pullBranch": "never",
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "workbench.colorCustomizations": {
+    "[Night Owl]": {
+      "editorInlayHint.foreground": "#868686f0",
+      "editorInlayHint.background": "#18181800",
+      // Overrides for specific kinds of inlay hints
+      "editorInlayHint.typeForeground": "#6b8790f0",
+      "editorInlayHint.parameterForeground": "#6b8790f0"
+    }
+  },
+  "search.useIgnoreFiles": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.jest_cache": true,
+    "**/bower_components": true,
+    "**/*.code-search": true
+  },
+  "window.zoomLevel": 1,
+  "workbench.tree.enableStickyScroll": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.stickyTabStops": true,
+  "terminal.integrated.stickyScroll.enabled": true,
+  "prisma.showPrismaDataPlatformNotification": false,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "terminal.integrated.env.osx": {},
+  "console-ninja.featureSet": "Community",
+  "kotlin.languageServer.enabled": false,
+  "kotlin.debugAdapter.enabled": false,
+  "vsicons.dontShowNewVersionMessage": true,
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [80],
+    "editor.selectionHighlight": false,
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off"
+  }
 }
