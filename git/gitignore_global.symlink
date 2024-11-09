@@ -44,3 +44,6 @@ composer.phar
 
 # Python - compiled files
 *.pyc
+
+# asdf
+.tool-versions

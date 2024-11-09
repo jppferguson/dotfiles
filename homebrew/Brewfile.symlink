@@ -11,6 +11,9 @@ brew "mas"
 brew 'coreutils'
 brew 'jq'
 
+# Package management
+brew 'asdf'
+
 # Other stuff
 brew 'figlet'
 brew 'git-extras'
