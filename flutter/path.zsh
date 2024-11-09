@@ -1,0 +1,1 @@
+export PATH=$PATH:$HOME/fvm/versions/stable/bin
