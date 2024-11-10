@@ -1,10 +1,10 @@
 name: Dotfiles Tests
-
-on:
-  push:
+on: [push]
 
 jobs:
-  - name: Clone this repository
-    uses: actions/checkout@v3
-  - name: Run tests
-    run: sh src/script/test
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - run: sh src/script/test
