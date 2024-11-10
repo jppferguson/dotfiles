@@ -1,2 +1,2 @@
-export EDITOR='atom'
-export GITGUI='SourceTree'
+export EDITOR='code'
+export GITGUI='stree'

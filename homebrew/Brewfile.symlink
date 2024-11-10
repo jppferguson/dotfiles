@@ -1,7 +1,4 @@
 tap 'homebrew/bundle'
-tap 'homebrew/cask'
-tap 'homebrew/cask-versions'
-tap "homebrew/core"
 tap 'homebrew/services'
 
 # Allow installing from Mac App Store
@@ -9,7 +6,10 @@ brew "mas"
 
 # System tools
 brew 'coreutils'
+brew 'dockutil'
+brew 'duti'
 brew 'jq'
+brew 'topgrade'
 
 # Package management
 brew 'asdf'
