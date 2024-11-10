@@ -5,6 +5,7 @@ tap 'homebrew/services'
 brew "mas"
 
 # System tools
+brew 'bats-core'
 brew 'coreutils'
 brew 'dockutil'
 brew 'duti'
