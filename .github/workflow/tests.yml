@@ -5,7 +5,8 @@ on:
 
 jobs:
   test:
-    - name: Clone this repository
-      uses: actions/checkout@v3
-    - name: Run tests
-      run: sh src/script/test
+    steps:
+      - name: Clone this repository
+        uses: actions/checkout@v3
+      - name: Run tests
+        run: sh src/script/test
