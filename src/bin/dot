@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+#
+# dot
+#
+# `dot` handles installation, updates, things like that. Run it periodically
+# to make sure you're on the latest and greatest.
+
+BIN_NAME=$(basename "$0")
+COMMAND_NAME=$1
+SUB_COMMAND_NAME=$2
+
+sub_help () {
+  echo "Usage: $BIN_NAME <command>"
+  echo
+  echo "Commands:"
+  echo "   clean            Clean up caches (brew)"
+  echo "   dock             Apply macOS Dock settings"
+  echo "   duti             Set default apps for file types (UTI)"
+  echo "   edit             Open dotfiles in IDE ($EDITOR) and Git GUI ($GITGUI)"
+  echo "   help             This help message"
+  echo "   install {pkg}    Install a package"
+  echo "   macos            Apply macOS system defaults"
+  echo "   reload           Reload dotfiles"
+  echo "   symlink          Symlink all dotfiles"
+  echo "   test             Run tests"
+  echo "   update           Update packages and pkg managers (brew, casks, cargo, pip3, npm, gems, macOS)"
+}
+
+sub_clean () {
+  echo "$ brew cleanup"
+  brew cleanup
+  # echo "$ cargo cache --autoclean"
+  # cargo cache --autoclean
+  # echo "$ gem cleanup"
+  # gem cleanup
+  # echo "$ pip cache purge"
+  # pip cache purge
+}
+
+sub_completion () {
+  echo "clean dock duti edit help install macos reload test update"
+}
+
+sub_dock () {
+  . "${DOTFILES}/macos/set-dock.sh" && echo "Dock reloaded."
+}
+
+sub_duti () {
+  . "${DOTFILES}/duti/update.sh"
+}
+
+sub_edit () {
+  sh -c "$EDITOR $DOTFILES"
+  sh -c "$GITGUI $DOTFILES"
+}
+
+sub_install () {
+  local SCRIPT="$DOTFILES/src/topics/$SUB_COMMAND_NAME/install.sh"
+  [ -f "$SCRIPT" ] && . "$SCRIPT" || echo "Unable to find script to install $SUB_COMMAND_NAME"
+}
+
+sub_macos () {
+  for DEFAULTS_FILE in "${DOTFILES}"/macos/defaults*.macos; do
+    echo "Applying ${DEFAULTS_FILE}" && . "${DEFAULTS_FILE}"
+  done
+  echo "Done. Some changes may require a logout/restart to take effect."
+}
+
+sub_reload () {
+  exec $SHELL -l
+}
+
+sub_symlink () {
+  $DOTFILES/src/script/bootstrap
+}
+
+sub_test () {
+  bats "$DOTFILES"/test/*.bats
+}
+
+sub_update () {
+  topgrade
+}
+
+case $COMMAND_NAME in
+  "" | "-h" | "--help")
+    sub_help
+    ;;
+  *)
+    shift
+    sub_${COMMAND_NAME} $@
+    if [ $? = 127 ]; then
+      echo "'$COMMAND_NAME' is not a known command or has errors." >&2
+      sub_help
+      exit 1
+    fi
+    ;;
+esac

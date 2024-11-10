@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+#
+# Common functions, used in both bash and zsh
+#
+###############################################################################
+
+loadAllAliases () {
+    # Get all of our alias files and source them
+    alias_files=($DOTFILES/src/topics/**/aliases.sh)
+    for alias_file in "${alias_files[@]}"; do
+        source $alias_file
+    done
+}

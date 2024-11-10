@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# uncomment for debugging:
+# export profiling=true     # profile zsh startup
+# export verbose=true       # more verbose output
+
+# start profiling if enabled
+if [ "$profiling" = true ]; then
+  zmodload zsh/zprof
+fi
+
+# add default $DOTFILES
+if [[ ! $DOTFILES ]]
+then
+  DOTFILES="${HOME}/.dotfiles/"
+fi
+# shellcheck source=$DOTFILES/src/functions/general
+. $DOTFILES/src/functions/common
+. $DOTFILES/src/functions/general
+
+# use .localrc for SUPER SECRET CRAP that you don't # want in your public, versioned repo.
+source_file ~/.localrc
+
+# using .commonrc for stuff you want shared between zsh and bash
+source_file ~/.commonrc
+
+# all of our zsh files
+typeset -U config_files
+config_files=($DOTFILES/src/topics/**/*.zsh)
+config_files_misc=("${config_files[@]}")
+
+# load the path files
+# source_files ${(M)config_files:#*/path.zsh}
+config_files_path=($(filter_array_include "/path.zsh" "${config_files[@]}"))
+source_files "${config_files_path[@]}"
+
+# load everything but the path and completion files
+config_files_misc=($(filter_array_exclude "/path.zsh" "${config_files_misc[@]}"))
+config_files_misc=($(filter_array_exclude "/completion.zsh" "${config_files_misc[@]}"))
+source_files "${config_files_misc[@]}"
+
+# initialize autocomplete here, otherwise functions won't be loaded
+# autoload -U compinit
+# compinit
+
+# load every completion after autocomplete loads
+config_files_completion=($(filter_array_include "/completion.zsh" "${config_files[@]}"))
+source_files "${config_files_completion[@]}"
+
+# include bash aliases & functions
+loadAllAliases
+source_file ~/.aliases
+source_file ~/.functions
+
+# end profiling if profiling is enabled
+if [ "$profiling" = true ]; then
+  zprof
+fi
+
+# cleanup variables
+unset config_files config_files_misc config_files_path config_files_completion verbose profiling

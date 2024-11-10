@@ -1,0 +1,85 @@
+#!/bin/sh
+#
+# Creates a new apache site
+# Usage `new-apache-site {hostname(=PWD)}`
+
+
+# Include dotfiles' general functions
+. $DOTFILES/src/functions/general
+
+
+# default flag options
+dontOpenInBrowser=false
+verbose=false
+
+
+# test flag options
+for i in "$@"; do
+  case $i in
+    -v|--verbose) verbose=true ;;
+    -d) dontOpenInBrowser=true ;;
+    -h=*|--hostname=*|*) hostname="${i#*=}" ;;
+  esac
+done
+
+
+# Set sites folder
+sitesFolder=/var/www
+tld=.dev
+verboseOut "Set sites folder to:" $sitesFolder
+verboseOut "Set tld to:" $tld
+
+
+# Fallback to PWD if hostname isn't set
+if [ -n "$hostname" ]; then
+  hostname=$hostname
+  verboseOut "Hostname supplied:" $hostname
+else
+  hostname=${PWD##*/}
+  verboseOut "Set hostname to PWD as wasnt supplied:" $hostname
+fi
+
+
+# Fallback to previous dirname if hostname is a reserved dirname
+reservedDirnames=("html" "mainwebsite_html" "public" "public_html" "www")
+if inArray "$hostname" "${reservedDirnames[@]}"; then
+  hostname=${PWD%/*}
+  hostname=${hostname##*/}
+  verboseOut "Fallback to previous dirname as current is reserved. New hostname:" $hostname
+fi
+
+
+# Tidy up hostname
+hostname=${hostname//[^a-zA-Z0-9]/-}
+hostname=$(echo "$hostname" | awk '{print tolower($0)}' | tr -s '-')
+verboseOut "Tidy up hostname:" $hostname
+
+
+# make sure the site doesn't already exist
+verboseOut "Checking site doesn't already exist..."
+if [ -d "$sitesFolder/$hostname/" ]; then
+  echo $cRed "ERROR: Site already exists --> "$cYellow $hostname$tld $cNo
+  exit 0
+fi
+
+# Create symbolic link to the sites folder
+verboseOut "Creating symbolic link to the sites folder..."
+ln -s "$PWD" "${sitesFolder}/${hostname}"
+
+
+# if no default files, create a placeholder index.php file to check everything is working
+if [ ! -f "index.html" ] && [ ! -f "index.php" ] && [ ! -f ".htaccess" ]; then
+  verboseOut "Creating placeholder index.php file..."
+  echo "Your new site is ready at: ${hostname}${tld}" >> index.php
+fi
+
+
+# We done boy!
+echo "New site created successfully -->" $cYellow $hostname$tld $cNo
+
+
+# Open in your browser of choice
+if [ $dontOpenInBrowser = false ]; then
+  verboseOut "Opening new site in your browser of choice..."
+  open "http://$hostname$tld/"
+fi

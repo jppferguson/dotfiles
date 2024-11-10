@@ -4,35 +4,35 @@ todo.md
 *tmp*
 
 # the actual git config
-git/gitconfig.symlink
+src/topics/git/gitconfig.symlink
 
 # dotfile vendor libs
 vendor
 vendor/*
 
 # sublime settings
-sublime/User/*
-!sublime/User/*.sublime-settings
-!sublime/User/*.sublime-keymap
+src/topics/sublime/User/*
+!src/topics/sublime/User/*.sublime-settings
+!src/topics/sublime/User/*.sublime-keymap
 
 # atom settings
-atom/atom.symlink/.apm
-atom/atom.symlink/.node-gyp
-atom/atom.symlink/projects.cson
-atom/atom.symlink/blob-store
-atom/atom.symlink/compile-cache
-atom/atom.symlink/packages
-atom/atom.symlink/recovery
-atom/atom.symlink/storage
-atom/atom.symlink/themes
+src/topics/atom/atom.symlink/.apm
+src/topics/atom/atom.symlink/.node-gyp
+src/topics/atom/atom.symlink/projects.cson
+src/topics/atom/atom.symlink/blob-store
+src/topics/atom/atom.symlink/compile-cache
+src/topics/atom/atom.symlink/packages
+src/topics/atom/atom.symlink/recovery
+src/topics/atom/atom.symlink/storage
+src/topics/atom/atom.symlink/themes
 
 # hammerspoon settings
-hammerspoon/hammerspoon.symlink/config.lua
-hammerspoon/hammerspoon.symlink/init-local.lua
-hammerspoon/hammerspoon.symlink/Spoons
+src/topics/hammerspoon/hammerspoon.symlink/config.lua
+src/topics/hammerspoon/hammerspoon.symlink/init-local.lua
+src/topics/hammerspoon/hammerspoon.symlink/Spoons
 
 # visual studio code settings
-vs-code/User/globalStorage
-vs-code/User/History
-vs-code/User/syncLocalSettings.json
-vs-code/User/workspaceStorage
+src/topics/vs-code/User/globalStorage
+src/topics/vs-code/User/History
+src/topics/vs-code/User/syncLocalSettings.json
+src/topics/vs-code/User/workspaceStorage
