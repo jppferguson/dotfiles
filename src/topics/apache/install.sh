@@ -32,7 +32,7 @@ sudo bash -c 'echo "nameserver 127.0.0.1" > /etc/resolver/dev'
 # TODO, check they dont already exist
 httpdvhosts="/private/etc/apache2/extra/httpd-vhosts.conf"
 sudo cp ${httpdvhosts} ${httpdvhosts}.bak
-sudo sh -c "cat ${httpdvhosts}.bak ${DOTFILES}/apache/vhosts > ${httpdvhosts}"
+sudo sh -c "cat ${httpdvhosts}.bak ${DOTFILES}/src/topics/apache/vhosts > ${httpdvhosts}"
 
 # fixup httpd.conf
 httpdconf="/private/etc/apache2/httpd.conf"

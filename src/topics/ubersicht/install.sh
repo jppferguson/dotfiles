@@ -23,6 +23,6 @@ if [ -f "${UBERSICHT_WIDGETS_DIR}" ]; then
 fi
 
 # symlink the Widgets folder
-ln -s "${DOTFILES}/ubersicht/widgets" "${UBERSICHT_WIDGETS_DIR}"
+ln -s "${DOTFILES}/src/topics/ubersicht/widgets" "${UBERSICHT_WIDGETS_DIR}"
 
 print_block_end

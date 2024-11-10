@@ -47,11 +47,11 @@ sub_completion () {
 }
 
 sub_dock () {
-  . "${DOTFILES}/macos/set-dock.sh" && echo "Dock reloaded."
+  . "${DOTFILES}/src/topics/macos/set-dock.sh" && echo "Dock reloaded."
 }
 
 sub_duti () {
-  . "${DOTFILES}/duti/update.sh"
+  . "${DOTFILES}/src/topics/duti/update.sh"
 }
 
 sub_edit () {

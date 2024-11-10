@@ -23,10 +23,10 @@ if [ -f "${SUBLIME_PACKAGES_DIR}/User" ]; then
 fi
 
 # symlink the User folder
-ln -s "${DOTFILES}/sublime/User" "${SUBLIME_PACKAGES_DIR}"
+ln -s "${DOTFILES}/src/topics/sublime/User" "${SUBLIME_PACKAGES_DIR}"
 
 # Install package control
 mkdir -p "${SUBLIME_DIR}/Installed Packages/"
-ln -s "${DOTFILES}/sublime/Packages/Package Control.sublime-package" "${SUBLIME_DIR}/Installed Packages/Package Control.sublime-package"
+ln -s "${DOTFILES}/src/topics/sublime/Packages/Package Control.sublime-package" "${SUBLIME_DIR}/Installed Packages/Package Control.sublime-package"
 
 print_block_end

@@ -15,4 +15,4 @@ if ! command_exists duti; then
 fi
 
 # Update file associations
-duti -v "${DOTFILES}/duti/duti"
+duti -v "${DOTFILES}/src/topics/duti/duti"

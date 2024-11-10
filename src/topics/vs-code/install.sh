@@ -29,7 +29,7 @@ installVSCode () {
 			mv "${1}/${link}" "${FILE_BACKUP}"
 		fi
 		# Link
-		ln -s "${DOTFILES}/vs-code/${link}" "${1}/${link}"
+		ln -s "${DOTFILES}/src/topics/vs-code/${link}" "${1}/${link}"
 	done
 }
 

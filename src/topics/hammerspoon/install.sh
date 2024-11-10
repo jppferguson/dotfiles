@@ -10,7 +10,7 @@ set -e
 
 print_block "Installing hammerspoon"
 
-SPOON_INSTALL_DIR="${DOTFILES}/hammerspoon/hammerspoon.symlink/Spoons/SpoonInstall.spoon"
+SPOON_INSTALL_DIR="${DOTFILES}/src/topics/hammerspoon/hammerspoon.symlink/Spoons/SpoonInstall.spoon"
 
 if [ ! -d "$SPOON_INSTALL_DIR" ]; then
   brew install hammerspoon
