@@ -13,6 +13,6 @@ jobs:
       - name: Tests
         shell: bash
         env:
-        BATS_LIB_PATH: ${{ steps.setup-bats.outputs.lib-path }}
-        TERM: xterm
+          BATS_LIB_PATH: ${{ steps.setup-bats.outputs.lib-path }}
+          TERM: xterm
         run: sh src/script/test
