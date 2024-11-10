@@ -1,2 +1,2 @@
 export EDITOR='code'
-export GITGUI='stree'
+export GITGUI='Sourcetree'

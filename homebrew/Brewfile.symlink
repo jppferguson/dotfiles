@@ -25,6 +25,7 @@ brew 'spark'
 cask 'skype'
 cask 'slack'
 mas "WhatsApp", id: 1147396723
+cask 'zoom'
 
 # Cloud
 cask 'dropbox'
@@ -40,6 +41,7 @@ cask '1password'
 cask 'alfred'
 cask 'evernote'
 cask 'notion'
+cask 'notion-calendar'
 mas 'Things 3', id: 904280696
 
 # System
@@ -48,6 +50,8 @@ cask 'hammerspoon'
 # Dev
 cask 'android-studio'
 cask 'cakebrew'
+cask 'docker'
+cask 'elgato-stream-deck'
 cask 'iterm2'
 cask 'kaleidoscope'
 cask 'local'

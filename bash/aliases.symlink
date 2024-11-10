@@ -144,3 +144,7 @@ alias hostsfile="sudo nano /etc/hosts"
 
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
+
+# RN Dev
+alias fixWatchman="watchman watch-del-all && watchman shutdown-server"
+alias fixAndroid="cd android && ./gradlew clean && ../"

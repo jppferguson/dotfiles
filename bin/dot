@@ -21,6 +21,7 @@ sub_help () {
   echo "   install {pkg}    Install a package"
   echo "   macos            Apply macOS system defaults"
   echo "   reload           Reload dotfiles"
+  echo "   symlink          Symlink all dotfiles"
   echo "   test             Run tests"
   echo "   update           Update packages and pkg managers (brew, casks, cargo, pip3, npm, gems, macOS)"
 }
@@ -37,7 +38,7 @@ sub_clean () {
 }
 
 sub_completion () {
-    echo "clean dock duti edit help install macos reload test update"
+  echo "clean dock duti edit help install macos reload test update"
 }
 
 sub_dock () {
@@ -67,6 +68,10 @@ sub_macos () {
 
 sub_reload () {
   exec $SHELL -l
+}
+
+sub_symlink () {
+  $DOTFILES/script/bootstrap
 }
 
 sub_test () {
