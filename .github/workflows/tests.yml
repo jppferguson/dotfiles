@@ -10,4 +10,9 @@ jobs:
       - name: Setup Bats and bats libs
          id: setup-bats
          uses: bats-core/bats-action@3.0.0
-      - run: sh src/script/test
+      - name: Tests
+        shell: bash
+        env:
+        BATS_LIB_PATH: ${{ steps.setup-bats.outputs.lib-path }}
+        TERM: xterm
+        run: sh src/script/test
