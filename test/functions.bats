@@ -5,7 +5,7 @@
 #load 'libs/bats-assert/load'
 
 # functions to test
-. ~/.dotfiles/src/functions/general
+. $PWD/src/functions/general
 
 # Colour assertion helpers
 assert_red_text     () { assert_output --partial "31"; }
