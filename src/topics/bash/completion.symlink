@@ -1,0 +1,8 @@
+# Dotfiles
+
+_dot_completions() {
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=( $(compgen -W '`dot completion`' -- $cur ) );
+}
+
+compdef _dot_completions dot
