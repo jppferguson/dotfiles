@@ -13,6 +13,7 @@ sub_help () {
   echo "Usage: $BIN_NAME <command>"
   echo
   echo "Commands:"
+  echo "   cd               cd into dotfiles directory"
   echo "   clean            Clean up caches (brew)"
   echo "   dock             Apply macOS Dock settings"
   echo "   duti             Set default apps for file types (UTI)"
@@ -35,6 +36,10 @@ sub_clean () {
   # gem cleanup
   # echo "$ pip cache purge"
   # pip cache purge
+}
+
+sub_cd () {
+  cd $DOTFILES && $SHELL
 }
 
 sub_completion () {
