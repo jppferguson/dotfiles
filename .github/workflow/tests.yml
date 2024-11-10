@@ -1,10 +1,9 @@
 name: Dotfiles Tests
-
-on:
-  push:
+on: [push]
 
 jobs:
   test:
+    runs-on: ubuntu-latest
     steps:
       - name: Clone this repository
         uses: actions/checkout@v3
