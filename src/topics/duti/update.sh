@@ -12,6 +12,7 @@ print_block "Updating duti"
 
 if ! command_exists duti; then
   print_error "Please install duti!"
+  exit 0
 fi
 
 # Update file associations

@@ -1,5 +1,6 @@
 tap 'homebrew/bundle'
 tap 'homebrew/services'
+brew "dsully/tap/macos-defaults"
 
 # Allow installing from Mac App Store
 brew "mas"

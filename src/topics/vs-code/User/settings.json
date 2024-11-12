@@ -97,7 +97,6 @@
   "console-ninja.featureSet": "Community",
   "kotlin.languageServer.enabled": false,
   "kotlin.debugAdapter.enabled": false,
-  "vsicons.dontShowNewVersionMessage": true,
   "[dart]": {
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
