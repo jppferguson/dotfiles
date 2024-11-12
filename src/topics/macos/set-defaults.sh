@@ -12,7 +12,7 @@
 ###############################################################################
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/src/functions/general
 
 # check this is actually an macOS machine
 if [ $(uname -s) = 'Darwin' ]

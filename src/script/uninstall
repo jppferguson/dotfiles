@@ -4,4 +4,4 @@
 set -e
 
 # Include the general functions
-. functions/general
+. $DOTFILES/src/functions/general

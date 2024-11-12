@@ -25,7 +25,7 @@ cd "$(dirname $0)"/..
 localSettings=~/.localrc
 
 # Include the general functions
-. ./functions/general
+. $DOTFILES/src/functions/general
 
 # Source .localrc file for stuff we don't want to install
 . $localSettings
