@@ -60,6 +60,9 @@
   "[css]": {
     "editor.defaultFormatter": "vscode.css-language-features"
   },
+  "files.associations": {
+    ".env*": "dotenv"
+  },
   "git.autofetch": true,
   "git.openRepositoryInParentFolders": "never",
   "githubPullRequests.pullBranch": "never",
@@ -73,9 +76,12 @@
       "editorInlayHint.parameterForeground": "#6b8790f0"
     }
   },
+  "search.useGlobalIgnoreFiles": true,
   "search.useIgnoreFiles": true,
   "search.exclude": {
     "**/node_modules": true,
+    "**/lcov-report": true,
+    "**/*.map": true,
     "**/.jest_cache": true,
     "**/bower_components": true,
     "**/*.code-search": true
