@@ -43,6 +43,7 @@ cask 'evernote'
 cask 'notion'
 cask 'notion-calendar'
 mas 'Things 3', id: 904280696
+mas 'Toggl Track', id: 1291898086
 
 # System
 cask 'hammerspoon'
