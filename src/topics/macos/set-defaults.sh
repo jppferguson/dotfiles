@@ -30,6 +30,8 @@ fi
 
 print_warning "If you get 'Could not write domain...' errors below, you may need to add your terminal app (e.g. Terminal.app, iTerm2) to System Preferences -> Privacy -> Full Disk Access"
 
-macos-defaults apply $DOTFILES/src/topics/macos/defaults
+macos-defaults apply $DOTFILES/src/topics/macos/defaults/
+
+print_line "Some settings may require a logout/restart to take effect."
 
 print_block_end

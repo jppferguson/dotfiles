@@ -65,10 +65,7 @@ sub_install () {
 }
 
 sub_macos () {
-  for DEFAULTS_FILE in "${DOTFILES}"/macos/defaults*.macos; do
-    echo "Applying ${DEFAULTS_FILE}" && . "${DEFAULTS_FILE}"
-  done
-  echo "Done. Some changes may require a logout/restart to take effect."
+  . "${DOTFILES}/src/topics/macos/update.sh"
 }
 
 sub_reload () {
