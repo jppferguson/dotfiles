@@ -1,0 +1,23 @@
+---
+description: "Google Chrome"
+kill: ["Google Chrome"]
+data:
+  com.google.Chrome:
+    # Use the system-native print preview dialog
+    DisablePrintPreview: true
+
+    # Expand the print dialog by default
+    PMPrintingExpandedStateForPrint2: true
+
+    # https://support.google.com/chrome/thread/14193532?hl=en
+    ExternalProtocolDialogShowAlwaysOpenCheckbox: true
+
+    # Disable the all too sensitive backswipe on Magic Mouse and Trackpads
+    AppleEnableMouseSwipeNavigateWithScrolls: false
+    AppleEnableSwipeNavigateWithScrolls: false
+
+  com.google.Chrome.canary:
+    PMPrintingExpandedStateForPrint2: true
+    DisablePrintPreview: true
+    AppleEnableMouseSwipeNavigateWithScrolls: false
+    AppleEnableSwipeNavigateWithScrolls: false

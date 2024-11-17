@@ -1,0 +1,5 @@
+---
+description: Accessibility
+data:
+  com.apple.Accessibility:
+    EnhancedBackgroundContrastEnabled: true

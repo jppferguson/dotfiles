@@ -1,0 +1,131 @@
+---
+description: Safari
+kill: ["Safari"]
+data:
+  # Safari opens with: "All windows from last sessions"
+  com.apple.Safari:
+    AlwaysRestoreSessionAtLaunch: true
+
+    # Disable the standard delay in rendering a Web page.
+    WebKitInitialTimedLayoutDelay: 0.25
+    WebKitResourceTimedLayoutDelay: 0.0001
+
+    # Hide Safari's bookmarks bar by default
+    ShowFavoritesBar: false
+
+    # Hide Safari's sidebar in Top Sites
+    ShowSidebarInTopSites: false
+
+    # Enabling Safari's debug menu
+    IncludeInternalDebugMenu: true
+
+    # Disable Safari notifications
+    CanPromptForPushNotifications: false
+
+    # Disable Safari’s Top Sites
+    DebugSafari4IncludeTopSites: false
+
+    # Enable continuous spellchecking
+    WebContinuousSpellCheckingEnabled: true
+
+    # Disable auto-correct
+    WebAutomaticSpellingCorrectionEnabled: false
+
+    # Disable AutoFill
+    AutoFillFromAddressBook: false
+    AutoFillPasswords: false
+    AutoFillCreditCardData: false
+    AutoFillMiscellaneousForms: false
+
+    # Disable Java
+    WebKitJavaEnabled: false
+    com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaEnabled: false
+    com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaEnabledForLocalFiles: false
+
+    # Enable "Do Not Track"
+    SendDoNotTrackHTTPHeader: true
+
+    # Making Safari's search banners default to Contains instead of Starts With
+    FindOnPageMatchesWordStartsOnly: false
+
+    # Removing useless icons from Safari's bookmarks bar
+    ProxiesInBookmarksBar: []
+
+    # Allow hitting the Backspace key to go to the previous page in history
+    # com.apple.Safari.ContentPageGroupIdentifier.WebKit2BackspaceKeyNavigationEnabled: true
+
+    # Enabling the Develop menu and the Web Inspector in Safari
+    IncludeDevelopMenu: true
+    WebKitDeveloperExtrasEnabledPreferenceKey: true
+    "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled": true
+
+    # Show the full URL in the address bar (note: this still hides the scheme)
+    ShowFullURLInSmartSearchField: true
+
+    # Set Safari’s home page to `about:blank` for faster loading
+    HomePage: "about:blank"
+
+    # New windows open with: "Homepage"
+    NewWindowBehavior: 0
+
+    # New tabs open with: "Homepage"
+    NewTabBehavior: 0
+
+    # Disable Preload Top Hit in the background
+    PreloadTopHit: true
+
+    # Enable Save articles for offline reading automatically
+    ReadingListSaveArticlesOfflineAutomatically: true
+
+    # Disable Include search engine suggestions
+    # SuppressSearchSuggestions: true
+
+    # Include Safari Suggestions
+    UniversalSearchEnabled: false
+
+    # Enable Quick Website Search
+    WebsiteSpecificSearchEnabled: false
+
+    # Warn when visiting a fraudulent website
+    WarnAboutFraudulentWebsites: true
+
+    # Prevent Safari from opening ‘safe’ files automatically after downloading
+    AutoOpenSafeDownloads: false
+
+    # Press Tab to highlight each item on a web page
+    WebKitTabToLinksPreferenceKey: true
+    "com.apple.Safari.ContentPageGroupIdentifier.WebKit2TabsToLinks": true
+
+    # Remove downloads list items
+    # 0 = manually
+    # 1 = when safari quits
+    # 2 = upon successful download
+    # 3 = after on day
+    DownloadsClearingPolicy: 0
+
+    # Show icons in tabs
+    ShowIconsInTabs: true
+
+    # Command-clicking a link creates tabs
+    CommandClickMakesTabs: true
+
+    # Make new tabs open in foreground
+    OpenNewTabsInFront: false
+
+    # Command + 1 through 9 switches tabs
+    Command1Through9SwitchesTabs: false
+
+    # Try to prevent cross-site tracking
+    WebKitStorageBlockingPolicy: 1
+
+    # Allow websites to check if ApplePay is enabled
+    WebKitPreferences.applePayCapabilityDisclosureAllowed: true
+
+    # Enable Extensions
+    ExtensionsEnabled: true
+
+    # Disable hyperlink auditing / tracking
+    "com.apple.Safari.ContentPageGroupIdentifier.WebKit2HyperlinkAuditingEnabled": false
+
+    # Update extensions automatically
+    InstallExtensionUpdatesAutomatically: true

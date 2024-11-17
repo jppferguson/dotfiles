@@ -1,0 +1,65 @@
+---
+description: Dock
+data:
+  com.apple.dock:
+    # Turn off Spaces auto-switching
+    workspaces-auto-swoosh: false
+
+    # Minimize windows into their application’s icon
+    minimize-to-application: true
+
+    # Show indicator lights for open applications in the Dock
+    show-process-indicators: true
+
+    # Show only open applications in the Dock
+    static-only: false
+
+    # Wipe all (default) app icons from the Dock.
+    persistent-apps: []
+
+    # Don’t show recent applications in Dock
+    show-recents: false
+
+    # Setting the icon size of Dock items to 36 pixels for optimal size/screen-realestate
+    tilesize: 36
+
+    # Change minimize/maximize window effect
+    mineffect: "scale"
+
+    # Set Dock to auto-hide and remove the auto-hiding delay.
+    autohide: true
+    autohide-delay: 0
+    autohide-time-modifier: 0
+
+    # Make Dock icons of hidden applications translucent
+    showhidden: true
+
+    # Hot corners
+    # Possible values:
+    #  0: no-op
+    #  2: Mission Control
+    #  3: Show application windows
+    #  4: Desktop
+    #  5: Start screen saver
+    #  6: Disable screen saver
+    #  7: Dashboard
+    # 10: Put display to sleep
+    # 11: Launchpad
+    # 12: Notification Center
+    # 13: Lock Screen
+
+    # Top left screen corner
+    wvous-tl-corner: 2
+    wvous-tl-modifier: 0
+
+    # Top right screen corner
+    wvous-tr-corner: 4
+    wvous-tr-modifier: 0
+
+    # Bottom left screen corner
+    wvous-bl-corner: 5
+    wvous-bl-modifier: 0
+
+    # Bottom right screen corner
+    wvous-br-corner: 0
+    wvous-br-modifier: 0

@@ -1,0 +1,16 @@
+---
+description: Displays
+data:
+  # Enabling sub-pixel font rendering on non-Apple LCD displays.
+  NSGlobalDomain:
+    CGFontRenderingFontSmoothingDisabled: false
+
+  # Enabling HiDPI display modes (requires restart)"
+  /Library/Preferences/com.apple.windowserver.plist:
+    DisplayResolutionEnabled: true
+
+  # Disable automatically adjust brightness
+  /Library/Preferences/com.apple.iokit.AmbientLightSensor.plist:
+    "Automatic Display Enabled": false
+
+sudo: true

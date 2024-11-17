@@ -1,0 +1,31 @@
+---
+description: "Menu Bar"
+data:
+  NSGlobalDomain:
+    # Disable menu bar transparency
+    AppleEnableMenuBarTransparency: false
+
+  com.apple.TextInputMenu:
+    # Disable the flag / keyboard icon.
+    visible: false
+
+  com.apple.menuextra.clock:
+    IsAnalog: false
+    ShowAMPM: true
+    ShowDate: 0
+    ShowDayOfWeek: true
+    ShowSeconds: true
+
+  com.apple.systemuiserver:
+    NSStatusItem Visible com.apple.menuextra.appleuser: false
+    NSStatusItem Visible com.apple.menuextra.bluetooth: true
+    NSStatusItem Visible com.apple.menuextra.clock: false
+    NSStatusItem Visible com.apple.menuextra.volume: false
+    dontAutoLoad:
+      - /System/Library/CoreServices/Menu Extras/AirPort.menu
+      - /System/Library/CoreServices/Menu Extras/Clock.menu
+      - /System/Library/CoreServices/Menu Extras/Displays.menu
+      - /System/Library/CoreServices/Menu Extras/TimeMachine.menu
+      - /System/Library/CoreServices/Menu Extras/User.menu
+      - /System/Library/CoreServices/Menu Extras/Volume.menu
+      - /System/Library/CoreServices/Menu Extras/WWAN.menu

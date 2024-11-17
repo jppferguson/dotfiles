@@ -1,0 +1,91 @@
+---
+description: Globals
+data:
+  NSGlobalDomain:
+    # Disable the over-the-top focus ring animation
+    NSUseAnimatedFocusRing: false
+
+    # Disable light / dark mode automatic switching.
+    AppleInterfaceStyleSwitchesAutomatically: false
+
+    # Set dark mode.
+    AppleInterfaceStyle: Dark
+
+    # Always show scrollbars (`WhenScrolling`,`Automatic`,`Always`)
+    AppleShowScrollBars: Always
+
+    # Disable animations when opening and closing windows.
+    NSAutomaticWindowAnimationsEnabled: false
+
+    # Increase window resize speed for Cocoa applications
+    NSWindowResizeTime: 0.001
+
+    # Disable animations when opening a Quick Look window.
+    QLPanelAnimationDuration: 0
+
+    # Expanding the save & print panels by default.
+    NSNavPanelExpandedStateForSaveMode: true
+    NSNavPanelExpandedStateForSaveMode2: true
+    PMPrintingExpandedStateForPrint: true
+    PMPrintingExpandedStateForPrint2: true
+
+    # Save to disk, rather than iCloud, by default.
+    NSDocumentSaveNewDocumentsToCloud: false
+
+    # Disable smart dashes as they’re annoying when typing code
+    NSAutomaticDashSubstitutionEnabled: false
+
+    # Disable automatic period substitution as it’s annoying when typing code
+    NSAutomaticPeriodSubstitutionEnabled: false
+
+    # Disable smart quotes as they’re annoying when typing code
+    NSAutomaticQuoteSubstitutionEnabled: false
+
+    # Disable auto-correct
+    NSAutomaticSpellingCorrectionEnabled: false
+
+    # Disable Capitalize words automatically
+    NSAutomaticCapitalizationEnabled: false
+
+    # Adding a context menu item for showing the Web Inspector in web views
+    WebKitDeveloperExtras: true
+
+    # Turn off auto-termination
+    NSDisableAutomaticTermination: true
+
+  com.apple.LaunchServices:
+    # Disable the "Are you sure you want to open this application?” dialog
+    LSQuarantine: false
+
+  com.apple.CrashReporter:
+    # Disable the crash reporter
+    DialogType: none
+
+  com.apple.helpviewer:
+    # Set Help Viewer windows to non-floating mode
+    DevMode: true
+
+  com.apple.dashboard:
+    # Completely Disable Dashboard
+    mcx-disabled: true
+
+    # Dashboard: "Off"
+    dashboard-enabled-state: 1
+
+  com.apple.print.PrintingPrefs:
+    # Automatically quit printer app once the print jobs complete.
+    "Quit When Finished": true
+
+  # Avoid creation of .DS_Store files on network volumes.
+  # com.apple.desktopservices:
+  #   DSDontWriteNetworkStores: true
+
+  com.apple.NetworkBrowser:
+    # Enable AirDrop over Ethernet
+    BrowseAllInterfaces: true
+
+  com.apple.frameworks.diskimages:
+    # Disable disk image verification.
+    skip-verify: true
+    skip-verify-locked: true
+    skip-verify-remote: true

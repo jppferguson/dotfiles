@@ -1,0 +1,19 @@
+---
+description: Keyboard
+data:
+  NSGlobalDomain:
+    # Set a blazingly fast keyboard repeat rate
+    KeyRepeat: 1
+    InitialKeyRepeat: 10
+
+    # Disable press-and-hold for keys in favor of key repeat
+    ApplePressAndHoldEnabled: false
+
+    # Enabling full keyboard access for all controls (enable Tab in modal dialogs, menu windows, etc.)
+    AppleKeyboardUIMode: 3
+
+    # Set language and text formats
+    AppleLanguages: ["en"]
+    AppleLocale: "en_GB@currency=GBP"
+    AppleMeasurementUnits: "Centimeters"
+    AppleMetricUnits: true

@@ -23,51 +23,13 @@ else
   exit 0
 fi
 
-# Close any open System Preferences panes, to prevent them from overriding
-# settings we’re about to change
-osascript -e 'tell application "System Preferences" to quit'
-
-# Ask for the administrator password upfront
-sudo -v
-
-# Keep-alive: update existing `sudo` time stamp until `.macos` has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-
-# Set the default shell to zsh
-if [ "$(echo $SHELL)" != "/bin/zsh" ]; then
-  sudo chsh -s /bin/zsh `whoami`
+if ! command_exists macos-defaults; then
+  print_error "ERROR: Please install macos-defaults!"
+  exit 0
 fi
 
-# find all the .macos default files and then run them iteratively
-default_files=( $(find . -name "*.macos" ) )
+print_warning "If you get 'Could not write domain...' errors below, you may need to add your terminal app (e.g. Terminal.app, iTerm2) to System Preferences -> Privacy -> Full Disk Access"
 
-# create an array of the apps we should now kill
-apps=(SystemUIServer cfprefsd)
-for file in "${default_files[@]}"
-do
-  # run each script
-  sh -c "${file}"
-
-  # create an array of the apps we should now kill
-  if [[ $file == *Applications/* ]]
-  then
-    app=${file//.macos/}        # remove the .macos extension
-    app=${app//_/ }             # remove app- prefix
-    app=${app##*/}              # remove the path
-    apps=("${apps[@]}" "$app")  # add to the apps array
-  fi
-done
-
-# Kill affected applications
-for app in "${apps[@]}"
-do
-    if [ "${app}" != "Terminal" ]
-    then
-      print_line "Killing" "${app}.app"
-      killall "${app}" > /dev/null 2>&1
-    fi
-done
-
-print_warning "Some of these changes require a logout/restart to take effect."
+macos-defaults apply $DOTFILES/src/topics/macos/defaults
 
 print_block_end

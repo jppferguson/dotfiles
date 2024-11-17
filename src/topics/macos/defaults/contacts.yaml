@@ -1,0 +1,27 @@
+---
+description: Contacts
+kill: ["Contacts"]
+data:
+  # Show first name
+  # 1 = before last name
+  # 2 = after last name
+  NSGlobalDomain:
+    NSPersonNameDefaultDisplayNameOrder: 1
+
+  # Sort by
+  com.apple.AddressBook:
+    ABNameSortingFormat: "sortingFirstName sortingLastName"
+
+    # vCard format
+    # false = 3.0
+    # true = 2.1
+    ABUse21vCardFormat: false
+
+    # Enable private me vCard
+    ABPrivateVCardFieldsEnabled: false
+
+    # Export notes in vCards
+    ABIncludeNotesInVCard: true
+
+    # Export photos in vCards
+    ABIncludePhotosInVCard: true

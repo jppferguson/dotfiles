@@ -1,0 +1,7 @@
+---
+description: Spotlight
+data:
+  com.apple.Spotlight:
+    # Don't display first-time Spotlight messages
+    showedFTE: 1
+    showedLearnMore: 1

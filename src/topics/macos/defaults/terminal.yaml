@@ -1,0 +1,23 @@
+---
+description: Terminal
+kill: ["Terminal", "iTerm"]
+data:
+  com.apple.Terminal:
+    # Only use UTF-8 in Terminal.app
+    StringEncodings:
+      - "4"
+
+    # Enable Secure Keyboard Entry in Terminal.app
+    # See: https://security.stackexchange.com/a/47786/8918
+    SecureKeyboardEntry: true
+
+    # Disable the annoying line marks
+    ShowLineMarks: 0
+
+    # Use the Pro theme by default in Terminal.app
+    "Default Window Settings": "Pro"
+    "Startup Window Settings": "Pro"
+
+  com.googlecode.iterm2:
+    # Don’t display the annoying prompt when quitting iTerm
+    PromptOnQuit: false

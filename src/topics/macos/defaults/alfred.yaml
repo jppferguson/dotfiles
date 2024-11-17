@@ -1,0 +1,20 @@
+---
+description: "Alfred"
+kill: ["Alfred"]
+data:
+  com.runningwithcrayons.Alfred-Preferences:
+    # Set double tap of command key as the shortcut
+    hotkey.default:
+      key: -1
+      mod: 1048576
+      string: "double tap"
+
+    # Set theme
+    appearance.theme: "alfred.theme.lightlarge"
+
+    # TODO: Hide his hat and menu icon
+    # defaults write ~/Library/Application\ Support/Alfred\ 2/Alfred.alfredpreferences/preferences/appearance/options/prefs.plist hidehat -bool true
+    # defaults write ~/Library/Application\ Support/Alfred\ 2/Alfred.alfredpreferences/preferences/appearance/options/prefs.plist hidemenu -bool true
+
+    # TODO: Set location to the UK
+    # defaults write ~/Library/Application\ Support/Alfred\ 2/Alfred.alfredpreferences/preferences/prefs.plist location -string "United Kingdom"

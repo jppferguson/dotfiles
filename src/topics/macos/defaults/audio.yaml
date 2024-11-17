@@ -1,0 +1,6 @@
+---
+description: "Audio & Sound"
+kill: ["cfprefsd"]
+data:
+  NSGlobalDomain:
+    com.apple.sound.beep.feedback: 0

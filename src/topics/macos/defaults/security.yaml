@@ -1,0 +1,36 @@
+---
+description: Security
+sudo: true
+data:
+  # Turn on the firewall
+  /Library/Preferences/com.apple.alf.plist:
+    globalstate: 1
+
+    # Disable stealth mode
+    stealthenabled: 0
+
+    # Allow signed apps.
+    allowsignedenabled: 1
+
+  "/Library/Application Support/CrashReporter/DiagnosticMessagesHistory.plist":
+    # Disable sending diagnostics data to apple
+    AutoSubmit: false
+    SeedAutoSubmit: false
+    AutoSubmitVersion: 4
+
+    # Disable sending diagnostics data to developers
+    ThirdPartyDataSubmit: false
+    ThirdPartyDataSubmitVersion: 4
+
+  com.apple.security.authorization:
+    # Ignore ARD as the following discussion to fix the sudo with touch ID in the terminal:
+    # https://apple.stackexchange.com/questions/411497/pam-tid-so-asks-for-password-instead-of-requesting-for-fingerprint-when-docked
+    ignoreArd: true
+
+  com.apple.loginwindow:
+    autoLoginUser: true
+
+  com.apple.screensaver:
+    # Require password immediately after sleep or screen saver begins
+    askForPassword: 1
+    askForPasswordDelay: 0

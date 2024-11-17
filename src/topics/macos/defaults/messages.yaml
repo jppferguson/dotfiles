@@ -1,0 +1,10 @@
+---
+description: Messages
+kill: ["Messages"]
+data:
+  # Disable auto correct and other substitutions in Message.app.
+  com.apple.messageshelper.MessageController:
+    SOInputLineSettings:
+      automaticQuoteSubstitutionEnabled: false
+      automaticEmojiSubstitutionEnablediMessage: false
+      continuousSpellCheckingEnabled: false

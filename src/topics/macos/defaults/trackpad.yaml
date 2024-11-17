@@ -1,0 +1,25 @@
+---
+description: Trackpad
+kill: ["cfprefsd"]
+data:
+  # Enable tap to click for this user and for the login screen
+  com.apple.AppleMultitouchTrackpad:
+    Clicking: true
+
+    # Two fingers for double click.
+    TrackpadRightClick: true
+
+    # Lookup & data detectors with 3 finger click.
+    TrackpadThreeFingerTapGesture: 2
+
+  com.apple.driver.AppleBluetoothMultitouch.trackpad:
+    Clicking: true
+
+    # Two fingers for double click.
+    TrackpadRightClick: true
+
+    # Lookup & data detectors with 3 finger click.
+    TrackpadThreeFingerTapGesture: 2
+
+  NSGlobalDomain:
+    com.apple.mouse.tapBehavior: 1
