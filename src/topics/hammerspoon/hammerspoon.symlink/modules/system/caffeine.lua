@@ -55,6 +55,7 @@ m.start = function()
     m.log.i('Persisted state was ' .. m.getStateKey(persistedState))
     -- Set the click handler
     m.menubar:setClickCallback(m.handleClick)
+    m.menubar:setTooltip('Caffeine')
     -- Set the state
     m.setState(persistedState)
   end

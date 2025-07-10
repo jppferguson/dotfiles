@@ -5,7 +5,9 @@
 local watch = {}
 
 function watch.reloadConfig(files)
-  hs.reload()
+  print("=======reload caused by change by:")
+  print (hs.inspect.inspect(files))
+  -- hs.reload()
 end
 
 

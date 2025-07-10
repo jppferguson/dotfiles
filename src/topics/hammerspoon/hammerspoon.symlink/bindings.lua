@@ -50,7 +50,11 @@ keys.triggers = {
   -- ["Bluetooth Toggle"] = { "mash", "E" },
   ["Caffeine Toggle"] = { "mash", "," },
 
-  ["System Lock"] = { "mash", "l" },
+  ["Child Lock Activate"] = { "mash", "l" },
+  ["Child Lock Deactivate"] = { "mash", "u" },
+  ["Child Lock Toggle"] = { "mash", "z" },
+
+  -- ["System Lock"] = { "mash", "l" },
   ["System Screensaver"] = { "mash", "F6" },
   ["System Sleep"] = { "mash", "s" },
 
