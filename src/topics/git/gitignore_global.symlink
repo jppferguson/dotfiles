@@ -47,3 +47,8 @@ composer.phar
 
 # asdf
 .tool-versions
+
+# AI
+CLAUDE.local.md
+.claude/*.local.json
+.claude/*.local.md
