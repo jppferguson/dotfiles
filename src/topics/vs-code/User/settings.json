@@ -13,9 +13,9 @@
   "editor.scrollBeyondLastLine": false,
   "editor.tabSize": 2,
   "eslint.format.enable": true,
-  "eslint.options": {
-    "extensions": [".js", ".jsx", ".md", ".mdx", ".ts", ".tsx"]
-  },
+  // "eslint.options": {
+  //   "extensions": [".js", ".jsx", ".md", ".mdx", ".ts", ".tsx"]
+  // },
   "eslint.validate": [
     "markdown",
     "mdx",
@@ -31,7 +31,7 @@
   "projectManager.confirmSwitchOnActiveWindow": "always",
   "projectManager.groupList": true,
   "projectManager.openInNewWindowWhenClickingInStatusBar": true,
-  "projectManager.projectsLocation": "~/Sites/Workspaces/",
+  "projectManager.projectsLocation": "~/Development/Workspaces/",
   "window.title": "${dirty}${activeEditorShort}${separator}${rootName}",
   "window.commandCenter": true,
   "workbench.colorTheme": "Night Owl",
@@ -65,6 +65,7 @@
   },
   "git.autofetch": true,
   "git.openRepositoryInParentFolders": "never",
+  "github.copilot.nextEditSuggestions.enabled": true,
   "githubPullRequests.pullBranch": "never",
   "typescript.inlayHints.parameterNames.enabled": "all",
   "workbench.colorCustomizations": {
@@ -76,15 +77,23 @@
       "editorInlayHint.parameterForeground": "#6b8790f0"
     }
   },
+  "workbench.editorAssociations": {
+    "*.svg": "default"
+  },
   "search.useGlobalIgnoreFiles": true,
   "search.useIgnoreFiles": true,
   "search.exclude": {
-    "**/node_modules": true,
-    "**/lcov-report": true,
-    "**/*.map": true,
     "**/.jest_cache": true,
+    "**/*.code-search": true,
+    "**/*.map": true,
     "**/bower_components": true,
-    "**/*.code-search": true
+    "**/lcov-report": true,
+    "**/node_modules": true,
+    "**/vendor": true,
+    "**/android/app/build": true,
+    "**/android/build/generated": true,
+    "**/*.xcarchive": true,
+    "**/ios/Pods": true
   },
   "window.zoomLevel": 1,
   "workbench.tree.enableStickyScroll": true,
@@ -104,5 +113,6 @@
     "editor.selectionHighlight": false,
     "editor.tabCompletion": "onlySnippets",
     "editor.wordBasedSuggestions": "off"
-  }
+  },
+  "projectManager.git.baseFolders": ["~/Development"]
 }

@@ -14,5 +14,9 @@
       "key": "shift+cmd+d",
       "command": "editor.action.copyLinesDownAction",
       "when": "editorTextFocus && !editorReadonly"
-  }
+},
+{
+    "key": "cmd+i",
+    "command": "composerMode.agent"
+}
 ]
