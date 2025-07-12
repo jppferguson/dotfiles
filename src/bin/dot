@@ -15,6 +15,7 @@ sub_help () {
   echo "Commands:"
   echo "   cd               cd into dotfiles directory"
   echo "   clean            Clean up caches (brew)"
+  echo "   claude {cmd}     Manage Claude configuration (install|status|diff|sync|backup)"
   echo "   dock             Apply macOS Dock settings"
   echo "   duti             Set default apps for file types (UTI)"
   echo "   edit             Open dotfiles in IDE ($EDITOR) and Git GUI ($GITGUI)"
@@ -42,8 +43,28 @@ sub_cd () {
   cd $DOTFILES && $SHELL
 }
 
+sub_claude () {
+  case "${SUB_COMMAND_NAME:-install}" in
+    "install")
+      . "${DOTFILES}/src/topics/claude/install.sh"
+      ;;
+    "status"|"diff"|"sync"|"backup")
+      . "${DOTFILES}/src/topics/claude/update.sh" "$SUB_COMMAND_NAME"
+      ;;
+    *)
+      echo "Usage: $BIN_NAME claude {install|status|diff|sync|backup}"
+      echo ""
+      echo "  install  - Install/reinstall Claude configuration"
+      echo "  status   - Show sync status"
+      echo "  diff     - Show differences between dotfiles and ~/.claude"
+      echo "  sync     - Sync dotfiles to ~/.claude (with backup)"
+      echo "  backup   - Create manual backup of ~/.claude"
+      ;;
+  esac
+}
+
 sub_completion () {
-  echo "clean dock duti edit help install macos reload test update"
+  echo "clean claude dock duti edit help install macos reload test update"
 }
 
 sub_dock () {

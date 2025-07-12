@@ -33,6 +33,7 @@ You can find this script in `src/bin/`. Run `dot help` to see all available comm
 
 - **`dot cd`** - Navigate into the dotfiles directory
 - **`dot clean`** - Clean up caches (brew)
+- **`dot claude {cmd}`** - Manage Claude Code configuration (install|status|diff|sync|backup)
 - **`dot dock`** - Apply macOS Dock settings
 - **`dot duti`** - Set default apps for file types (UTI)
 - **`dot edit`** - Open dotfiles in your IDE and Git GUI
@@ -100,6 +101,40 @@ symlinked without extension into `$HOME` when you run `src/script/bootstrap`.
 - **topgrade** - Tool for updating all package managers at once
 - **vs-code** - Visual Studio Code settings and keybindings
 - **zsh** - Zsh shell configuration
+
+## Claude Code Configuration
+
+The `claude` topic manages your [Claude Code](https://claude.ai/code) configuration, including custom commands, hooks, and settings.
+
+### Commands
+
+- **`dot claude install`** - Install/reinstall Claude configuration
+- **`dot claude status`** - Show sync status between dotfiles and `~/.claude`
+- **`dot claude diff`** - Show differences between dotfiles and `~/.claude`
+- **`dot claude sync`** - Sync dotfiles to `~/.claude` (with backup)
+- **`dot claude backup`** - Create manual backup of `~/.claude`
+
+### Configuration Files
+
+- **`src/topics/claude/commands/`** - Custom slash commands (`.md` files)
+- **`src/topics/claude/hooks/`** - Git hooks and automation scripts
+- **`src/topics/claude/settings.json`** - Claude Code settings
+- **`src/topics/claude/CLAUDE.md.symlink`** - Global Claude configuration (symlinked to `~/.CLAUDE.md`)
+
+### Important Note
+
+Due to a [known bug in Claude Code](https://github.com/anthropics/claude-code/issues/764), we cannot use symlinks for the `commands` and `hooks` directories. Instead, we copy files from the dotfiles to `~/.claude/`. This means:
+
+1. Changes to commands/hooks in dotfiles need to be synced with `dot claude sync`
+2. Local changes in `~/.claude/` are automatically backed up before syncing
+3. We'll switch back to symlinks when the upstream bug is fixed
+
+### Workflow
+
+1. Edit commands/hooks in `src/topics/claude/`
+2. Run `dot claude status` to see what needs syncing
+3. Run `dot claude sync` to update `~/.claude/` from dotfiles
+4. Your changes are now available in Claude Code
 
 ## Components
 

@@ -1,0 +1,17 @@
+{
+  "model": "sonnet",
+  "defaultMode": "allowEdits",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh ~/.claude/hooks/completed-task.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,3 +1,9 @@
+# Prepend claude to PATH to take precedence over asdf
+export PATH="$HOME/.claude/local:$HOME/.claude/local/node_modules/.bin:$PATH"
+
+# Also keep the alias as a fallback
+alias claude="~/.claude/local/claude"
+
 # Function to create a git worktree with a dedicated worktrees folder
 wt() {
     # Array of additional directories to copy (customize this list as needed)
