@@ -64,7 +64,7 @@ show_diff() {
 show_status() {
     local has_changes=false
     
-    print_info "Claude configuration status:"
+    info "Claude configuration status:\n"
     
     # Check commands
     if files_differ "$DOTFILES_CLAUDE/commands" "$CLAUDE_DIR/commands"; then
@@ -118,13 +118,13 @@ case "${1:-status}" in
         show_status
         ;;
     "diff")
-        print_info "Showing differences between dotfiles and ~/.claude:"
+        info "Showing differences between dotfiles and ~/.claude:\n"
         show_diff "commands" "$DOTFILES_CLAUDE/commands" "$CLAUDE_DIR/commands"
         show_diff "hooks" "$DOTFILES_CLAUDE/hooks" "$CLAUDE_DIR/hooks"
         show_diff "settings.json" "$DOTFILES_CLAUDE/settings.json" "$CLAUDE_DIR/settings.json"
         ;;
     "sync")
-        print_info "Syncing Claude configuration from dotfiles to ~/.claude..."
+        info "Syncing Claude configuration from dotfiles to ~/.claude...\n"
         
         # Show what will change
         if ! show_status >/dev/null 2>&1; then
@@ -134,7 +134,7 @@ case "${1:-status}" in
             read -p "Continue? [y/N] " -n 1 -r
             echo
             if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-                print_info "Sync cancelled"
+                info "Sync cancelled\n"
                 exit 0
             fi
         fi
