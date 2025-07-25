@@ -1,0 +1,36 @@
+# Task Management Configuration Template
+# Copy this to .tskrrc in your project root and customize as needed
+
+# Task storage format: "files" (individual files) or "single_file" (one tasks.md file)
+task_format: "files"
+
+# Directory name (if files format) or file name (if single_file format)  
+task_dir: "tasks"
+
+# Optional command to run after task completion for validation
+# Examples: "npm test", "cargo check", "python -m pytest", "make test"
+# Leave empty for no validation
+validation_script: ""
+
+# Template for suggested commit messages
+# Available placeholders: {task_title}, {task_type}, {task_id}
+# Examples:
+#   "{task_type}: {task_title}"
+#   "feat: {task_title} (#{task_id})"
+#   "[{task_type}] {task_title}"
+commit_template: "{task_type}: {task_title}"
+
+# Time in seconds before an agent assignment expires and task is released
+# Default: 3600 (1 hour). Use 0 to disable agent timeouts.
+agent_timeout: 3600
+
+# Optional: Custom task ID format (advanced)
+# Default uses zero-padded numbers: 001, 002, 003
+# You can customize with strftime-like formatting
+# task_id_format: "%03d"
+
+# Optional: Completed task handling for files format
+# "archive": Move to tasks/completed/ directory (default)
+# "prefix": Rename with "DONE-" prefix  
+# "delete": Remove completed task files
+# completed_action: "archive"

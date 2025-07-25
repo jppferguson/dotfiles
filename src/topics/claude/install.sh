@@ -28,7 +28,7 @@ backup_if_exists() {
     if [ -e "$src" ]; then
         mkdir -p "$BACKUP_DIR"
         cp -r "$src" "$BACKUP_DIR/"
-        print_info "Backed up existing $name to $BACKUP_DIR/"
+        info "Backed up existing $name to $BACKUP_DIR/"
         return 0
     fi
     return 1
@@ -55,7 +55,7 @@ copy_claude_files() {
     fi
 }
 
-print_info "Installing Claude configuration..."
+info "Installing Claude configuration..."
 
 # Copy commands directory
 copy_claude_files "$DOTFILES/src/topics/claude/commands" "$HOME/.claude/commands" "commands"
@@ -70,13 +70,13 @@ copy_claude_files "$DOTFILES/src/topics/claude/settings.json" "$HOME/.claude/set
 if [ -d "$HOME/.claude/backups" ]; then
     cd "$HOME/.claude/backups"
     ls -t | tail -n +6 | xargs rm -rf 2>/dev/null || true
-    print_info "Cleaned up old backups (keeping last 5)"
+    info "Cleaned up old backups (keeping last 5)"
 fi
 
 if [ -d "$BACKUP_DIR" ]; then
-    print_info "Backups created in: $BACKUP_DIR"
+    info "Backups created in: $BACKUP_DIR"
 fi
 
 print_success "Claude configuration installed successfully"
-print_info "Note: Using copy method due to Claude Code symlink bug"
-print_info "Bug tracking: https://github.com/anthropics/claude-code/issues/764"
+info "Note: Using copy method due to Claude Code symlink bug"
+info "Bug tracking: https://github.com/anthropics/claude-code/issues/764"

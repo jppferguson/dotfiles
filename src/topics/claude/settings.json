@@ -1,6 +1,10 @@
 {
   "model": "sonnet",
-  "defaultMode": "allowEdits",
+  "permissions": {
+    "additionalDirectories": [
+      "~/.agentrc"
+    ]
+  },
   "hooks": {
     "Stop": [
       {
