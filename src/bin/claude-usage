@@ -1,0 +1,328 @@
+#!/usr/bin/env bash
+
+# claude-usage - Track Claude Code sessions usage
+# Uses ccusage to count sessions and check against monthly limits
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Usage limits (based on Claude Pro plan)
+MAX_SESSIONS_PER_MONTH=50  # Rough estimate for Pro plan
+
+usage() {
+    cat << EOF
+Usage: claude-usage [OPTIONS]
+
+Track Claude Code sessions usage for the current billing cycle.
+Billing cycles run from the 28th of each month to the 27th of the next month.
+
+OPTIONS:
+    -h, --help          Show this help message
+    -m, --month YYYYMM  Check specific billing cycle (default: current cycle)
+    -j, --json          Output raw JSON data
+    -v, --verbose       Show detailed session information
+    
+EXAMPLES:
+    claude-usage                    # Show current billing cycle usage
+    claude-usage -m 202412          # Show December 2024 billing cycle usage
+    claude-usage --verbose          # Show detailed session breakdown
+EOF
+}
+
+# Get current billing cycle in YYYYMM format
+# Billing cycles run from 28th to 27th of next month
+current_month() {
+    local today=$(date +"%Y%m%d")
+    local current_day=$(date +"%d")
+    local current_ym=$(date +"%Y%m")
+    
+    # If we're before the 28th, we're in the previous month's billing cycle
+    if [[ $current_day -lt 28 ]]; then
+        # Go back one month
+        local year=${current_ym:0:4}
+        local month=${current_ym:4:2}
+        
+        if [[ $month == "01" ]]; then
+            echo "$((year - 1))12"
+        else
+            printf "%04d%02d" "$year" "$((10#$month - 1))"
+        fi
+    else
+        echo "$current_ym"
+    fi
+}
+
+# Get billing cycle start date (28th) in YYYYMMDD format
+month_start() {
+    local month=${1:-$(current_month)}
+    echo "${month}28"
+}
+
+# Get billing cycle end date (27th of next month) in YYYYMMDD format
+month_end() {
+    local month=${1:-$(current_month)}
+    local year=${month:0:4}
+    local mon=${month:4:2}
+    
+    # Calculate next month
+    if [[ $mon == "12" ]]; then
+        echo "$((year + 1))0127"
+    else
+        printf "%04d%02d27" "$year" "$((10#$mon + 1))"
+    fi
+}
+
+# Count 5-hour blocks (actual usage periods) using ccusage
+count_sessions() {
+    local since=$1
+    local until=$2
+    local json_output=$3
+    
+    # Use ccusage blocks to get actual 5-hour usage periods
+    local cmd="npx ccusage blocks --since $since --until $until --json"
+    
+    if ! command -v npx &> /dev/null; then
+        echo -e "${RED}Error: npx not found. Please install Node.js.${NC}" >&2
+        exit 1
+    fi
+    
+    local blocks_data
+    if ! blocks_data=$(eval "$cmd" 2>/dev/null); then
+        echo -e "${RED}Error: Failed to fetch Claude usage data.${NC}" >&2
+        echo -e "${YELLOW}Make sure you're logged into Claude and have used it recently.${NC}" >&2
+        exit 1
+    fi
+    
+    if [[ "$json_output" == "true" ]]; then
+        echo "$blocks_data"
+        return
+    fi
+    
+    # Count non-gap blocks (actual 5-hour usage periods)
+    local session_count
+    session_count=$(echo "$blocks_data" | jq -r '.blocks | map(select(.isGap == false)) | length' 2>/dev/null || echo "0")
+    
+    echo "$session_count"
+}
+
+# Count today's 5-hour blocks
+count_todays_sessions() {
+    local today=$(date +"%Y%m%d")
+    local cmd="npx ccusage blocks --since $today --json"
+    
+    local blocks_data
+    if ! blocks_data=$(eval "$cmd" 2>/dev/null); then
+        echo "0"
+        return
+    fi
+    
+    local session_count
+    session_count=$(echo "$blocks_data" | jq -r '.blocks | map(select(.isGap == false)) | length' 2>/dev/null || echo "0")
+    
+    echo "$session_count"
+}
+
+
+# Get session timing information using actual session blocks data
+get_session_timing() {
+    local today=$(date +"%Y%m%d")
+    local cmd="npx ccusage blocks --since $today --json"
+    
+    local blocks_data
+    if ! blocks_data=$(eval "$cmd" 2>/dev/null); then
+        echo "reset_time:Unable to determine|time_remaining:Unable to determine"
+        return
+    fi
+    
+    # Find active session (isActive: true)
+    local active_end_time
+    active_end_time=$(echo "$blocks_data" | jq -r '.blocks[] | select(.isActive == true) | .endTime' 2>/dev/null | head -1)
+    
+    if [[ -n "$active_end_time" && "$active_end_time" != "null" ]]; then
+        # Convert ISO time to local time and calculate remaining time
+        local end_time_local
+        local end_time_epoch
+        local current_epoch=$(date +"%s")
+        
+        if command -v gdate &> /dev/null; then
+            # GNU date (if available via brew coreutils)
+            end_time_local=$(gdate -d "$active_end_time" "+%H:%M today" 2>/dev/null)
+            end_time_epoch=$(gdate -d "$active_end_time" "+%s" 2>/dev/null)
+        else
+            # macOS date - try different formats for robustness
+            end_time_local=$(date -j -f "%Y-%m-%dT%H:%M:%S.%fZ" "$active_end_time" "+%H:%M today" 2>/dev/null || \
+                           date -j -f "%Y-%m-%dT%H:%M:%SZ" "$active_end_time" "+%H:%M today" 2>/dev/null || \
+                           date -j -f "%Y-%m-%dT%H:%M:%S" "$active_end_time" "+%H:%M today" 2>/dev/null)
+            end_time_epoch=$(date -j -f "%Y-%m-%dT%H:%M:%S.%fZ" "$active_end_time" "+%s" 2>/dev/null || \
+                           date -j -f "%Y-%m-%dT%H:%M:%SZ" "$active_end_time" "+%s" 2>/dev/null || \
+                           date -j -f "%Y-%m-%dT%H:%M:%S" "$active_end_time" "+%s" 2>/dev/null)
+        fi
+        
+        local time_remaining="Unable to calculate"
+        if [[ -n "$end_time_epoch" && "$end_time_epoch" -gt "$current_epoch" ]]; then
+            local seconds_remaining=$((end_time_epoch - current_epoch))
+            local hours=$((seconds_remaining / 3600))
+            local minutes=$(((seconds_remaining % 3600) / 60))
+            
+            if [[ $hours -gt 0 ]]; then
+                time_remaining="${hours}h ${minutes}m"
+            else
+                time_remaining="${minutes}m"
+            fi
+        elif [[ -n "$end_time_epoch" ]]; then
+            time_remaining="Session expired"
+        fi
+        
+        local reset_time="${end_time_local:-Unable to parse time}"
+        echo "reset_time:$reset_time|time_remaining:$time_remaining"
+    else
+        echo "reset_time:No active session|time_remaining:No active session"
+    fi
+}
+
+# Main function
+main() {
+    local month=""
+    local json_output=false
+    local verbose=false
+    
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            -m|--month)
+                month="$2"
+                shift 2
+                ;;
+            -j|--json)
+                json_output=true
+                shift
+                ;;
+            -v|--verbose)
+                verbose=true
+                shift
+                ;;
+            *)
+                echo -e "${RED}Unknown option: $1${NC}" >&2
+                usage
+                exit 1
+                ;;
+        esac
+    done
+    
+    # Use current month if not specified
+    if [[ -z "$month" ]]; then
+        month=$(current_month)
+    fi
+    
+    # Validate month format
+    if [[ ! "$month" =~ ^[0-9]{6}$ ]]; then
+        echo -e "${RED}Error: Month must be in YYYYMM format (e.g., 202412)${NC}" >&2
+        exit 1
+    fi
+    
+    local since=$(month_start "$month")
+    local until=$(month_end "$month")
+    
+    if [[ "$json_output" == "true" ]]; then
+        count_sessions "$since" "$until" "true"
+        exit 0
+    fi
+    
+    echo -e "${BLUE}Claude Usage Report - Billing Cycle ${month:0:4}-${month:4:2}${NC}"
+    echo -e "${BLUE}Period: ${since:0:4}-${since:4:2}-${since:6:2} to ${until:0:4}-${until:4:2}-${until:6:2}${NC}"
+    echo "========================================"
+    
+    # Get session count
+    local session_count
+    session_count=$(count_sessions "$since" "$until" "false")
+    
+    # Calculate time-based metrics
+    local today=$(date +"%Y%m%d")
+    local cycle_start_epoch=$(date -j -f "%Y%m%d" "$since" "+%s" 2>/dev/null || date -d "$since" "+%s")
+    local cycle_end_epoch=$(date -j -f "%Y%m%d" "$until" "+%s" 2>/dev/null || date -d "$until" "+%s")
+    local today_epoch=$(date +"%s")
+    
+    # Ensure today is within the cycle bounds
+    if [[ $today_epoch -lt $cycle_start_epoch ]]; then
+        today_epoch=$cycle_start_epoch
+    elif [[ $today_epoch -gt $cycle_end_epoch ]]; then
+        today_epoch=$cycle_end_epoch
+    fi
+    
+    local total_days=$(( (cycle_end_epoch - cycle_start_epoch) / 86400 + 1 ))
+    local days_elapsed=$(( (today_epoch - cycle_start_epoch) / 86400 + 1 ))
+    local days_remaining=$(( total_days - days_elapsed ))
+    
+    # Calculate averages
+    local avg_sessions_per_day="0.0"
+    if [[ $days_elapsed -gt 0 ]]; then
+        avg_sessions_per_day=$(echo "scale=1; $session_count / $days_elapsed" | bc 2>/dev/null || echo "0.0")
+    fi
+    
+    # Calculate usage percentage and remaining blocks
+    local usage_percent=$((session_count * 100 / MAX_SESSIONS_PER_MONTH))
+    local remaining=$((MAX_SESSIONS_PER_MONTH - session_count))
+    
+    # Get today's session count
+    local todays_sessions
+    todays_sessions=$(count_todays_sessions)
+    
+    # Calculate remaining blocks per day rate
+    local blocks_per_day_remaining="0.0"
+    if [[ $days_remaining -gt 0 && $remaining -gt 0 ]]; then
+        blocks_per_day_remaining=$(echo "scale=1; $remaining / $days_remaining" | bc 2>/dev/null || echo "0.0")
+    fi
+    
+    # Get session timing information
+    local session_timing
+    session_timing=$(get_session_timing)
+    local next_reset=$(echo "$session_timing" | cut -d'|' -f1 | cut -d':' -f2-)
+    local time_remaining=$(echo "$session_timing" | cut -d'|' -f2 | cut -d':' -f2-)
+    
+    # Display results with color coding
+    echo -e "5-hour blocks used: ${BLUE}$session_count${NC} / ${BLUE}$MAX_SESSIONS_PER_MONTH${NC}"
+    echo -e "Today's blocks: ${BLUE}$todays_sessions${NC}"
+    echo -e "Average per day: ${BLUE}$avg_sessions_per_day${NC} blocks (past usage)"
+    echo -e "Blocks per day remaining: ${BLUE}$blocks_per_day_remaining${NC} blocks (to stay in limit)"
+    echo -e "Days elapsed: ${BLUE}$days_elapsed${NC} / ${BLUE}$total_days${NC} days"
+    echo -e "Next session reset: ${BLUE}$next_reset${NC}"
+    echo -e "Time remaining: ${BLUE}$time_remaining${NC}"
+    
+    if [[ $usage_percent -lt 70 ]]; then
+        echo -e "Usage: ${GREEN}${usage_percent}%${NC} - On track ✓"
+    elif [[ $usage_percent -lt 90 ]]; then
+        echo -e "Usage: ${YELLOW}${usage_percent}%${NC} - Approaching limit ⚠️"
+    elif [[ $usage_percent -lt 100 ]]; then
+        echo -e "Usage: ${RED}${usage_percent}%${NC} - Near limit! ⚠️"
+    else
+        echo -e "Usage: ${RED}${usage_percent}%${NC} - Limit exceeded! ⚠️"
+    fi
+    
+    # Show remaining sessions and days
+    if [[ $remaining -gt 0 ]]; then
+        echo -e "Remaining: ${GREEN}$remaining blocks${NC} over ${GREEN}$days_remaining days${NC}"
+    else
+        echo -e "Remaining: ${RED}0 blocks${NC} (${RED}${remaining#-} over limit${NC})"
+        echo -e "Days left in cycle: ${BLUE}$days_remaining${NC}"
+    fi
+    
+    # Show verbose information if requested
+    if [[ "$verbose" == "true" ]]; then
+        echo ""
+        echo "Detailed session data:"
+        echo "====================="
+        npx ccusage session --since "$since" --until "$until" 2>/dev/null || echo "Failed to get detailed data"
+    fi
+}
+
+main "$@"
