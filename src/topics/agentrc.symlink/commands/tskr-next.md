@@ -77,29 +77,21 @@ All tasks are either completed or in progress.
 
 ## Step 3: Check Agent Assignment
 
-Before assigning the task, check if it's already assigned to another agent:
+Before updating the task, check if it's already in progress:
 
-### Check for existing assignment:
+### Check for existing progress:
 
-- Look for "Assigned To:" field with agent ID and timestamp
-- Check if assignment is within the timeout period (from .tskrrc `agent_timeout`)
-- If assignment is expired, automatically release it
+- Look for "Status: in_progress" 
+- Check if task has incomplete progress checklist items
+- If task appears abandoned (no recent updates), it can be resumed
 
-### Generate Agent ID:
+## Step 4: Update Task Status and Create Progress Checklist
 
-Create unique agent identifier:
+If `--show-only` is provided, display task without updates and stop here.
 
-```bash
-AGENT_ID="claude-$(date +%s)"
-```
+Otherwise, update the task status and ensure it has a progress checklist:
 
-## Step 4: Assign Task and Display
-
-If `--show-only` is provided, display task without assignment and stop here.
-
-Otherwise, assign the task and display details:
-
-### Update task with agent assignment
+### Update task status and add progress tracking
 
 #### For files format
 
@@ -107,8 +99,18 @@ Add or update these fields in the task file:
 
 ```markdown
 **Status:** in_progress
-**Assigned To:** {agent_id}
 **Started:** {current_timestamp}
+**Last Updated:** {current_timestamp}
+
+## Progress Checklist
+
+- [ ] Understand requirements and acceptance criteria
+- [ ] Plan implementation approach
+- [ ] Implement core functionality
+- [ ] Add tests (if applicable)
+- [ ] Update documentation
+- [ ] Verify all acceptance criteria met
+- [ ] Mark task as complete
 ```
 
 #### For single_file format
@@ -118,9 +120,20 @@ Move task from "Pending" to "In Progress" section and update:
 ```markdown
 ## In Progress
 
-### {ID} - {Task Title} [ASSIGNED: {agent_id}]
+### {ID} - {Task Title}
 
 **Type:** {task_type} | **Priority:** {priority} | **Started:** {current_timestamp}
+**Last Updated:** {current_timestamp}
+
+## Progress Checklist
+
+- [ ] Understand requirements and acceptance criteria
+- [ ] Plan implementation approach
+- [ ] Implement core functionality
+- [ ] Add tests (if applicable)
+- [ ] Update documentation
+- [ ] Verify all acceptance criteria met
+- [ ] Mark task as complete
 ```
 
 ### Display task details
@@ -131,7 +144,6 @@ Move task from "Pending" to "In Progress" section and update:
 # {Task Title}
 
 **Type:** {task_type} | **Priority:** {priority}  
-**Agent:** {agent_id}
 **Started:** {current_timestamp}
 
 ## Description
@@ -142,54 +154,78 @@ Move task from "Pending" to "In Progress" section and update:
 
 {acceptance_criteria}
 
+## Progress Checklist
+
+- [ ] Understand requirements and acceptance criteria
+- [ ] Plan implementation approach  
+- [ ] Implement core functionality
+- [ ] Add tests (if applicable)
+- [ ] Update documentation
+- [ ] Verify all acceptance criteria met
+- [ ] Mark task as complete
+
 ## Notes
 
 {additional_notes}
 
 ---
 
-**Ready to work on this task. When complete, I'll handle the completion workflow.**
+**Working on this task. I'll update the progress checklist as I complete each step.**
 ```
 
 ## Step 5: Work on Task
 
-Begin working on the task according to its requirements:
+Begin working on the task according to its requirements, updating the progress checklist as you go:
 
-1. **Read and understand** all task details thoroughly
-2. **Plan the approach** based on task type:
+1. **✅ Check off "Understand requirements"** after reading all task details thoroughly
+2. **✅ Check off "Plan implementation"** after determining approach based on task type:
 
    - **bug**: Investigate, reproduce, fix, test
    - **feature**: Design, implement, test
    - **task**: Follow specific instructions
    - **question**: Research, analyse, document findings
 
-3. **Execute the work** using appropriate tools
-4. **Validate completion** against acceptance criteria
-5. **Run validation script** if configured in .tskrrc
+3. **✅ Check off "Implement core functionality"** as you build features
+4. **✅ Check off "Add tests"** if applicable
+5. **✅ Check off "Update documentation"** when adding docs
+6. **✅ Check off "Verify acceptance criteria"** after validation
+7. **Execute validation script** if configured in .tskrrc
+
+**IMPORTANT:** Update the "Last Updated" timestamp each time you modify the task file to show progress.
 
 ## Step 6: Task Completion Workflow
 
-Once the task work is complete:
+Once all work is complete and all checklist items are checked:
 
-### Run Validation (if configured)
+### Final Validation
 
 ```bash
 # If validation_script is set in .tskrrc
 {validation_script}
 ```
 
-If validation fails, stop and report what needs to be fixed before marking complete.
+If validation fails, uncheck relevant items and fix issues before completing.
 
 ### Update Task Status
 
 #### For files format
 
-Update the task file:
+Update the task file to mark as complete:
 
 ```markdown
 **Status:** completed
-**Completed:** {current_timestamp}  
-**Completed By:** {agent_id}
+**Completed:** {current_timestamp}
+**Last Updated:** {current_timestamp}
+
+## Progress Checklist
+
+- [x] Understand requirements and acceptance criteria
+- [x] Plan implementation approach
+- [x] Implement core functionality
+- [x] Add tests (if applicable)
+- [x] Update documentation
+- [x] Verify all acceptance criteria met
+- [x] Mark task as complete
 ```
 
 Move file to completed subdirectory or rename with prefix:
@@ -209,6 +245,8 @@ Move task from "In Progress" to "Completed" section:
 ### {ID} - {Task Title} ✅
 
 **Type:** {task_type} | **Completed:** {current_timestamp}
+
+Progress: All checklist items completed
 {summary_of_work_done}
 ```
 

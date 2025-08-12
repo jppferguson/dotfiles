@@ -30,6 +30,16 @@ Provide enough detail that an LLM can understand and complete this task autonomo
 - [ ] Criterion 2
 - [ ] Criterion 3
 
+## Progress Checklist
+
+- [ ] Understand requirements and acceptance criteria
+- [ ] Plan implementation approach
+- [ ] Implement core functionality
+- [ ] Add tests (if applicable)
+- [ ] Update documentation
+- [ ] Verify all acceptance criteria met
+- [ ] Mark task as complete
+
 ## Notes
 
 {ADDITIONAL_CONTEXT_CONSTRAINTS_OR_RELATED_INFORMATION}
@@ -67,11 +77,12 @@ _Template for task creation - replace placeholders with actual content_
 - **in_progress**: Currently being worked on (includes agent assignment)
 - **completed**: Finished and archived
 
-### Agent Assignment (added automatically by tskr-next)
+### Progress Tracking (added automatically by tskr-next)
 
 When a task is picked up, these fields are added:
 
-- **Assigned To**: Unique agent identifier
-- **Started**: Timestamp when work began
+- **Started**: Timestamp when work began  
+- **Last Updated**: Timestamp of most recent progress
 - **Completed**: Timestamp when work finished (for completed tasks)
-- **Completed By**: Agent that completed the task
+
+Progress is tracked via the Progress Checklist - agents check off items as they complete them, allowing tasks to be resumed if interrupted.
