@@ -20,15 +20,17 @@ You are helping the user process tasks from their task management system. Follow
 First, read the project configuration:
 
 ```bash
-# Check for config files
+# Check for config files (prefer .local over standard)
+CONFIG_FILE=""
 if [ -f .tskrrc.local ]; then
-    echo "Using .tskrrc.local"
+    CONFIG_FILE=".tskrrc.local"
 elif [ -f .tskrrc ]; then
-    echo "Using .tskrrc"
+    CONFIG_FILE=".tskrrc"
 else
     echo "ERROR: No .tskrrc file found. Run /tskr-init first."
     exit 1
 fi
+echo "Using $CONFIG_FILE"
 ```
 
 Parse command line options:
@@ -88,7 +90,7 @@ Before assigning the task, check if it's already assigned to another agent:
 Create unique agent identifier:
 
 ```bash
-AGENT_ID="claude-$(date +%s)-$(head -c 8 /dev/urandom | base64 | tr -d '=/+' | head -c 8)"
+AGENT_ID="claude-$(date +%s)"
 ```
 
 ## Step 4: Assign Task and Display

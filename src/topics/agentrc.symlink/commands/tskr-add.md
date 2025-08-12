@@ -9,9 +9,11 @@ Add a new task, bug, feature, or question to the task management system with int
 ## What it does
 
 - Step 1: Load project configuration from .tskrrc
-- Step 2: Gather task details through interactive prompts
-- Step 3: Generate unique task ID and create task entry
-- Step 4: Add task to storage in the configured format
+- Step 2: Choose creation mode (smart, interactive, or minimal)
+- Step 3: Gather task details (smart inference or interactive prompts)
+- Step 4: Apply task refinement and enhancement
+- Step 5: Generate unique task ID and create task entry
+- Step 6: Add task to storage in the configured format
 
 You are helping the user add a new task to their task management system. Follow these steps carefully:
 
@@ -20,15 +22,17 @@ You are helping the user add a new task to their task management system. Follow 
 First, read the project configuration using the Read tool:
 
 ```bash
-# Check for config files in order of preference
+# Check for config files (prefer .local over standard)
+CONFIG_FILE=""
 if [ -f .tskrrc.local ]; then
-    echo "Using .tskrrc.local"
+    CONFIG_FILE=".tskrrc.local"
 elif [ -f .tskrrc ]; then
-    echo "Using .tskrrc"
+    CONFIG_FILE=".tskrrc"
 else
     echo "ERROR: No .tskrrc file found. Run /tskr-init first."
     exit 1
 fi
+echo "Using $CONFIG_FILE"
 ```
 
 Read the configuration file to understand:
@@ -39,17 +43,71 @@ Read the configuration file to understand:
 
 If no configuration is found, stop and instruct the user to run `/tskr-init` first.
 
-## Step 2: Check for Minimal Mode
+## Step 2: Check for Mode Options
 
-If `--minimal` flag is provided, skip interactive prompts and use provided title:
-
-- Create task with minimal required fields
-- Use "task" as default type, "medium" as default priority
+### Minimal Mode (`--minimal` flag)
+- Skip all interactive prompts and smart inference
+- Use provided title, default type "task", priority "medium"
 - Prompt only for description if title not provided
 
-## Step 3: Interactive Task Creation
+### Interactive Mode (`--interactive` flag)
+- Use the traditional step-by-step prompting process
+- Gather title, type, priority, description separately
+- Skip to Step 3B for traditional workflow
 
-Gather the following information through prompts:
+### Smart Mode (default)
+- Use intelligent inference from single description
+- Continue with Step 3A
+
+## Step 3A: Smart Task Creation (Default)
+
+### Single Initial Prompt
+
+Ask: "Describe the task you want to accomplish (include what needs to be done, why, and any important details):"
+
+### Smart Analysis and Inference
+
+Analyze the user's description to automatically infer:
+
+**Task Type Inference:**
+- Look for **bug** keywords: "fix", "broken", "error", "issue", "failing", "not working", "crash", "problem"
+- Look for **feature** keywords: "add", "implement", "create", "new", "build", "develop", "design"
+- Look for **question** keywords: "research", "investigate", "find out", "understand", "how to", "why does"
+- Default to **task** for: "update", "improve", "refactor", "optimize", "clean up"
+
+**Priority Inference:**
+- **high**: "urgent", "blocking", "critical", "asap", "immediately", "broken", "production"
+- **low**: "later", "nice to have", "when time permits", "eventually", "minor"
+- **medium**: Default for everything else
+
+**Title Extraction:**
+- Extract a clear, action-oriented title (under 80 characters)
+- Use format: "[Action] [Object/Component]"
+- Examples: "Fix login validation", "Add dark mode toggle", "Research database optimization"
+
+### Present Inferred Values
+
+Show the extracted information:
+
+```
+📋 **Task Analysis:**
+- **Title:** {inferred_title}
+- **Type:** {inferred_type}
+- **Priority:** {inferred_priority}
+- **Description:** {enhanced_description}
+
+Does this look correct? (y/n/edit)
+```
+
+### Handle User Response
+
+- **"y" or "yes"**: Continue to task refinement
+- **"n" or "no"**: Fall back to Step 3B (interactive mode)
+- **"edit"**: Ask which field to modify and allow targeted edits
+
+## Step 3B: Interactive Task Creation (Fallback)
+
+Use when smart inference fails or user requests step-by-step:
 
 ### Task Title (Required)
 
@@ -62,7 +120,7 @@ Gather the following information through prompts:
 Present options:
 
 - **bug**: Something broken that needs fixing
-- **feature**: New functionality to implement
+- **feature**: New functionality to implement  
 - **task**: General work item or improvement
 - **question**: Investigation or research needed
 
@@ -84,39 +142,56 @@ Default: "medium"
 - Validate: At least 20 characters
 - Suggest including context, current behavior, expected behavior
 
-### Task Refinement Mode
+## Step 4: Task Refinement and Enhancement
 
-After gathering basic details, ask: "Would you like me to refine this task for better clarity and completeness? (y/n)"
+### Auto-Refinement for Smart Mode
 
-If yes, apply the task refinement process:
+For tasks created via smart inference (Step 3A), automatically apply task refinement to enhance the description:
 
 **IMPORTANT**: Use the shared refinement instructions from `/instructions/task-refinement.md`.
 
-Follow the complete refinement process defined in the shared instructions:
+1. Analyze the inferred task details
+2. Enhance the description for agent completion
+3. Generate specific acceptance criteria
+4. Present the refined version for final approval
+
+### Optional Refinement for Interactive Mode
+
+For tasks created via interactive mode (Step 3B), ask: "Would you like me to refine this task for better clarity and completeness? (y/n)"
+
+If yes, follow the complete refinement process:
 1. Analyze current task details
-2. Create succinct title  
-3. Enhance description for agent completion
+2. Create succinct title
+3. Enhance description for agent completion  
 4. Generate specific acceptance criteria
 5. Ask clarifying questions if needed
 6. Present refined version for approval
 
-The user can also skip refinement during creation and use `/tskr-refine` later to enhance the task.
+### Final Task Presentation
 
-### Acceptance Criteria (Optional but Recommended)
+Present the complete task for approval:
 
-- Prompt: "List the acceptance criteria (what defines 'done'):"
-- Allow multiple criteria
-- Format as checkboxes in markdown
-- Skip if empty
-- If task refinement was performed, these may be auto-generated
+```
+🎯 **Final Task:**
 
-### Additional Notes (Optional)
+# {Final Title}
 
-- Prompt: "Any additional notes, context, or constraints?"
-- Allow empty
-- Include relevant file paths, related issues, etc.
+**Type:** {type} | **Priority:** {priority} | **Status:** pending  
+**Created:** {current_date}
 
-## Step 4: Generate Task ID
+## Description
+{enhanced_description}
+
+## Acceptance Criteria
+{auto_generated_criteria}
+
+## Additional Notes
+{optional_notes}
+
+Create this task? (y/n)
+```
+
+## Step 5: Generate Task ID
 
 Determine the next available task ID:
 
@@ -132,7 +207,7 @@ Determine the next available task ID:
 2. Parse existing task headers to find highest ID
 3. Increment by 1
 
-## Step 5: Create Task Entry
+## Step 6: Create Task Entry
 
 ### For files format
 
@@ -187,7 +262,7 @@ Add to the "Pending" section of the tasks file:
 ---
 ```
 
-## Step 6: Sort and Organize Tasks
+## Step 7: Sort and Organize Tasks
 
 Ensure tasks are ordered for sequential processing:
 
@@ -208,7 +283,7 @@ Ensure tasks are ordered for sequential processing:
 - Reorder entries within the Pending section
 - Maintain ID numbers but adjust display order
 
-## Step 7: Validation
+## Step 8: Validation
 
 Perform basic validation:
 
@@ -217,7 +292,7 @@ Perform basic validation:
 - Ensure formatting is correct
 - Validate that required fields are present
 
-## Step 8: Success Summary
+## Step 9: Success Summary
 
 Provide confirmation of task creation:
 

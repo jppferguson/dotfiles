@@ -19,15 +19,17 @@ Review, reprioritize, and reorder pending tasks to set the optimal execution seq
 First, read the project configuration using the Read tool:
 
 ```bash
-# Check for config files in order of preference
+# Check for config files (prefer .local over standard)
+CONFIG_FILE=""
 if [ -f .tskrrc.local ]; then
-    echo "Using .tskrrc.local"
+    CONFIG_FILE=".tskrrc.local"
 elif [ -f .tskrrc ]; then
-    echo "Using .tskrrc"
+    CONFIG_FILE=".tskrrc"
 else
     echo "ERROR: No .tskrrc file found. Run /tskr-init first."
     exit 1
 fi
+echo "Using $CONFIG_FILE"
 ```
 
 Read the configuration file to understand:
