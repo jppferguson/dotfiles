@@ -26,6 +26,7 @@ sub_help () {
   echo "   symlink          Symlink all dotfiles"
   echo "   test             Run tests"
   echo "   update           Update packages and pkg managers (brew, casks, cargo, pip3, npm, gems, macOS)"
+  echo "   upgrade          Alias for update"
 }
 
 sub_clean () {
@@ -64,7 +65,7 @@ sub_claude () {
 }
 
 sub_completion () {
-  echo "clean claude dock duti edit help install macos reload test update"
+  echo "clean claude dock duti edit help install macos reload test update upgrade"
 }
 
 sub_dock () {
@@ -103,6 +104,10 @@ sub_test () {
 
 sub_update () {
   topgrade
+}
+
+sub_upgrade () {
+  sub_update
 }
 
 case $COMMAND_NAME in
