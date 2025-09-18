@@ -1,9 +1,12 @@
 {
   "model": "sonnet",
   "permissions": {
-    "additionalDirectories": [
-      "~/.agentrc"
-    ]
+    "additionalDirectories": ["~/.agentrc"],
+    "defaultMode": "acceptEdits"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bun x ccusage statusline"
   },
   "hooks": {
     "Stop": [

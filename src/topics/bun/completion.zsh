@@ -1,0 +1,1 @@
+[ -s "/Users/jppferguson/.bun/_bun" ] && source "/Users/jppferguson/.bun/_bun"
