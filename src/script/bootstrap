@@ -11,6 +11,11 @@ BACKUP_DIR="~/.dotfiles_backup/${CUR_UNIX}/"
 
 set -e
 
+# Set DOTFILES if not already set (defensive initialization)
+if [[ ! $DOTFILES ]]; then
+  export DOTFILES="$(cd "$(dirname "$0")/.." && pwd)"
+fi
+
 # Include the general functions
 . $DOTFILES/src/functions/general
 

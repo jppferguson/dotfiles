@@ -21,6 +21,11 @@ done
 # Make sure we're in the right directory
 cd "$(dirname $0)"/..
 
+# Set DOTFILES if not already set (defensive initialization)
+if [[ ! $DOTFILES ]]; then
+  export DOTFILES="$(pwd)"
+fi
+
 # Set where we want to store the DOTFILES_IGNORE variable
 localSettings=~/.localrc
 
