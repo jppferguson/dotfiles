@@ -13,7 +13,7 @@ set -e
 
 # Set DOTFILES if not already set (defensive initialization)
 if [[ ! $DOTFILES ]]; then
-  export DOTFILES="$(cd "$(dirname "$0")/.." && pwd)"
+  export DOTFILES="$(pwd)"
 fi
 
 # Include the general functions
