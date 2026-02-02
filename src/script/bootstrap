@@ -4,17 +4,14 @@
 #
 ###############################################################################
 
-cd "$(dirname "$0")/.."
-DOTFILES_TOPIC_ROOT=$(pwd)/topics
+# Initialize dotfiles environment
+. "$(dirname "$0")/init"
+
+DOTFILES_TOPIC_ROOT=$(pwd)/src/topics
 CUR_UNIX="`date +%s`"
 BACKUP_DIR="~/.dotfiles_backup/${CUR_UNIX}/"
 
 set -e
-
-# Set DOTFILES if not already set (defensive initialization)
-if [[ ! $DOTFILES ]]; then
-  export DOTFILES="$(pwd)"
-fi
 
 # Include the general functions
 . $DOTFILES/src/functions/general

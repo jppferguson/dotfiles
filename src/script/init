@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Common initialization for dotfiles scripts
+# Source this at the beginning of scripts in src/script/
+#
+###############################################################################
+
+# Navigate to dotfiles root directory
+# When sourced from src/script/, go up two levels to reach root
+cd "$(dirname "${BASH_SOURCE[0]}")"/../..
+
+# Set DOTFILES if not already set (defensive initialization)
+if [[ ! $DOTFILES ]]; then
+  export DOTFILES="$(pwd)"
+fi

@@ -3,6 +3,9 @@
 # Update all the things (or just 1-or-2)
 set -e
 
+# Initialize dotfiles environment
+. "$(dirname "$0")/init"
+
 # Include the general functions
 . $DOTFILES/src/functions/general
 

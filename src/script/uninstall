@@ -3,5 +3,8 @@
 # Uninstall something from dotfiles
 set -e
 
+# Initialize dotfiles environment
+. "$(dirname "$0")/init"
+
 # Include the general functions
 . $DOTFILES/src/functions/general

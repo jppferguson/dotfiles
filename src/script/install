@@ -18,13 +18,8 @@ while getopts 'dv' flag; do
   esac
 done
 
-# Make sure we're in the right directory
-cd "$(dirname $0)"/..
-
-# Set DOTFILES if not already set (defensive initialization)
-if [[ ! $DOTFILES ]]; then
-  export DOTFILES="$(pwd)"
-fi
+# Initialize dotfiles environment
+. "$(dirname "$0")/init"
 
 # Set where we want to store the DOTFILES_IGNORE variable
 localSettings=~/.localrc
@@ -141,8 +136,8 @@ install_run () {
 # Interactively installs everything!
 
 install_run_all () {
-  local install_scripts=('./homebrew/install.sh')
-  install_scripts+=($(find . -name install.sh -not -path "./vendor/*" -not -path "./homebrew/*" ) )
+  local install_scripts=('./src/topics/homebrew/install.sh')
+  install_scripts+=($(find ./src/topics -name install.sh -not -path "./vendor/*" -not -path "*/homebrew/*" ) )
   local install_all=false always_skip_all=false skip_all=false
 
   for install_script in "${install_scripts[@]}"; do
