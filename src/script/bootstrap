@@ -34,7 +34,7 @@ backup () {
 }
 
 setup_gitconfig () {
-  if ! [ -f topics/git/gitconfig.symlink ]
+  if ! [ -f src/topics/git/gitconfig.symlink ]
   then
     info 'setup gitconfig'
 
@@ -49,7 +49,7 @@ setup_gitconfig () {
     user ' - What email do you want to use for git commits?'
     read -e git_authoremail
 
-    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" topics/git/gitconfig.symlink.example > topics/git/gitconfig.symlink
+    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" src/topics/git/gitconfig.symlink.example > src/topics/git/gitconfig.symlink
 
     print_success 'gitconfig'
   fi
