@@ -40,8 +40,8 @@ config_files_misc=($(filter_array_exclude "/completion.zsh" "${config_files_misc
 source_files "${config_files_misc[@]}"
 
 # initialize autocomplete here, otherwise functions won't be loaded
-# autoload -U compinit
-# compinit
+autoload -U compinit
+compinit -i
 
 # load every completion after autocomplete loads
 config_files_completion=($(filter_array_include "/completion.zsh" "${config_files[@]}"))

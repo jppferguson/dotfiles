@@ -1,9 +1,12 @@
 
 # Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+# Use $HOME explicitly so prezto loads correctly when ZDOTDIR is overridden
+# (e.g. by Wave terminal)
+if [[ -s "$HOME/.zprezto/init.zsh" ]]; then
+  local _saved_zdotdir="$ZDOTDIR"
+  ZDOTDIR="$HOME"
+  source "$HOME/.zprezto/init.zsh"
+  ZDOTDIR="$_saved_zdotdir"
 fi
 
-autoload -Uz promptinit
-promptinit
-prompt agnoster
+# prompt theme is set via zpreztorc (zstyle ':prezto:module:prompt' theme)

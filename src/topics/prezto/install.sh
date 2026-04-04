@@ -12,6 +12,8 @@ print_block "Installing Prezto"
 
 PREZTO_DIR="${ZDOTDIR:-$HOME}/.zprezto"
 
+mkdir ${ZDOTDIR:-$HOME}/.zprezto-contrib
+
 if [ ! -d "${PREZTO_DIR}" ]; then
   print_block "Installing prezto"
   cd $HOME

@@ -1,4 +1,5 @@
 autoload colors && colors
+setopt PROMPT_SUBST
 # cheers, @ehrenmurdick
 # http://github.com/ehrenmurdick/config/blob/master/zsh/prompt.zsh
 
@@ -71,12 +72,13 @@ directory_name() {
   echo "%{$fg_bold[cyan]%}%1/%\/%{$reset_color%}"
 }
 
-export PROMPT=$'\n$(rb_prompt)in $(directory_name) $(git_dirty)$(need_push)\n› '
-set_prompt () {
-  export RPROMPT="%{$fg_bold[cyan]%}%{$reset_color%}"
-}
-
-precmd() {
-  title "zsh" "%m" "%55<...<%~"
-  set_prompt
-}
+# Custom prompt disabled in favour of agnoster (via prezto)
+# export PROMPT=$'\n$(rb_prompt)in $(directory_name) $(git_dirty)$(need_push)\n› '
+# set_prompt () {
+#   export RPROMPT="%{$fg_bold[cyan]%}%{$reset_color%}"
+# }
+#
+# precmd() {
+#   title "zsh" "%m" "%55<...<%~"
+#   set_prompt
+# }
