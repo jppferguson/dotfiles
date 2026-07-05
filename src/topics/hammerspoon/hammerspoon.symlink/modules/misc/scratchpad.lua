@@ -101,7 +101,7 @@ local function choiceCallback(choice)
 end
 
 -- callback when the menubar icon is clicked.
-local function menuClickCallback(mods)
+m.populateMenu = function(mods)
   local list = {}
 
   if mods.shift or mods.ctrl then
@@ -172,7 +172,8 @@ function m.start()
   -- menu:setTitle(m.config.menubar.icon)
   menu:setIcon(hs.image.imageFromPath(m.config.menubar.icon):setSize({w=16,h=16}))
   menu:setTooltip(m.config.menubar.tooltip)
-  menu:setMenu(menuClickCallback)
+  menu:setMenu(m.populateMenu)
+  m.menubar = menu
 
   chooser = hs.chooser.new(choiceCallback)
   chooser:width(m.config.width)
