@@ -1,4 +1,3 @@
-tap 'homebrew/bundle'
 tap 'homebrew/services'
 brew "dsully/tap/macos-defaults"
 
@@ -23,7 +22,6 @@ brew 'grc'
 brew 'spark'
 
 # Communication
-cask 'skype'
 cask 'slack'
 mas "WhatsApp", id: 1147396723
 cask 'zoom'
@@ -51,7 +49,6 @@ cask 'hammerspoon'
 
 # Dev
 cask 'android-studio'
-cask 'cakebrew'
 cask 'docker'
 cask 'elgato-stream-deck'
 cask 'iterm2'
@@ -59,24 +56,20 @@ cask 'kaleidoscope'
 cask 'local'
 cask 'postman'
 cask 'proxyman'
-cask 'reggy'
-cask 'sequel-pro'
 cask 'sourcetree'
-cask 'sublime-text'
 cask 'transmit'
 cask 'visual-studio-code'
 mas "Xcode", id: 497799835
 
 # Design
 cask 'figma'
-cask 'skyfonts'
 cask 'rightfont'
 
 # Browsers
 cask 'firefox'
-cask 'firefox-developer-edition'
+cask 'firefox@developer-edition'
 cask 'google-chrome'
-cask 'google-chrome-canary'
+cask 'google-chrome@canary'
 cask 'opera'
 
 # Utilities

@@ -97,7 +97,6 @@ symlinked without extension into `$HOME` when you run `src/script/bootstrap`.
 - **macos** - macOS system defaults (YAML-based configuration)
 - **node** - Node.js configuration and global packages
 - **prezto** - Zsh framework configuration
-- **sublime** - Sublime Text settings
 - **topgrade** - Tool for updating all package managers at once
 - **vs-code** - Visual Studio Code settings and keybindings
 - **zsh** - Zsh shell configuration

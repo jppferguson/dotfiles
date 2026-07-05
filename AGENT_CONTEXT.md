@@ -13,7 +13,6 @@ This is a personal dotfiles repository based on Holman's dotfiles pattern. It us
 - `src/script/` - Installation and setup scripts
 - `src/topics/` - Topic-based configurations (main organisation)
 - `test/` - Bats tests for shell functions
-- `vendor/` - External dependencies
 
 ### Topic Organisation
 
