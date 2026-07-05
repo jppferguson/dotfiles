@@ -150,9 +150,9 @@ bats test/functions.bats
 
 ### Commit Guidelines
 
-- Keep commits focused and message them in imperative mood (`Add upgrade alias`, `Refine tskr`)
+- Keep commits focused and message them in imperative mood (`Add upgrade alias`, `Fix zsh prompt`)
 - Reference related issues in the body if applicable
-- PRs should summarize the change, note any config migrations, and include verification steps (`dot test`, `dot symlink`, `dot claude sync`, etc.)
+- PRs should summarize the change, note any config migrations, and include verification steps (`dot test`, `dot symlink`, `dot claude status`, etc.)
 
 ### Custom Git Commands
 

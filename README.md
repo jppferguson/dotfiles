@@ -102,39 +102,30 @@ symlinked without extension into `$HOME` when you run `src/script/bootstrap`.
 - **vs-code** - Visual Studio Code settings and keybindings
 - **zsh** - Zsh shell configuration
 
-## Claude Code Configuration
+## AI Agent Configuration
 
-The `claude` topic manages your [Claude Code](https://claude.ai/code) configuration, including custom commands, hooks, and settings.
+Two topics manage AI coding agent configuration, wired into place with per-item symlinks so every tweak is tracked in git:
+
+- **`src/topics/agentrc.symlink/`** (symlinked to `~/.agentrc`) - agent-agnostic config shared by Claude Code, Codex, Gemini and OpenCode: global instructions (`AGENTS.md`), skills and standards. See its [README](src/topics/agentrc.symlink/README.md).
+- **`src/topics/claude/`** - Claude Code specifics: `settings.json`, `statusline.sh` and subagents (`agents/`).
+
+### How it's wired
+
+`src/topics/claude/install.sh` symlinks individual items into `~/.claude` (never the whole directory, which holds runtime state):
+
+- `~/.claude/settings.json`, `statusline.sh`, `agents/` → `src/topics/claude/`
+- `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.gemini/GEMINI.md`, `~/.config/opencode/AGENTS.md` → `src/topics/agentrc.symlink/AGENTS.md`
+- `~/.claude/skills/<name>` → `src/topics/agentrc.symlink/skills/<name>` (individual links; the skills directory itself stays real because other tools install skills there too)
 
 ### Commands
 
-- **`dot claude install`** - Install/reinstall Claude configuration
-- **`dot claude status`** - Show sync status between dotfiles and `~/.claude`
-- **`dot claude diff`** - Show differences between dotfiles and `~/.claude`
-- **`dot claude sync`** - Sync dotfiles to `~/.claude` (with backup)
-- **`dot claude backup`** - Create manual backup of `~/.claude`
-
-### Configuration Files
-
-- **`src/topics/claude/commands/`** - Custom slash commands (`.md` files)
-- **`src/topics/claude/hooks/`** - Git hooks and automation scripts
-- **`src/topics/claude/settings.json`** - Claude Code settings
-- **`src/topics/claude/CLAUDE.md.symlink`** - Global Claude configuration (symlinked to `~/.CLAUDE.md`)
-
-### Important Note
-
-Due to a [known bug in Claude Code](https://github.com/anthropics/claude-code/issues/764), we cannot use symlinks for the `commands` and `hooks` directories. Instead, we copy files from the dotfiles to `~/.claude/`. This means:
-
-1. Changes to commands/hooks in dotfiles need to be synced with `dot claude sync`
-2. Local changes in `~/.claude/` are automatically backed up before syncing
-3. We'll switch back to symlinks when the upstream bug is fixed
+- **`dot claude status`** - Check symlink health
+- **`dot claude sync`** - Repair symlinks (pre-existing real files are backed up to `~/.claude/backups/`)
+- **`dot claude backup`** - Create a manual backup of the linked config
 
 ### Workflow
 
-1. Edit commands/hooks in `src/topics/claude/`
-2. Run `dot claude status` to see what needs syncing
-3. Run `dot claude sync` to update `~/.claude/` from dotfiles
-4. Your changes are now available in Claude Code
+Edit files in the repo (or in `~/.claude` - symlinks write through), then commit from the dotfiles repo. Changes apply to new agent sessions immediately; no sync step needed.
 
 ## Components
 
