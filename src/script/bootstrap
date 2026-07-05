@@ -8,8 +8,8 @@
 . "$(dirname "$0")/init"
 
 DOTFILES_TOPIC_ROOT=$(pwd)/src/topics
-CUR_UNIX="`date +%s`"
-BACKUP_DIR="~/.dotfiles_backup/${CUR_UNIX}/"
+CUR_UNIX="$(date +%s)"
+BACKUP_DIR="$HOME/.dotfiles_backup/${CUR_UNIX}/"
 
 set -e
 
@@ -29,7 +29,8 @@ create_localrc () {
 }
 
 backup () {
-  mkdir -p "$BACKUP_DIR"; mv "$1" "$_"
+  mkdir -p "$BACKUP_DIR"
+  mv "$1" "$BACKUP_DIR"
   print_success "backed up $1"
 }
 
@@ -123,11 +124,24 @@ install_dotfiles () {
 
   local overwrite_all=false backup_all=false skip_all=false
 
-  for src in $(find "$DOTFILES_TOPIC_ROOT" -maxdepth 3 -name '*.symlink')
+  while IFS= read -r -d '' src
   do
-    dst="$HOME/.$(basename "${src%.*}")"
+    # Path within the topic, e.g. "zshrc.symlink" or ".config/topgrade.toml.symlink"
+    local rel="${src#"$DOTFILES_TOPIC_ROOT"/}"
+    rel="${rel#*/}"
+    rel="${rel%.symlink}"
+
+    local dst
+    if [[ "$rel" == */* ]]
+    then
+      # Nested paths keep their structure relative to $HOME (e.g. ~/.config/...)
+      dst="$HOME/$rel"
+      mkdir -p "$(dirname "$dst")"
+    else
+      dst="$HOME/.$rel"
+    fi
     link_file "$src" "$dst"
-  done
+  done < <(find "$DOTFILES_TOPIC_ROOT" -maxdepth 3 -name '*.symlink' -print0)
 }
 
 create_localrc

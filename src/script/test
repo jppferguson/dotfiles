@@ -1,4 +1,4 @@
-#!../test/libs/bats/bin/bats
+#!/usr/bin/env bash
 #
 # Run dotfiles test suite.
 #

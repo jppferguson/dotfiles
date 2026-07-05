@@ -65,7 +65,7 @@ sub_claude () {
 }
 
 sub_completion () {
-  echo "clean claude dock duti edit help install macos reload test update upgrade"
+  echo "cd clean claude dock duti edit help install macos reload symlink test update upgrade"
 }
 
 sub_dock () {
@@ -116,11 +116,11 @@ case $COMMAND_NAME in
     ;;
   *)
     shift
-    sub_${COMMAND_NAME} $@
-    if [ $? = 127 ]; then
-      echo "'$COMMAND_NAME' is not a known command or has errors." >&2
+    if ! declare -f "sub_${COMMAND_NAME}" > /dev/null; then
+      echo "'$COMMAND_NAME' is not a known command." >&2
       sub_help
       exit 1
     fi
+    "sub_${COMMAND_NAME}" "$@"
     ;;
 esac

@@ -15,19 +15,19 @@ fi
 
 # Update dotfiles to latest version
 print_line "Making sure dotfiles are up-to-date first..."
-cd $DOTFILES && git pull --ff-only
+cd "$DOTFILES" && git pull --ff-only
 
 # find the update.sh files and run them iteratively
 if [ "$1" = "" ] ; then
-  updates=($( find . -name update.sh -not -path "./vendor/*") )
+  updates=($( find . -name update.sh ))
 else
   updates=()
   for search in "${@}"; do
-    updates+=($( find . -name update.sh -path "*${search}*" -not -path "./vendor/*") )
+    updates+=($( find . -name update.sh -path "*${search}*" ))
   done
 fi
 
 # Loop through update.sh files and execute them
 for update in "${updates[@]}"; do
-  sh -c "${update}"
+  bash "${update}"
 done

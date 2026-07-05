@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Update node
 #
@@ -15,9 +15,6 @@ DOTFILES_NODE_DIR="$DOTFILES/src/topics/node"
 # Update npm and global packages
 npm install npm -g
 npm update -g
-
-# Update yarn
-brew upgrade yarn
 
 # Load list of global node_modules to update from the npm-global file
 OLDIFS=$IFS; IFS=$'\n' node_modules=($(egrep -v '(^#|^$)' $DOTFILES_NODE_DIR/npm-global)); IFS=$OLDIFS

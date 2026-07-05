@@ -1,1 +1,1 @@
-[ -s "/Users/jppferguson/.bun/_bun" ] && source "/Users/jppferguson/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"

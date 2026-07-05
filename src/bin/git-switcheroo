@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Switches git remote between https/ssh
 # https://help.github.com/articles/why-is-git-always-asking-for-my-password
@@ -6,15 +6,7 @@
 
 #origin or upstream
 REMOTE=${1-origin}
-REMOTE_URL=`git remote get-url $REMOTE`
-
-# get the service url
-# TODO use it
-if [[ *"bitbucket.com"* ]]; then
-  DOMAIN="bitbucket.com"
-else
-  DOMAIN="github.com"
-fi
+REMOTE_URL=$(git remote get-url "$REMOTE")
 
 if [[ $REMOTE_URL == https* ]]; then
 
@@ -44,8 +36,7 @@ if [[ $REMOTE_URL == https* ]]; then
   echo "  '$NEW_URL'"
   echo ""
 
-  CHANGE_CMD="git remote set-url $REMOTE $NEW_URL"
-  `$CHANGE_CMD`
+  git remote set-url "$REMOTE" "$NEW_URL"
 
   echo "Success"
 
@@ -78,8 +69,7 @@ else
   echo "  '$NEW_URL'"
   echo ""
 
-  CHANGE_CMD="git remote set-url $REMOTE $NEW_URL"
-  `$CHANGE_CMD`
+  git remote set-url "$REMOTE" "$NEW_URL"
 
   echo "Success"
 

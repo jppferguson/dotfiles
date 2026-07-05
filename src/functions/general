@@ -143,12 +143,12 @@ verboseOut () {
 
 cask_install() {
   print_task "Installing" "${@}"
-  brew cask install "${@}"
+  brew install --cask "${@}"
 }
 
 cask_reinstall() {
   print_task "Installing" "${@}" "(with force)"
-  brew cask install --force "${@}"
+  brew install --cask --force "${@}"
 }
 
 # source a file, but only if it exists

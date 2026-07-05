@@ -28,7 +28,7 @@ localSettings=~/.localrc
 . $DOTFILES/src/functions/general
 
 # Source .localrc file for stuff we don't want to install
-. $localSettings
+[ -f "$localSettings" ] && . "$localSettings"
 
 
 # Functions
@@ -113,7 +113,7 @@ install_run () {
 
   if [ "$install" == "true" ]; then
     if [ ! "$dryRunFlag" == "true" ]; then
-      sh -c "${installer}"
+      bash "${installer}"
     fi
     print_success "Installed $script"
   fi
@@ -137,7 +137,7 @@ install_run () {
 
 install_run_all () {
   local install_scripts=('./src/topics/homebrew/install.sh')
-  install_scripts+=($(find ./src/topics -name install.sh -not -path "./vendor/*" -not -path "*/homebrew/*" ) )
+  install_scripts+=($(find ./src/topics -name install.sh -not -path "*/homebrew/*" ) )
   local install_all=false always_skip_all=false skip_all=false
 
   for install_script in "${install_scripts[@]}"; do
@@ -155,10 +155,10 @@ _DOTFILES_IGNORE=${_DOTFILES_IGNORE[*]}
 DOTFILES_IGNORE="DOTFILES_IGNORE=( $_DOTFILES_IGNORE )"
 
 # Check if the array already exists within .localrc
-if grep -q DOTFILES_IGNORE "$localSettings"; then
-   perl -pi -e "s/DOTFILES_IGNORE.*/$DOTFILES_IGNORE/g" $localSettings
+if [ -f "$localSettings" ] && grep -q DOTFILES_IGNORE "$localSettings"; then
+   perl -pi -e "s/DOTFILES_IGNORE.*/$DOTFILES_IGNORE/g" "$localSettings"
 else
-   echo -e "\n# Ignore these dotfiles installers: \n$DOTFILES_IGNORE" >> $localSettings
+   echo -e "\n# Ignore these dotfiles installers: \n$DOTFILES_IGNORE" >> "$localSettings"
 fi
 
 

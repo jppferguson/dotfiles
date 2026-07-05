@@ -17,4 +17,4 @@ else
   DIR="$2"
 fi
 
-grep -ril --color --include=*.{php,js,css,scss,html} "$1" $DIR
+grep -ril --color --include=*.{php,js,css,scss,html} "$1" "$DIR"
