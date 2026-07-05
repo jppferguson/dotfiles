@@ -12,6 +12,7 @@ local currentHandler = nil
 
 m.config = {
   apps = {
+    ['company.thebrowser.Browser'] = true,
     ['com.apple.Safari'] = true,
     ['com.google.Chrome'] = true,
     ['org.mozilla.firefox'] = true,
