@@ -30,7 +30,13 @@ fi
 
 print_warning "If you get 'Could not write domain...' errors below, you may need to add your terminal app (e.g. Terminal.app, iTerm2) to System Preferences -> Privacy -> Full Disk Access"
 
-macos-defaults apply $DOTFILES/src/topics/macos/defaults/
+macos-defaults apply "$DOTFILES/src/topics/macos/defaults/"
+
+# Per-machine overrides, not tracked in git (e.g. auto-login on the Mac mini)
+if [ -d "$DOTFILES/src/topics/macos/defaults-local" ]; then
+  print_line "Applying per-machine overrides from defaults-local/"
+  macos-defaults apply "$DOTFILES/src/topics/macos/defaults-local/"
+fi
 
 print_line "Some settings may require a logout/restart to take effect."
 

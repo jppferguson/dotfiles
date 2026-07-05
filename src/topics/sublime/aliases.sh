@@ -1,1 +1,0 @@
-alias sublime="subl"

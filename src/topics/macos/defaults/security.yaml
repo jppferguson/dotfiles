@@ -27,9 +27,6 @@ data:
     # https://apple.stackexchange.com/questions/411497/pam-tid-so-asks-for-password-instead-of-requesting-for-fingerprint-when-docked
     ignoreArd: true
 
-  com.apple.loginwindow:
-    autoLoginUser: true
-
   com.apple.screensaver:
     # Require password immediately after sleep or screen saver begins
     askForPassword: 1
