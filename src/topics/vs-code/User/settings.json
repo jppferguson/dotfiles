@@ -1,6 +1,6 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.fontFamily": "'Operator Mono', 'Fira Code', Monaco, monospace",
@@ -22,7 +22,7 @@
     "javascript",
     "javascriptreact",
     "typescript",
-    "typescriptreact"
+    "typescriptreact",
   ],
   "explorer.confirmDelete": false,
   "peacock.affectActivityBar": false,
@@ -38,30 +38,30 @@
   "workbench.iconTheme": "file-icons",
   "workbench.startupEditor": "none",
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "scm.diffDecorationsGutterPattern": {
-    "added": true
+    "added": true,
   },
   "cSpell.userWords": ["dotfiles", "jppferguson", "Ooni"],
   "typescript.updateImportsOnFileMove.enabled": "always",
   "[html]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
+    "editor.defaultFormatter": "vscode.html-language-features",
   },
   "terminal.external.osxExec": "iTerm.app",
   "terminal.integrated.automationProfile.osx": {},
   "editor.accessibilitySupport": "off",
   "[css]": {
-    "editor.defaultFormatter": "vscode.css-language-features"
+    "editor.defaultFormatter": "vscode.css-language-features",
   },
   "files.associations": {
-    ".env*": "dotenv"
+    ".env*": "dotenv",
   },
   "git.autofetch": true,
   "git.openRepositoryInParentFolders": "never",
@@ -74,11 +74,11 @@
       "editorInlayHint.background": "#18181800",
       // Overrides for specific kinds of inlay hints
       "editorInlayHint.typeForeground": "#6b8790f0",
-      "editorInlayHint.parameterForeground": "#6b8790f0"
-    }
+      "editorInlayHint.parameterForeground": "#6b8790f0",
+    },
   },
   "workbench.editorAssociations": {
-    "*.svg": "default"
+    "*.svg": "default",
   },
   "search.useGlobalIgnoreFiles": true,
   "search.useIgnoreFiles": true,
@@ -93,7 +93,7 @@
     "**/android/app/build": true,
     "**/android/build/generated": true,
     "**/*.xcarchive": true,
-    "**/ios/Pods": true
+    "**/ios/Pods": true,
   },
   "window.zoomLevel": 1,
   "workbench.tree.enableStickyScroll": true,
@@ -112,7 +112,10 @@
     "editor.rulers": [80],
     "editor.selectionHighlight": false,
     "editor.tabCompletion": "onlySnippets",
-    "editor.wordBasedSuggestions": "off"
+    "editor.wordBasedSuggestions": "off",
   },
-  "projectManager.git.baseFolders": ["~/Development"]
+  "projectManager.git.baseFolders": ["~/Development"],
+  "claudeCode.preferredLocation": "panel",
+  "claudeCode.useTerminal": false,
+  "claudeCode.initialPermissionMode": "acceptEdits",
 }
