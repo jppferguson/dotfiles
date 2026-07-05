@@ -1,12 +1,8 @@
 {
-  "model": "claude-fable-5[1m]",
-  "effortLevel": "xhigh",
-  "alwaysThinkingEnabled": true,
   "env": {
     "ENABLE_TOOL_SEARCH": "true"
   },
   "permissions": {
-    "defaultMode": "auto",
     "allow": [
       "Bash(ls:*)",
       "Bash(cat:*)",
@@ -63,8 +59,10 @@
       "Read(//tmp/**)",
       "Read(//private/tmp/**)"
     ],
-    "deny": []
+    "deny": [],
+    "defaultMode": "auto"
   },
+  "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "bash \"$HOME/.claude/statusline.sh\""
@@ -83,6 +81,8 @@
       }
     }
   },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
   "tui": "fullscreen",
   "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": true,

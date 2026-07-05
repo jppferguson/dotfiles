@@ -52,6 +52,8 @@ composer.phar
 CLAUDE.local.md
 .claude/*.local.json
 .claude/*.local.md
+claude*local*
+.claude/*
 
 .tskrrc.local
 tasks-local
