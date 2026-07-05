@@ -142,7 +142,7 @@ bats test/functions.bats
 
 - Treat dotfiles as public: never commit secrets or machine-specific tokens
 - Use `~/.localrc` for local machine-specific configuration (not in git)
-- When modifying Claude assets under `src/topics/claude/`, finish by running `dot claude sync`
+- Claude/agent assets are symlinked live: `~/.claude/*` items link into `src/topics/claude/`, and `~/.agentrc` links to `src/topics/agentrc.symlink/` (shared cross-agent config: AGENTS.md, skills, standards). Edits apply immediately; run `dot claude status` to verify link health, `dot claude sync` only to repair links
 - Review `zsh/zshrc.symlink` updates carefully—call out any path changes in PRs
 - Keep shared documentation under the repository root and reserve `___NOTES.md` for personal scratch notes.
 

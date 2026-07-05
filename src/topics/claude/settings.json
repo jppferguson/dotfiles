@@ -1,24 +1,92 @@
 {
-  "model": "sonnet",
+  "model": "claude-fable-5[1m]",
+  "effortLevel": "xhigh",
+  "alwaysThinkingEnabled": true,
+  "env": {
+    "ENABLE_TOOL_SEARCH": "true"
+  },
   "permissions": {
-    "additionalDirectories": ["~/.agentrc"],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "auto",
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(sed:*)",
+      "Bash(cd:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(mv:*)",
+      "Bash(rmdir:*)",
+      "Bash(node:*)",
+      "Bash(curl:*)",
+      "Bash(git:*)",
+      "Bash(gh search:*)",
+      "Bash(gh issue:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr view:*)",
+      "Bash(yarn:*)",
+      "Bash(pnpm:*)",
+      "Bash(npm run:*)",
+      "Bash(npx jest:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx playwright:*)",
+      "Bash(npx supabase:*)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(npx npm-check-updates:*)",
+      "Bash(docker ps:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker exec:*)",
+      "Bash(PGPASSWORD=postgres psql:*)",
+      "Bash(bats:*)",
+      "WebSearch",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:code.claude.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:nextjs.org)",
+      "WebFetch(domain:react.dev)",
+      "WebFetch(domain:supabase.com)",
+      "WebFetch(domain:vercel.com)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:docs.sentry.io)",
+      "WebFetch(domain:tailwindcss.com)",
+      "WebFetch(domain:developer.mozilla.org)",
+      "mcp__doto__*",
+      "mcp__sentry__*",
+      "mcp__context7__*",
+      "mcp__sequential-thinking__sequentialthinking",
+      "mcp__playwright__*",
+      "Read(//Users/jppferguson/Development/**)",
+      "Read(//Users/jppferguson/.agentrc/**)",
+      "Edit(//Users/jppferguson/.agentrc/**)",
+      "Read(//tmp/**)",
+      "Read(//private/tmp/**)"
+    ],
+    "deny": []
   },
   "statusLine": {
     "type": "command",
-    "command": "bun x ccusage statusline"
+    "command": "bash \"$HOME/.claude/statusline.sh\""
   },
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh ~/.claude/hooks/completed-task.sh"
-          }
-        ]
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "skill-codex@skill-codex": true
+  },
+  "extraKnownMarketplaces": {
+    "skill-codex": {
+      "source": {
+        "source": "github",
+        "repo": "skills-directory/skill-codex"
       }
-    ]
-  }
+    }
+  },
+  "tui": "fullscreen",
+  "remoteControlAtStartup": true,
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true
 }

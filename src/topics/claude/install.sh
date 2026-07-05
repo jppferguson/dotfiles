@@ -1,82 +1,73 @@
 #!/usr/bin/env bash
 #
-# Install Claude configuration by copying files
-# (Using copy instead of symlinks due to Claude Code bug: https://github.com/anthropics/claude-code/issues/764)
+# Install Claude Code configuration via per-item symlinks into ~/.claude.
+# Symlinking individual items (never the whole directory) keeps runtime
+# state (projects/, history.jsonl, caches) out of the repo while making
+# every config tweak instantly visible in git.
 #
 
-# Include the general functions
 . $DOTFILES/src/functions/general
 
-# Color definitions
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+CLAUDE_DIR="$HOME/.claude"
+DOTFILES_CLAUDE="$DOTFILES/src/topics/claude"
+AGENTRC="$DOTFILES/src/topics/agentrc.symlink"
+BACKUP_DIR="$CLAUDE_DIR/backups/$(date +%Y-%m-%d-%H%M%S)"
 
-# Create ~/.claude directory if it doesn't exist
-mkdir -p "$HOME/.claude"
+mkdir -p "$CLAUDE_DIR"
 
-# Create backup directory with timestamp
-BACKUP_DIR="$HOME/.claude/backups/$(date +%Y-%m-%d-%H%M%S)"
-
-# Function to backup a file or directory if it exists
-backup_if_exists() {
-    local src="$1"
-    local name="$2"
-    
-    if [ -e "$src" ]; then
-        mkdir -p "$BACKUP_DIR"
-        cp -r "$src" "$BACKUP_DIR/"
-        info "Backed up existing $name to $BACKUP_DIR/"
-        return 0
-    fi
-    return 1
-}
-
-# Function to copy claude files
-copy_claude_files() {
+# Symlink a source into place, backing up any pre-existing real file/dir.
+link_item() {
     local src="$1"
     local dst="$2"
-    local name="$3"
-    
-    if [ -e "$src" ]; then
-        # Backup existing if it exists
-        backup_if_exists "$dst" "$name"
-        
-        # Remove existing and copy new
-        rm -rf "$dst"
-        cp -r "$src" "$dst"
-        print_success "Copied $name to $dst"
-        return 0
-    else
-        print_error "Source $name not found at $src"
+
+    if [ ! -e "$src" ]; then
+        print_error "Source not found: $src"
         return 1
     fi
+
+    # Already correctly linked
+    if [ -L "$dst" ] && [ "$(readlink "$dst")" = "$src" ]; then
+        info "Already linked: $dst"
+        return 0
+    fi
+
+    # Back up a real (non-symlink) file or directory before replacing it
+    if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+        mkdir -p "$BACKUP_DIR"
+        mv "$dst" "$BACKUP_DIR/"
+        info "Backed up $dst to $BACKUP_DIR/"
+    fi
+
+    ln -sfn "$src" "$dst"
+    print_success "Linked $dst -> $src"
 }
 
-info "Installing Claude configuration..."
+info "Installing Claude Code configuration (symlinks)..."
 
-# Copy commands directory
-copy_claude_files "$DOTFILES/src/topics/claude/commands" "$HOME/.claude/commands" "commands"
+link_item "$DOTFILES_CLAUDE/settings.json" "$CLAUDE_DIR/settings.json"
+link_item "$DOTFILES_CLAUDE/statusline.sh" "$CLAUDE_DIR/statusline.sh"
+link_item "$DOTFILES_CLAUDE/agents"        "$CLAUDE_DIR/agents"
 
-# Copy hooks directory  
-copy_claude_files "$DOTFILES/src/topics/claude/hooks" "$HOME/.claude/hooks" "hooks"
+# Shared cross-agent assets live in ~/.agentrc (itself a symlink into this repo).
+# ~/.claude/skills stays a real directory (other tools, e.g. gstack, install
+# their own skills there) - link each shared skill into it individually.
+mkdir -p "$CLAUDE_DIR/skills"
+for skill in "$AGENTRC"/skills/*/; do
+    link_item "${skill%/}" "$CLAUDE_DIR/skills/$(basename "$skill")"
+done
 
-# Copy settings.json
-copy_claude_files "$DOTFILES/src/topics/claude/settings.json" "$HOME/.claude/settings.json" "settings.json"
+link_item "$AGENTRC/AGENTS.md" "$CLAUDE_DIR/CLAUDE.md"
+
+# Wire the same global instructions into other agents when they're installed
+[ -d "$HOME/.codex" ]  && link_item "$AGENTRC/AGENTS.md" "$HOME/.codex/AGENTS.md"
+[ -d "$HOME/.gemini" ] && link_item "$AGENTRC/AGENTS.md" "$HOME/.gemini/GEMINI.md"
+[ -d "$HOME/.config/opencode" ] && link_item "$AGENTRC/AGENTS.md" "$HOME/.config/opencode/AGENTS.md"
 
 # Clean up old backups (keep last 5)
-if [ -d "$HOME/.claude/backups" ]; then
-    cd "$HOME/.claude/backups"
-    ls -t | tail -n +6 | xargs rm -rf 2>/dev/null || true
-    info "Cleaned up old backups (keeping last 5)"
+if [ -d "$CLAUDE_DIR/backups" ]; then
+    ls -t "$CLAUDE_DIR/backups" | tail -n +6 | while read -r old; do
+        rm -rf "$CLAUDE_DIR/backups/$old"
+    done
 fi
 
-if [ -d "$BACKUP_DIR" ]; then
-    info "Backups created in: $BACKUP_DIR"
-fi
-
-print_success "Claude configuration installed successfully"
-info "Note: Using copy method due to Claude Code symlink bug"
-info "Bug tracking: https://github.com/anthropics/claude-code/issues/764"
+print_success "Claude configuration installed"
