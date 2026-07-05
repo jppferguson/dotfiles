@@ -27,25 +27,19 @@ source_file ~/.commonrc
 # all of our zsh files
 typeset -U config_files
 config_files=($DOTFILES/src/topics/**/*.zsh)
-config_files_misc=("${config_files[@]}")
 
 # load the path files
-# source_files ${(M)config_files:#*/path.zsh}
-config_files_path=($(filter_array_include "/path.zsh" "${config_files[@]}"))
-source_files "${config_files_path[@]}"
+source_files ${(M)config_files:#*/path.zsh}
 
 # load everything but the path and completion files
-config_files_misc=($(filter_array_exclude "/path.zsh" "${config_files_misc[@]}"))
-config_files_misc=($(filter_array_exclude "/completion.zsh" "${config_files_misc[@]}"))
-source_files "${config_files_misc[@]}"
+source_files ${config_files:#*/(path|completion).zsh}
 
-# initialize autocomplete here, otherwise functions won't be loaded
-autoload -U compinit
-compinit -i
+# prezto's completion module runs compinit; only fall back if it didn't load
+# (e.g. fresh machine before prezto is installed)
+whence compdef > /dev/null || { autoload -U compinit && compinit -i }
 
 # load every completion after autocomplete loads
-config_files_completion=($(filter_array_include "/completion.zsh" "${config_files[@]}"))
-source_files "${config_files_completion[@]}"
+source_files ${(M)config_files:#*/completion.zsh}
 
 # include bash aliases & functions
 loadAllAliases
@@ -58,4 +52,5 @@ if [ "$profiling" = true ]; then
 fi
 
 # cleanup variables
-unset config_files config_files_misc config_files_path config_files_completion verbose profiling
+unset config_files verbose profiling
+

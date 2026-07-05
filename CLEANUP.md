@@ -26,23 +26,6 @@ settings need reverting by hand:
 - If the LocalStack token in `~/.localrc` was ever live, rotate it and delete
   the commented-out line (it was never committed, this is just hygiene).
 
-## zsh startup speed
-
-`zshrc.symlink` had uncommitted changes during the tidy-up, so it was left
-alone. When picking this up:
-
-- Remove the second `compinit` (lines ~43-44); prezto's completion module
-  already runs it. Consider a zcompdump mtime guard.
-- Replace `filter_array_include`/`filter_array_exclude` in the fragment loader
-  with native zsh filtering (`${(M)config_files:#*/path.zsh}` etc. - the
-  approach is already commented out at line 33). The current version forks a
-  grep per file per pass, dozens of processes per shell open.
-- Delete `src/topics/zsh/fpath.zsh` - it loops over `$DOTFILES_ZSH`, which is
-  never set anywhere, so it does nothing.
-- Delete the dead custom prompt functions in `src/topics/zsh/prompt.zsh`
-  (everything using them is commented out; agnoster via prezto is the real
-  prompt).
-
 ## Config conflicts to reconcile
 
 - **zshenv collision**: `prezto/zshenv.symlink` and `zsh/zshenv.symlink` both
