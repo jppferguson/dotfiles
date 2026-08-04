@@ -10,6 +10,9 @@ set -e
 
 print_block "Updating fonts"
 
+# install fontconfig
+brew install fontconfig
+
 # Because OSX doesn't let you install fonts by symlink,
 # lets rsync the folder, keeping things in sync
 OSX_FONTS_DIR=~/Library/Fonts/Dotfiles
