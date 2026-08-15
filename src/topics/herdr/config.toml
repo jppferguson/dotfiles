@@ -1,0 +1,33 @@
+[ui]
+agent_panel_sort = "spaces"
+copy_on_select = false
+show_agent_labels_on_pane_borders = true
+
+[theme]
+name = "solarized" 
+auto_switch = false
+
+[ui.toast]
+delivery = "system"
+
+[ui.sidebar.agents]
+rows = [
+  ["state_icon", { token = "workspace", bold = false }, "tab"], [{ token = "$summary", fg = "#89b4fa", bold = true, dim = false }],
+]
+
+[ui.sidebar.agents.rows_by_agent]
+claude = [
+  ["state_icon", "agent", "state_text"], ["terminal_title_stripped"], ["workspace", "tab"],
+]
+
+[[keys.command]]
+key = "prefix+up"
+type = "plugin_action"
+command = "cloudmanic.herdr-plus.projects"
+description = "herdr-plus: projects"
+
+[[keys.command]]
+key = "prefix+down"
+type = "plugin_action"
+command = "cloudmanic.herdr-plus.quick-actions"
+description = "herdr-plus: quick actions"

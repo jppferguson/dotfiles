@@ -91,8 +91,10 @@ symlinked without extension into `$HOME` when you run `src/script/bootstrap`.
 - **asdf** - Version manager for Node.js, Ruby, and other tools
 - **bash** - Bash shell configuration
 - **duti** - Default application settings for file types on macOS
+- **ghostty** - Ghostty terminal configuration
 - **git** - Git configuration and custom commands
 - **hammerspoon** - macOS automation and window management
+- **herdr** - Herdr terminal workspace manager configuration
 - **homebrew** - Package management via Brewfile
 - **macos** - macOS system defaults (YAML-based configuration)
 - **node** - Node.js configuration and global packages
