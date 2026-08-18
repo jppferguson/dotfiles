@@ -48,6 +48,13 @@ link_item "$DOTFILES_CLAUDE/settings.json" "$CLAUDE_DIR/settings.json"
 link_item "$DOTFILES_CLAUDE/statusline.sh" "$CLAUDE_DIR/statusline.sh"
 link_item "$DOTFILES_CLAUDE/agents"        "$CLAUDE_DIR/agents"
 
+# ~/.claude/hooks stays a real directory (machine-local hooks, e.g. herdr's,
+# live there too) - link each repo-tracked hook into it individually.
+mkdir -p "$CLAUDE_DIR/hooks"
+for hook in "$DOTFILES_CLAUDE"/hooks/*; do
+    link_item "$hook" "$CLAUDE_DIR/hooks/$(basename "$hook")"
+done
+
 # Shared cross-agent assets live in ~/.agentrc (itself a symlink into this repo).
 # ~/.claude/skills stays a real directory (other tools, e.g. gstack, install
 # their own skills there) - link each shared skill into it individually.
