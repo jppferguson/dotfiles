@@ -2,9 +2,13 @@
 
 [misc]
 assume_yes = true
-disable = ["containers", "git_repos", "pnpm", "yarn", "node"]
+disable = ["containers", "pnpm", "yarn", "node"]
 display_time = false
 cleanup = true
 
 [commands]
 "npm" = "npm update --location global --force"
+
+[git]
+repos = ["~/.dotfiles"]
+pull_predefined = false
