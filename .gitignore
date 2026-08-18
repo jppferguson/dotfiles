@@ -18,6 +18,10 @@ src/topics/homebrew/Brewfile.lock.json.symlink
 # per-machine macOS defaults overrides
 src/topics/macos/defaults-local/
 
+# per-machine Claude Code settings (PATH, worktree dirs, autoMode infra notes) -
+# never publish this: it's a recon map of the private repos it references
+src/topics/claude/settings.local.json
+
 # hammerspoon settings
 src/topics/hammerspoon/hammerspoon.symlink/config.lua
 src/topics/hammerspoon/hammerspoon.symlink/init-local.lua
