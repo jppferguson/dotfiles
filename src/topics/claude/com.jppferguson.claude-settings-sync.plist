@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jppferguson.claude-settings-sync</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/jppferguson/.dotfiles/src/topics/claude/merge-settings.sh</string>
+    </array>
+    <key>WatchPaths</key>
+    <array>
+        <string>/Users/jppferguson/.dotfiles/src/topics/claude/settings.json</string>
+        <string>/Users/jppferguson/.dotfiles/src/topics/claude/settings.local.json</string>
+    </array>
+    <key>StandardOutPath</key>
+    <string>/Users/jppferguson/Library/Logs/claude-settings-sync.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/jppferguson/Library/Logs/claude-settings-sync.log</string>
+</dict>
+</plist>

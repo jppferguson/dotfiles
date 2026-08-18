@@ -45,21 +45,16 @@ link_item() {
 # settings.json is a merge, not a symlink: src/topics/claude/settings.local.json
 # is a gitignored, per-machine overlay (PATH, worktree dirs, autoMode infra
 # notes) that must never reach the public repo. If present, it's deep-merged
-# over the public settings.json (local wins) into a generated ~/.claude/settings.json.
-# Because this is generated, an edit made live (e.g. via `/config`) does NOT
-# propagate back automatically - split it back into the two source files by
-# hand, the same way a symlinked item would need no such step.
+# over the public settings.json (local wins) into a generated ~/.claude/settings.json
+# by merge-settings.sh, kept live thereafter by the claude-settings-sync
+# LaunchAgent installed below (WatchPaths on both source files - editing
+# either one re-merges within seconds, no manual re-run needed). The one
+# direction that stays manual: an edit made live (e.g. via `/config`) does
+# NOT propagate back to the two source files - split it back by hand.
 merge_claude_settings() {
-    local public="$DOTFILES_CLAUDE/settings.json"
-    local overlay="$DOTFILES_CLAUDE/settings.local.json"
     local dst="$CLAUDE_DIR/settings.json"
 
-    if [ ! -e "$public" ]; then
-        print_error "Source not found: $public"
-        return 1
-    fi
-
-    if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+    if [ -e "$dst" ] && [ ! -L "$dst" ] && [ ! -f "$DOTFILES_CLAUDE/settings.json" ]; then
         mkdir -p "$BACKUP_DIR"
         mv "$dst" "$BACKUP_DIR/"
         info "Backed up $dst to $BACKUP_DIR/"
@@ -67,18 +62,31 @@ merge_claude_settings() {
         rm "$dst"
     fi
 
-    if [ -f "$overlay" ]; then
-        jq -s '.[0] * .[1]' "$public" "$overlay" > "$dst"
-        print_success "Merged $dst <- $public + $overlay"
+    bash "$DOTFILES_CLAUDE/merge-settings.sh"
+    print_success "Merged $dst from settings.json + settings.local.json"
+}
+
+# Installs (or reloads) the LaunchAgent that keeps ~/.claude/settings.json
+# in sync whenever settings.json or settings.local.json changes.
+install_claude_settings_sync() {
+    local plist_src="$DOTFILES_CLAUDE/com.jppferguson.claude-settings-sync.plist"
+    local plist_dst="$HOME/Library/LaunchAgents/com.jppferguson.claude-settings-sync.plist"
+
+    mkdir -p "$HOME/Library/LaunchAgents"
+    link_item "$plist_src" "$plist_dst"
+
+    launchctl bootout "gui/$(id -u)" "$plist_dst" >/dev/null 2>&1 || true
+    if launchctl bootstrap "gui/$(id -u)" "$plist_dst" 2>/dev/null; then
+        print_success "claude-settings-sync LaunchAgent loaded"
     else
-        cp "$public" "$dst"
-        info "No $overlay found - installed $dst from public settings only"
+        print_error "Failed to load claude-settings-sync LaunchAgent" ""
     fi
 }
 
 info "Installing Claude Code configuration (symlinks)..."
 
 merge_claude_settings
+install_claude_settings_sync
 link_item "$DOTFILES_CLAUDE/statusline.sh" "$CLAUDE_DIR/statusline.sh"
 link_item "$DOTFILES_CLAUDE/agents"        "$CLAUDE_DIR/agents"
 
