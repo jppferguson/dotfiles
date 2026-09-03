@@ -1,4 +1,13 @@
 # Help: `topgrade --config-reference` (displays https://github.com/topgrade-rs/topgrade/blob/main/config.example.toml)
+#
+# This IS the canonical config — it must stay symlinked to $HOME/.config/topgrade.toml
+# by `dot symlink`. Nothing prevents it being a symlink; it drifted to a plain,
+# effectively-empty file at that path (audit-2026-09) because bootstrap's
+# nested-path (.config/...) linking hit a pre-existing file there and never
+# resolved the conflict. Confirmed via `topgrade --dry-run -v` debug logs
+# (topgrade 17.9.0) that config is loaded ONLY from $XDG_CONFIG_HOME/topgrade.toml
+# — the legacy `~/.topgrade.toml` path is not read at all, so a symlink there is
+# dead weight. Do not recreate it.
 
 [misc]
 assume_yes = true

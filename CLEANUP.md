@@ -31,12 +31,6 @@ settings need reverting by hand:
 - **zshenv collision**: `prezto/zshenv.symlink` and `zsh/zshenv.symlink` both
   map to `~/.zshenv`. Bootstrap will prompt about the clash every run. Merge
   them into one file and delete the other.
-- **topgrade config divergence**: the live config is a plain file at
-  `~/.config/topgrade.toml` (edited April 2025) and has drifted from the repo
-  copy at `src/topics/topgrade/.config/topgrade.toml.symlink`. Diff them, fold
-  the live changes into the repo, delete the plain file, then re-run
-  `dot symlink` (the nested-path bug that caused this is now fixed). The
-  legacy `~/.topgrade.toml` symlink can then be removed.
 - **bun pinned twice**: `.tool-versions` (root) and `src/.tool-versions` both
   pin bun and will drift. Keep one.
 
