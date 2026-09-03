@@ -166,3 +166,50 @@ source_files() {
     source_file $file
   done
 }
+
+# Finds $HOME (depth 1) and $HOME/.config (depth 1) symlinks whose target
+# resolves under $DOTFILES but no longer exists on disk — the residue left
+# behind when a topic is deleted but its already-created $HOME link isn't.
+# Dry-run by default (lists only); pass "true" to actually remove them.
+prune_dead_links () {
+  local yes="${1:-false}"
+  local -a dangling=()
+  local link target
+
+  while IFS= read -r -d '' link
+  do
+    target=$(readlink "$link")
+    case "$target" in
+      "$DOTFILES"/*)
+        [ -e "$target" ] || dangling+=("$link")
+        ;;
+    esac
+  done < <(
+    find "$HOME" -maxdepth 1 -type l -print0 2>/dev/null
+    find "$HOME/.config" -maxdepth 1 -type l -print0 2>/dev/null
+  )
+
+  if [ ${#dangling[@]} -eq 0 ]
+  then
+    print_success "no dangling \$DOTFILES symlinks found"
+    return 0
+  fi
+
+  echo "Found ${#dangling[@]} dangling \$DOTFILES symlink(s):"
+  for link in "${dangling[@]}"
+  do
+    echo "  $link -> $(readlink "$link")"
+  done
+
+  if [ "$yes" == "true" ]
+  then
+    for link in "${dangling[@]}"
+    do
+      rm "$link"
+      print_success "removed $link"
+    done
+  else
+    echo
+    echo "Dry run only — nothing deleted. Re-run with 'dot symlink --prune --yes' to remove the above."
+  fi
+}

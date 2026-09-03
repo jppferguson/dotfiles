@@ -152,6 +152,22 @@ setup_git_hooks () {
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]
 then
+  PRUNE=false
+  PRUNE_YES=false
+  for arg in "$@"
+  do
+    case "$arg" in
+      --prune) PRUNE=true ;;
+      --yes) PRUNE_YES=true ;;
+    esac
+  done
+
+  if [ "$PRUNE" == "true" ]
+  then
+    prune_dead_links "$PRUNE_YES"
+    exit 0
+  fi
+
   create_localrc
   setup_gitconfig
   install_dotfiles

@@ -363,3 +363,72 @@ EOF
   [ "$FIRST_VAR" = "one" ]
   [ "$SECOND_VAR" = "two" ]
 }
+
+
+# prune_dead_links() <yes>
+#######################################
+
+setup_prune_fixtures () {
+  PRUNE_TEST_HOME=$(mktemp -d)
+  PRUNE_TEST_DOTFILES=$(mktemp -d)
+  mkdir -p "$PRUNE_TEST_DOTFILES/src/topics/removed" "$PRUNE_TEST_HOME/.config"
+}
+
+teardown_prune_fixtures () {
+  rm -rf "$PRUNE_TEST_HOME" "$PRUNE_TEST_DOTFILES"
+}
+
+@test "prune_dead_links(): reports none when no dangling symlinks exist" {
+  setup_prune_fixtures
+  HOME="$PRUNE_TEST_HOME" DOTFILES="$PRUNE_TEST_DOTFILES" run prune_dead_links
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"no dangling"* ]]
+  teardown_prune_fixtures
+}
+
+@test "prune_dead_links(): lists (but does not delete) a dangling \$DOTFILES symlink by default" {
+  setup_prune_fixtures
+  ln -s "$PRUNE_TEST_DOTFILES/src/topics/removed/gone.symlink" "$PRUNE_TEST_HOME/.gone"
+
+  HOME="$PRUNE_TEST_HOME" DOTFILES="$PRUNE_TEST_DOTFILES" run prune_dead_links
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"$PRUNE_TEST_HOME/.gone"* ]]
+  [ -L "$PRUNE_TEST_HOME/.gone" ]
+  teardown_prune_fixtures
+}
+
+@test "prune_dead_links(): removes exactly the dangling symlink when yes=true" {
+  setup_prune_fixtures
+  ln -s "$PRUNE_TEST_DOTFILES/src/topics/removed/gone.symlink" "$PRUNE_TEST_HOME/.gone"
+
+  HOME="$PRUNE_TEST_HOME" DOTFILES="$PRUNE_TEST_DOTFILES" run prune_dead_links true
+  [ "$status" -eq 0 ]
+  [ ! -e "$PRUNE_TEST_HOME/.gone" ] && [ ! -L "$PRUNE_TEST_HOME/.gone" ]
+  teardown_prune_fixtures
+}
+
+@test "prune_dead_links(): leaves a valid \$DOTFILES symlink untouched" {
+  setup_prune_fixtures
+  echo "still here" > "$PRUNE_TEST_DOTFILES/src/topics/removed/kept.symlink"
+  ln -s "$PRUNE_TEST_DOTFILES/src/topics/removed/kept.symlink" "$PRUNE_TEST_HOME/.kept"
+
+  HOME="$PRUNE_TEST_HOME" DOTFILES="$PRUNE_TEST_DOTFILES" run prune_dead_links true
+  [ "$status" -eq 0 ]
+  [[ "$output" != *".kept"* ]]
+  [ -L "$PRUNE_TEST_HOME/.kept" ]
+  teardown_prune_fixtures
+}
+
+@test "prune_dead_links(): ignores a dangling symlink whose target is outside \$DOTFILES" {
+  setup_prune_fixtures
+  local outside
+  outside=$(mktemp -d)
+  ln -s "$outside/gone-elsewhere" "$PRUNE_TEST_HOME/.unrelated"
+
+  HOME="$PRUNE_TEST_HOME" DOTFILES="$PRUNE_TEST_DOTFILES" run prune_dead_links
+  [ "$status" -eq 0 ]
+  [[ "$output" != *".unrelated"* ]]
+  [ -L "$PRUNE_TEST_HOME/.unrelated" ]
+  rm -rf "$outside"
+  teardown_prune_fixtures
+}

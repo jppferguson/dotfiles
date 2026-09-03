@@ -24,6 +24,7 @@ sub_help () {
   echo "   macos            Apply macOS system defaults"
   echo "   reload           Reload dotfiles"
   echo "   symlink          Symlink all dotfiles"
+  echo "   symlink --prune [--yes]   List (or, with --yes, remove) dangling \$HOME symlinks left by deleted topics"
   echo "   test             Run tests"
   echo "   update           Update packages and pkg managers (brew, casks, cargo, pip3, npm, gems, macOS)"
   echo "   upgrade          Alias for update"
@@ -96,7 +97,7 @@ sub_reload () {
 }
 
 sub_symlink () {
-  $DOTFILES/src/script/bootstrap
+  $DOTFILES/src/script/bootstrap "$@"
 }
 
 sub_test () {
