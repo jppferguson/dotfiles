@@ -70,6 +70,14 @@ mas "Xcode", id: 497799835
 cask 'figma'
 cask 'rightfont'
 
+# Fonts
+cask 'font-fira-code'
+cask 'font-fira-mono-for-powerline'
+cask 'font-inconsolata-for-powerline'
+cask 'font-inconsolata-nerd-font'
+cask 'font-open-sans'
+cask 'font-source-code-pro'
+
 # Browsers
 cask 'firefox'
 cask 'firefox@developer-edition'
