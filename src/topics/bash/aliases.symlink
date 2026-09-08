@@ -22,9 +22,6 @@ alias h="history"
 alias cl="clear"
 alias o="open ."
 
-# Enable aliases to be sudo’ed
-alias sudo=$'nocorrect sudo\t'
-
 # Gzip-enabled `curl`
 alias gurl='curl --compressed'
 
@@ -49,7 +46,7 @@ alias flush="dscacheutil -flushcache && killall -HUP mDNSResponder"
 alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
 
 # View HTTP traffic
-alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+command -v ngrep > /dev/null && alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
 # Canonical hex dump; some systems have this symlinked
@@ -88,7 +85,7 @@ alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && 
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
 # URL-encode strings
-alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
+alias urlencode='python3 -c "import sys, urllib.parse as ul; print(ul.quote(sys.argv[1]))"'
 
 # Merge PDF files
 # Usage: `mergepdf -o output.pdf input{1,2,3}.pdf`
@@ -129,7 +126,7 @@ alias pumpitup="osascript -e 'set volume 7'"
 alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
 
 # Lock the screen (when going AFK)
-alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+alias afk="pmset displaysleepnow"
 
 # Quick server from any folder
 alias server="open http://localhost:9000 && python3 -m http.server 9000"
@@ -146,5 +143,12 @@ alias hostsfile="sudo nano /etc/hosts"
 alias path='echo -e ${PATH//:/\\n}'
 
 # RN Dev
-alias fixWatchman="watchman watch-del-all && watchman shutdown-server"
-alias fixAndroid="cd android && ./gradlew clean && ../"
+command -v watchman > /dev/null && alias fixWatchman="watchman watch-del-all && watchman shutdown-server"
+fixAndroid() {
+  if [ -d android ]; then
+    (cd android && ./gradlew clean)
+  else
+    echo "fixAndroid: no ./android directory in $PWD" >&2
+    return 1
+  fi
+}

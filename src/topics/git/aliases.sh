@@ -21,4 +21,4 @@ alias gs='git status -sb' # upgrade your git if -sb breaks for you. it's fun.
 alias ggui='gitgui'
 
 # open with source tree
-alias sourcetree='open -a SourceTree'
+[ -d "/Applications/SourceTree.app" ] && alias sourcetree='open -a SourceTree'
