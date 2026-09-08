@@ -135,7 +135,7 @@ bats test/functions.bats
 
 - **Primary**: Homebrew (see Brewfile.symlink)
 - **Node.js**: asdf version manager (Node.js 23.1.0)
-- **Updates**: topgrade updates all package managers at once
+- **Updates**: topgrade updates all package managers at once; `topgrade.toml.symlink`'s `[commands]` block owns global npm package updates (`npm update --location global --force`) — `node/npm-global` and `node/update.sh` were removed as dead code, since `dot update` never called them
 
 ## Security & Configuration
 

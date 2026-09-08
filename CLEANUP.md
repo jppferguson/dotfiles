@@ -75,5 +75,3 @@ settings need reverting by hand:
 - `bash` topic kept deliberately as a just-in-case fallback, but its aliases
   duplicate the zsh ones and will drift. Consider generating shared aliases
   from one source, or accept the drift.
-- `node/npm-global` package list overlaps with topgrade's custom
-  `npm update --location global` step - decide which owns global packages.
