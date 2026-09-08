@@ -39,6 +39,9 @@ installVSCode () {
 }
 
 installVSCode "${VS_CODE_DIR}"
-installVSCode "${VS_CODE_INSIDERS_DIR}"
+
+if [[ -d "/Applications/Visual Studio Code - Insiders.app" ]] || [[ -d "${HOME}/Applications/Visual Studio Code - Insiders.app" ]]; then
+	installVSCode "${VS_CODE_INSIDERS_DIR}"
+fi
 
 print_block_end

@@ -191,3 +191,7 @@ Uses ZSH with Prezto framework. Key files:
 - Add the marker `<!-- AGENT_CONTEXT: ./AGENT_CONTEXT.md -->` near the top of each agent file so automation can discover the shared guidance.
 - Link to `[AGENT_CONTEXT.md](./AGENT_CONTEXT.md)` within agent docs for easy human navigation.
 - Keep agent-specific nuances (editor setup, tooling differences, prompt guidance) in their dedicated files while updating this context for anything shared across agents.
+
+## doto
+
+doto project: 60ea0f2f-7c32-4563-b15d-5812a7eec3b3

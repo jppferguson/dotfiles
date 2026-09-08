@@ -25,7 +25,6 @@ com.microsoft.VSCode .gitignore editor
 com.microsoft.VSCode .graphql editor
 com.microsoft.VSCode .grep editor
 com.microsoft.VSCode .ignore editor
-com.microsoft.VSCode .ignore editor
 com.microsoft.VSCode .ini editor
 com.microsoft.VSCode .inputrc editor
 com.microsoft.VSCode .js editor
@@ -34,7 +33,6 @@ com.microsoft.VSCode .jsonc editor
 com.microsoft.VSCode .jsx editor
 com.microsoft.VSCode .log editor
 com.microsoft.VSCode .lua editor
-com.microsoft.VSCode .macos editor
 com.microsoft.VSCode .macos editor
 com.microsoft.VSCode .map editor
 com.microsoft.VSCode .md editor
@@ -58,7 +56,6 @@ com.microsoft.VSCode .txt editor
 com.microsoft.VSCode .vue editor
 com.microsoft.VSCode .yaml editor
 com.microsoft.VSCode .yml editor
-com.microsoft.VSCode .zoxide editor
 com.microsoft.VSCode Brewfile editor
 com.microsoft.VSCode Caskfile editor
 com.microsoft.VSCode Codefile editor
