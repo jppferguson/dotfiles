@@ -5,7 +5,7 @@
 ###############################################################################
 
 # Initialize dotfiles environment
-. "$(dirname "$0")/init"
+. "$(dirname "${BASH_SOURCE[0]}")/init"
 
 DOTFILES_TOPIC_ROOT=$(pwd)/src/topics
 CUR_UNIX="$(date +%s)"
@@ -144,6 +144,9 @@ install_dotfiles () {
   done < <(find "$DOTFILES_TOPIC_ROOT" -maxdepth 3 -name '*.symlink' -print0)
 }
 
-create_localrc
-setup_gitconfig
-install_dotfiles
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]
+then
+  create_localrc
+  setup_gitconfig
+  install_dotfiles
+fi

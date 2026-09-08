@@ -1,11 +1,72 @@
 #!./libs/bats/bin/bats
 
-# bats helpers
-#load 'libs/bats-support/load'
-#load 'libs/bats-assert/load'
-
 # functions to test
 . $PWD/src/functions/general
+
+# Minimal self-contained assertion helpers (no bats-assert/bats-support
+# dependency - this repo has no submodule convention and the assertions
+# needed here are a small, fixed set). Operate on bats' own $output/$lines.
+
+assert_output () {
+  if [ "$1" = "--partial" ]
+  then
+    [[ "$output" == *"$2"* ]]
+  else
+    [ "$output" = "$1" ]
+  fi
+}
+
+assert_line () {
+  local index= partial=false needle=
+  while [ $# -gt 0 ]
+  do
+    case "$1" in
+      --index)   index=$2; shift 2;;
+      --partial) partial=true; shift;;
+      *)         needle=$1; shift;;
+    esac
+  done
+
+  if [ -n "$index" ]
+  then
+    local line="${lines[$index]}"
+    if [ "$partial" = true ]
+    then [[ "$line" == *"$needle"* ]]
+    else [ "$line" = "$needle" ]
+    fi
+  else
+    local line
+    for line in "${lines[@]}"
+    do
+      if [ "$partial" = true ]
+      then [[ "$line" == *"$needle"* ]] && return 0
+      else [ "$line" = "$needle" ] && return 0
+      fi
+    done
+    return 1
+  fi
+}
+
+refute_line () {
+  local partial=false needle=
+  while [ $# -gt 0 ]
+  do
+    case "$1" in
+      --partial) partial=true; shift;;
+      *)         needle=$1; shift;;
+    esac
+  done
+
+  local line
+  for line in "${lines[@]}"
+  do
+    if [ "$partial" = true ]
+    then [[ "$line" == *"$needle"* ]] && return 1
+    else [ "$line" = "$needle" ] && return 1
+    fi
+  done
+  return 0
+}
 
 # Colour assertion helpers
 assert_red_text     () { assert_output --partial "31"; }
@@ -37,7 +98,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "print_block(): Prints block surrounded by asterisks" {
-  skip # TODO
   run print_block "testing"
   assert_output --partial "*********"
   assert_output --partial "testing"
@@ -49,10 +109,10 @@ assert_white_text   () { assert_output --partial "37"; }
 # print_fancy() <string>
 #######################################
 
-@test "print_fancy(): Prints large text block" {
-  skip # TODO
+@test "print_fancy(): Prints non-empty green output (figlet if installed, block fallback otherwise)" {
   run print_fancy "testing"
-  assert_output --partial "\__\___/__/\__|_|_||_\__, |"
+  [ "$status" -eq 0 ]
+  [ -n "$output" ]
   assert_green_text
 }
 
@@ -61,7 +121,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "print_block_end(): Prints asterisks length+1 of last print_block()" {
-  skip # TODO
   print_block "testing output"
   run print_block_end
   assert_line --index 0 --partial "****************"
@@ -72,7 +131,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "print_line(): Prints line of text" {
-  skip # TODO
   run print_line "testing output"
   assert_line --partial "testing output"
   assert_green_text
@@ -83,7 +141,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "print_warning(): Prints warning text" {
-  skip # TODO
   run print_warning "Some warning copy"
   assert_line --partial "Warning: "
   assert_line --partial "Some warning copy"
@@ -96,7 +153,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "print_task(): Prints task text" {
-  skip # TODO
   run print_task "[info]" "Some task copy"
   assert_line --partial "[info] "
   assert_line --partial "Some task copy"
@@ -108,7 +164,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "print_error(): Prints error text" {
-  skip # TODO
   run print_error "Some error text"
   assert_line --partial "Some error text"
   assert_red_text
@@ -120,7 +175,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "print_array(): Prints array items on new line per item" {
-  skip # TODO
   arrayUnderTest=(aaa bbb ccc)
   run print_array "${arrayUnderTest[@]}"
   assert_line --index 0 "aaa"
@@ -133,7 +187,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "filter_array_include(): Removes items from array which do NOT contain substring when exclude is true" {
-  skip # TODO
   arrayUnderTest=(aaa bbb ccc ddd)
   run filter_array_include "c" "${arrayUnderTest[@]}"
   assert_output "ccc"
@@ -143,7 +196,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "filter_array_exclude(): Removes items from array which contain substring when exclude is false" {
-  skip # TODO
   arrayUnderTest=(item1 item2 item3)
   run filter_array_exclude "item1" "${arrayUnderTest[@]}"
   assert_output "item2 item3"
@@ -168,7 +220,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "info(): outputs string with colouring" {
-    skip # TODO
     run info "testing"
     assert_line --partial "testing"
     assert_blue_text
@@ -179,7 +230,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "user(): outputs string with colouring" {
-    skip # TODO
     run user "testing"
     assert_line --partial "testing"
     assert_yellow_text
@@ -190,7 +240,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "print_success(): outputs string with colouring" {
-    skip # TODO
     run print_success "all systems go"
     assert_line --partial "OK"
     assert_line --partial "all systems go"
@@ -202,7 +251,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "print_fail(): outputs string with colouring" {
-    skip # TODO
     run print_fail "something went wrong"
     assert_line --partial "FAIL"
     assert_line --partial "something went wrong"
@@ -213,8 +261,17 @@ assert_white_text   () { assert_output --partial "37"; }
 # uncomment()
 #######################################
 
-@test "uncomment(): TBC" {
-  skip
+@test "uncomment(): Uncomments a matching line in a file" {
+  # Stub sudo so the real sed edit runs as the test user against a temp file
+  sudo () { "$@"; }
+
+  local target="$BATS_TEST_TMPDIR/config"
+  printf '#some_option true\nother_line\n' > "$target"
+
+  uncomment "some_option" "$target"
+
+  run cat "$target"
+  assert_line "some_option true"
 }
 
 
@@ -222,7 +279,6 @@ assert_white_text   () { assert_output --partial "37"; }
 #######################################
 
 @test "verboseOut(): Outputs string if verbose variable is truthy" {
-  skip # TODO
   verbose=true
   run verboseOut "Some debug information"
   assert_line --partial "Some debug information"
@@ -230,14 +286,12 @@ assert_white_text   () { assert_output --partial "37"; }
 }
 
 @test "verboseOut(): Does not output string if verbose variable is not truthy" {
-  skip # TODO
   verbose=false
   run verboseOut "Some debug information"
   refute_line --partial "Some debug information"
 }
 
 @test "verboseOut(): Does not output string if verbose variable is not set" {
-  skip # TODO
   unset verbose
   run verboseOut "Some debug information"
   refute_line --partial "Some debug information"
@@ -247,30 +301,65 @@ assert_white_text   () { assert_output --partial "37"; }
 # cask_install()
 #######################################
 
-@test "cask_install(): TBC" {
-  skip
+@test "cask_install(): Invokes brew install --cask with the given args" {
+  mkdir -p "$BATS_TEST_TMPDIR/bin"
+  cat > "$BATS_TEST_TMPDIR/bin/brew" <<'EOF'
+#!/usr/bin/env bash
+echo "brew $*"
+EOF
+  chmod +x "$BATS_TEST_TMPDIR/bin/brew"
+
+  PATH="$BATS_TEST_TMPDIR/bin:$PATH" run cask_install "some-cask"
+  assert_output --partial "brew install --cask some-cask"
 }
 
 
 # cask_reinstall()
 #######################################
 
-@test "cask_reinstall(): TBC" {
-  skip
+@test "cask_reinstall(): Invokes brew install --cask --force with the given args" {
+  mkdir -p "$BATS_TEST_TMPDIR/bin"
+  cat > "$BATS_TEST_TMPDIR/bin/brew" <<'EOF'
+#!/usr/bin/env bash
+echo "brew $*"
+EOF
+  chmod +x "$BATS_TEST_TMPDIR/bin/brew"
+
+  PATH="$BATS_TEST_TMPDIR/bin:$PATH" run cask_reinstall "some-cask"
+  assert_output --partial "brew install --cask --force some-cask"
 }
 
 
 # source_file()
 #######################################
 
-@test "source_file(): TBC" {
-  skip
+@test "source_file(): Sources an existing file into the current shell" {
+  local target="$BATS_TEST_TMPDIR/vars.sh"
+  echo 'SOURCED_VAR=hello' > "$target"
+
+  source_file "$target"
+
+  [ "$SOURCED_VAR" = "hello" ]
+}
+
+@test "source_file(): Does nothing for a file that does not exist" {
+  run source_file "$BATS_TEST_TMPDIR/does-not-exist.sh"
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
 }
 
 
 # source_files()
 #######################################
 
-@test "source_files(): TBC" {
-  skip
+@test "source_files(): Sources every file in the given array" {
+  local first="$BATS_TEST_TMPDIR/first.sh"
+  local second="$BATS_TEST_TMPDIR/second.sh"
+  echo 'FIRST_VAR=one' > "$first"
+  echo 'SECOND_VAR=two' > "$second"
+
+  source_files "$first" "$second"
+
+  [ "$FIRST_VAR" = "one" ]
+  [ "$SECOND_VAR" = "two" ]
 }
