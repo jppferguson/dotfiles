@@ -50,8 +50,11 @@ Repeat until it passes. Never proceed to review with failing validation. If fail
 If the `codex` CLI is available, run an automated review of the working-tree diff in read-only mode:
 
 ```bash
-codex exec --skip-git-repo-check -m gpt-5.4 --config model_reasoning_effort="high" --sandbox read-only "Review the current git diff for this task. Focus on correctness bugs, security issues, missed edge cases, and deviations from the repo conventions. Be concise and list concrete, actionable findings only - no praise or restating the diff." 2>/dev/null
+~/.agentrc/scripts/check-codex-review-model.sh
+codex exec --skip-git-repo-check -p review --sandbox read-only "Review the current git diff for this task. Focus on correctness bugs, security issues, missed edge cases, and deviations from the repo conventions. Be concise and list concrete, actionable findings only - no praise or restating the diff." < /dev/null 2>/dev/null
 ```
+
+`-p review` loads `~/.codex/review.config.toml`, the single home for the review model and effort. Change them there, not here - pinning `-m` in each command is what left these call sites on the retired `gpt-5.4`. The check script (stderr, never blocks) reads Codex's own model list: it auto-updates the profile to OpenAI's named replacement for a retiring model or to a newer generation of the same tier (printing `UPDATED:`), and only warns when a change needs judgement, such as the tier disappearing. If it prints either, mention it in the final report so no model change goes unnoticed.
 
 Treat Codex as a peer reviewer, not an authority: fix valid findings and re-validate; note why rejected findings were skipped. If Codex fails to run, report that and continue - do not block the hand-off on tooling failure.
 
