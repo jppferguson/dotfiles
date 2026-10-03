@@ -240,3 +240,7 @@ zstyle ':prezto:module:prompt' theme 'agnoster'
 # before deleting or overwriting files. Set to 'no' to disable this safer
 # behavior.
 # zstyle ':prezto:module:utility' safe-ops 'yes'
+# Coding agents run non-interactively, so an `rm -i` prompt hangs them.
+if [[ -n "$CLAUDECODE" || -n "$AI_AGENT" ]]; then
+  zstyle ':prezto:module:utility' safe-ops 'no'
+fi
