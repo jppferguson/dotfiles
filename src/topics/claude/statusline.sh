@@ -17,6 +17,7 @@ red='\033[38;2;255;85;85m'
 yellow='\033[38;2;230;200;0m'
 white='\033[38;2;220;220;220m'
 magenta='\033[38;2;180;140;255m'
+purple='\033[38;2;198;120;221m'
 dim='\033[2m'
 reset='\033[0m'
 
@@ -130,7 +131,21 @@ if [ -f "$settings_path" ]; then
     effort=$(jq -r '.effortLevel // "default"' "$settings_path" 2>/dev/null)
 fi
 
-# ── LINE 1: Model │ Context % │ Directory (branch) │ Session │ Effort ──
+# Set by user-prompt-title.sh from the kind Claude hands off with the title
+session_name=$(echo "$input" | jq -r '.session_name // empty')
+session_id=$(echo "$input" | jq -r '.session_id // empty')
+session_kind=""
+kind_file="$HOME/.claude/session-titles/$session_id.kind"
+[ -n "$session_id" ] && [ -f "$kind_file" ] && session_kind=$(cat "$kind_file")
+case "$session_kind" in
+    bug)      kind_color="$red" ;;
+    feature)  kind_color="$green" ;;
+    chore)    kind_color="$blue" ;;
+    research) kind_color="$purple" ;;
+    *)        kind_color="$white" ;;
+esac
+
+# ── LINE 1: Session │ Model │ Context % │ Directory (branch) │ Duration │ Effort ──
 pct_color=$(color_for_pct "$pct_used")
 cwd=$(echo "$input" | jq -r '.cwd // ""')
 [ -z "$cwd" ] || [ "$cwd" = "null" ] && cwd=$(pwd)
@@ -138,8 +153,18 @@ dirname=$(basename "$cwd")
 
 git_branch=""
 git_dirty=""
+worktree_name=""
 if git -C "$cwd" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     git_branch=$(git -C "$cwd" symbolic-ref --short HEAD 2>/dev/null)
+    [ -z "$git_branch" ] && git_branch=$(git -C "$cwd" rev-parse --short HEAD 2>/dev/null)
+    # A linked worktree has its own git dir under the main repo's common dir
+    git_paths=$(git -C "$cwd" rev-parse --path-format=absolute --git-dir --git-common-dir --show-toplevel 2>/dev/null)
+    git_dir=$(sed -n 1p <<< "$git_paths")
+    git_common_dir=$(sed -n 2p <<< "$git_paths")
+    if [ "$git_dir" != "$git_common_dir" ]; then
+        worktree_name=$(basename "$(sed -n 3p <<< "$git_paths")")
+        dirname=$(basename "$(dirname "$git_common_dir")")
+    fi
     if [ -n "$(git -C "$cwd" --no-optional-locks status --porcelain 2>/dev/null)" ]; then
         git_dirty="*"
     fi
@@ -168,11 +193,18 @@ if [[ "$parent_cmd" == *"--dangerously-skip-permissions"* ]]; then
     skip_perms="⚡  "
 fi
 
-line1="${blue}${model_name}${reset}"
+line1=""
+if [ -n "$session_name" ]; then
+    line1+="${kind_color}● ${session_name}${reset}${sep}"
+fi
+line1+="${blue}${model_name}${reset}"
 line1+="${sep}"
 line1+="✍️ ${pct_color}${pct_used}%${reset}"
 line1+="${sep}"
 line1+="${skip_perms}${cyan}${dirname}${reset}"
+if [ -n "$worktree_name" ]; then
+    line1+=" ${orange}⑂ ${worktree_name}${reset}"
+fi
 if [ -n "$git_branch" ]; then
     line1+=" ${green}(${git_branch}${red}${git_dirty}${green})${reset}"
 fi
