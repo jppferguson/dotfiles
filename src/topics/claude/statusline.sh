@@ -131,21 +131,21 @@ if [ -f "$settings_path" ]; then
     effort=$(jq -r '.effortLevel // "default"' "$settings_path" 2>/dev/null)
 fi
 
-# Set by user-prompt-title.sh from the kind Claude hands off with the title
-session_name=$(echo "$input" | jq -r '.session_name // empty')
+# Set by user-prompt-title.sh from the kind Claude hands off with the title.
+# Only the kind is shown: Claude Code already displays the session name.
 session_id=$(echo "$input" | jq -r '.session_id // empty')
 session_kind=""
 kind_file="$HOME/.claude/session-titles/$session_id.kind"
 [ -n "$session_id" ] && [ -f "$kind_file" ] && session_kind=$(cat "$kind_file")
+kind_segment=""
 case "$session_kind" in
-    bug)      kind_color="$red" ;;
-    feature)  kind_color="$green" ;;
-    chore)    kind_color="$blue" ;;
-    research) kind_color="$purple" ;;
-    *)        kind_color="$white" ;;
+    bug)      kind_segment="🐛 ${red}bug${reset}" ;;
+    feature)  kind_segment="✨ ${green}feature${reset}" ;;
+    chore)    kind_segment="🔧 ${blue}chore${reset}" ;;
+    research) kind_segment="🔍 ${purple}research${reset}" ;;
 esac
 
-# ── LINE 1: Session │ Model │ Context % │ Directory (branch) │ Duration │ Effort ──
+# ── LINE 1: Kind │ Model │ Context % │ Directory (branch) │ Duration │ Effort ──
 pct_color=$(color_for_pct "$pct_used")
 cwd=$(echo "$input" | jq -r '.cwd // ""')
 [ -z "$cwd" ] || [ "$cwd" = "null" ] && cwd=$(pwd)
@@ -194,8 +194,8 @@ if [[ "$parent_cmd" == *"--dangerously-skip-permissions"* ]]; then
 fi
 
 line1=""
-if [ -n "$session_name" ]; then
-    line1+="${kind_color}● ${session_name}${reset}${sep}"
+if [ -n "$kind_segment" ]; then
+    line1+="${kind_segment}${sep}"
 fi
 line1+="${blue}${model_name}${reset}"
 line1+="${sep}"
