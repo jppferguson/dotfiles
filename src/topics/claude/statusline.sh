@@ -151,6 +151,11 @@ cwd=$(echo "$input" | jq -r '.cwd // ""')
 [ -z "$cwd" ] || [ "$cwd" = "null" ] && cwd=$(pwd)
 dirname=$(basename "$cwd")
 
+# ── PS1-style identity ──────────────────────────────────
+ps1_user=$(whoami)
+ps1_host=$(hostname -s)
+ps1_dir=$(echo "$cwd" | sed "s|^$HOME|~|")
+
 git_branch=""
 git_dirty=""
 worktree_name=""
@@ -191,6 +196,11 @@ skip_perms=""
 parent_cmd=$(ps -o args= -p "$PPID" 2>/dev/null)
 if [[ "$parent_cmd" == *"--dangerously-skip-permissions"* ]]; then
     skip_perms="⚡  "
+fi
+
+identity="${magenta}${ps1_user}${reset} ${white}at${reset} ${orange}${ps1_host}${reset} ${white}in${reset} ${green}${ps1_dir}${reset}"
+if [ -n "$git_branch" ]; then
+    identity+=" ${white}on${reset} ${magenta}${git_branch}${red}${git_dirty}${reset}"
 fi
 
 line1=""
@@ -361,7 +371,7 @@ if [ "$extra_enabled" = "true" ] && [ -n "$usage_data" ]; then
 fi
 
 # ── Output ──────────────────────────────────────────────
-printf "%b" "$line1"
+printf "%b\n%b" "$identity" "$line1"
 [ -n "$rate_lines" ] && printf "\n\n%b" "$rate_lines"
 
 exit 0
