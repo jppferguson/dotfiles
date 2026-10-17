@@ -31,6 +31,12 @@ config_files=($DOTFILES/src/topics/**/*.zsh)
 # load the path files
 source_files ${(M)config_files:#*/path.zsh}
 
+# path.zsh files load in alphabetical topic order, so homebrew/path.zsh
+# (prepending /opt/homebrew/bin) runs after asdf/path.zsh and shadows asdf's
+# shims for anything also installed via brew (e.g. node). Re-assert asdf's
+# shims at the front so version-managed tools always win over brew's.
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+
 # load everything but the path and completion files
 source_files ${config_files:#*/(path|completion).zsh}
 
