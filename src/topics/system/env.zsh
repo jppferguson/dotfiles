@@ -1,6 +1,5 @@
-# UTF-8 terminal support
-export LC_CTYPE=en_GB.UTF-8
-export LC_ALL=en_GB.UTF-8
+# UTF-8 terminal support. LANG (not LC_ALL) so per-command LC_* overrides still win.
+export LANG=en_GB.UTF-8
 
 export EDITOR='code'
 export GITGUI='Sourcetree'
