@@ -1,4 +1,7 @@
 
+# MCP server config (contains doto bearer token)
+.mcp.json
+
 # macOS
 .DS_Store
 
