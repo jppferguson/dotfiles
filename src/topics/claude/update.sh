@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Check/repair the symlinks and merged settings that wire ~/.claude to this repo.
-# Usage: dot claude {status|sync|backup}
+# Usage: dot claude {status|diff|sync|backup}
 #
 
 . $DOTFILES/src/functions/general
@@ -112,9 +112,51 @@ show_status() {
     echo -e "\n${GREEN}All Claude configuration is linked to the dotfiles repo${NC}"
 }
 
+# Read-only: shows what a sync would change, writes nothing under ~/.claude.
+# Exits 0 whether or not there are differences; only a missing tool is an error.
+show_diff() {
+    if ! command -v jq >/dev/null 2>&1; then
+        echo "dot claude diff: jq is required" >&2
+        return 1
+    fi
+    if [ ! -f "$DOTFILES_CLAUDE/merge-settings.sh" ]; then
+        echo "dot claude diff: missing $DOTFILES_CLAUDE/merge-settings.sh" >&2
+        return 1
+    fi
+
+    local live
+    if [ -L "$SETTINGS" ]; then
+        echo "$SETTINGS is a symlink, expected a generated merge"
+    elif [ ! -e "$SETTINGS" ]; then
+        echo "$SETTINGS is missing"
+    elif ! live="$(jq -S . "$SETTINGS" 2>/dev/null)"; then
+        echo "$SETTINGS is not valid JSON"
+    else
+        diff -u --label "merge of settings.json + settings.local.json" \
+            --label "$SETTINGS" <(expected_settings) <(echo "$live") || true
+    fi
+
+    local pair dst src
+    for pair in "${LINKS[@]}"; do
+        dst="${pair%%|*}"
+        src="${pair##*|}"
+        if [ -L "$dst" ]; then
+            [ "$(readlink "$dst")" = "$src" ] || echo "$dst points to $(readlink "$dst"), expected $src"
+        elif [ -e "$dst" ]; then
+            echo "$dst is a real file, expected a link to $src"
+        else
+            echo "$dst is missing, expected a link to $src"
+        fi
+    done
+    return 0
+}
+
 case "${1:-status}" in
     "status")
         show_status
+        ;;
+    "diff")
+        show_diff
         ;;
     "sync")
         "$DOTFILES_CLAUDE/install.sh"
@@ -130,7 +172,7 @@ case "${1:-status}" in
         print_success "Manual backup created: $backup_dir"
         ;;
     *)
-        echo "Usage: $0 {status|sync|backup}"
+        echo "Usage: $0 {status|diff|sync|backup}"
         exit 1
         ;;
 esac
