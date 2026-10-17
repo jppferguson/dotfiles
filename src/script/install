@@ -10,6 +10,8 @@ verbose='false'
 dryRunFlag=''
 
 # Allow using flags when running this script
+# verbose is set here for the sourced helpers to read
+# shellcheck disable=SC2034
 while getopts 'dv' flag; do
   case "${flag}" in
     d) dryRunFlag='true' ;;
@@ -28,6 +30,8 @@ localSettings=~/.localrc
 . $DOTFILES/src/functions/general
 
 # Source .localrc file for stuff we don't want to install
+# Per-machine file outside the repo, so there is nothing for shellcheck to follow
+# shellcheck disable=SC1090
 [ -f "$localSettings" ] && . "$localSettings"
 
 
@@ -46,6 +50,8 @@ install_get_topic_name () {
 
 # Build a string for the interactive options for each install
 
+# cWhite and cNo come from src/functions/general, which shellcheck does not follow
+# shellcheck disable=SC2154
 install_options () {
   local _opts=()
   local _default=" (${cWhite}d${cNo}efault)"
@@ -73,7 +79,7 @@ install_options () {
 # Interactively runs an install.sh
 
 install_run () {
-  local install= always_skip= skip=
+  local install='' always_skip='' skip=''
   local installer=$1
   local script=$2
 
@@ -137,7 +143,10 @@ install_run () {
 
 install_run_all () {
   local install_scripts=('./src/topics/homebrew/install.sh')
-  install_scripts+=($(find ./src/topics -name install.sh -not -path "*/homebrew/*" ) )
+  while IFS= read -r installer_path
+  do
+    install_scripts+=("$installer_path")
+  done < <(find ./src/topics -name install.sh -not -path "*/homebrew/*")
   local install_all=false always_skip_all=false skip_all=false
 
   for install_script in "${install_scripts[@]}"; do
@@ -151,8 +160,8 @@ install_run_all () {
 install_run_all
 
 # Add DOTFILES_IGNORE stuff to a global array in .localrc
-_DOTFILES_IGNORE=${_DOTFILES_IGNORE[*]}
-DOTFILES_IGNORE="DOTFILES_IGNORE=( $_DOTFILES_IGNORE )"
+_ignore_list="${_DOTFILES_IGNORE[*]}"
+DOTFILES_IGNORE="DOTFILES_IGNORE=( $_ignore_list )"
 
 # Check if the array already exists within .localrc
 if [ -f "$localSettings" ] && grep -q DOTFILES_IGNORE "$localSettings"; then

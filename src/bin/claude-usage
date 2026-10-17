@@ -38,9 +38,12 @@ EOF
 # Get current billing cycle in YYYYMM format
 # Billing cycles run from 28th to 27th of next month
 current_month() {
-    local today=$(date +"%Y%m%d")
-    local current_day=$(date +"%d")
-    local current_ym=$(date +"%Y%m")
+    local today
+    today=$(date +"%Y%m%d")
+    local current_day
+    current_day=$(date +"%d")
+    local current_ym
+    current_ym=$(date +"%Y%m")
     
     # If we're before the 28th, we're in the previous month's billing cycle
     if [[ $current_day -lt 28 ]]; then
@@ -113,7 +116,8 @@ count_sessions() {
 
 # Count today's 5-hour blocks
 count_todays_sessions() {
-    local today=$(date +"%Y%m%d")
+    local today
+    today=$(date +"%Y%m%d")
     local cmd="npx ccusage blocks --since $today --json"
     
     local blocks_data
@@ -131,7 +135,8 @@ count_todays_sessions() {
 
 # Get session timing information using actual session blocks data
 get_session_timing() {
-    local today=$(date +"%Y%m%d")
+    local today
+    today=$(date +"%Y%m%d")
     local cmd="npx ccusage blocks --since $today --json"
     
     local blocks_data
@@ -148,7 +153,8 @@ get_session_timing() {
         # Convert ISO time to local time and calculate remaining time
         local end_time_local
         local end_time_epoch
-        local current_epoch=$(date +"%s")
+        local current_epoch
+        current_epoch=$(date +"%s")
         
         if command -v gdate &> /dev/null; then
             # GNU date (if available via brew coreutils)
@@ -230,8 +236,10 @@ main() {
         exit 1
     fi
     
-    local since=$(month_start "$month")
-    local until=$(month_end "$month")
+    local since
+    since=$(month_start "$month")
+    local until
+    until=$(month_end "$month")
     
     if [[ "$json_output" == "true" ]]; then
         count_sessions "$since" "$until" "true"
@@ -247,10 +255,14 @@ main() {
     session_count=$(count_sessions "$since" "$until" "false")
     
     # Calculate time-based metrics
-    local today=$(date +"%Y%m%d")
-    local cycle_start_epoch=$(date -j -f "%Y%m%d" "$since" "+%s" 2>/dev/null || date -d "$since" "+%s")
-    local cycle_end_epoch=$(date -j -f "%Y%m%d" "$until" "+%s" 2>/dev/null || date -d "$until" "+%s")
-    local today_epoch=$(date +"%s")
+    local today
+    today=$(date +"%Y%m%d")
+    local cycle_start_epoch
+    cycle_start_epoch=$(date -j -f "%Y%m%d" "$since" "+%s" 2>/dev/null || date -d "$since" "+%s")
+    local cycle_end_epoch
+    cycle_end_epoch=$(date -j -f "%Y%m%d" "$until" "+%s" 2>/dev/null || date -d "$until" "+%s")
+    local today_epoch
+    today_epoch=$(date +"%s")
     
     # Ensure today is within the cycle bounds
     if [[ $today_epoch -lt $cycle_start_epoch ]]; then
@@ -286,8 +298,10 @@ main() {
     # Get session timing information
     local session_timing
     session_timing=$(get_session_timing)
-    local next_reset=$(echo "$session_timing" | cut -d'|' -f1 | cut -d':' -f2-)
-    local time_remaining=$(echo "$session_timing" | cut -d'|' -f2 | cut -d':' -f2-)
+    local next_reset
+    next_reset=$(echo "$session_timing" | cut -d'|' -f1 | cut -d':' -f2-)
+    local time_remaining
+    time_remaining=$(echo "$session_timing" | cut -d'|' -f2 | cut -d':' -f2-)
     
     # Display results with color coding
     echo -e "5-hour blocks used: ${BLUE}$session_count${NC} / ${BLUE}$MAX_SESSIONS_PER_MONTH${NC}"

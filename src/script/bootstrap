@@ -68,7 +68,7 @@ setup_gitconfig () {
 link_file () {
   local src=$1 dst=$2
 
-  local overwrite= backup= skip=
+  local overwrite='' backup='' skip=''
   local action=
 
   if [ -L "$dst" ] && [ "$(readlink "$dst")" == "$src" ]
@@ -77,7 +77,7 @@ link_file () {
     return
   fi
 
-  if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]
+  if [ -f "$dst" ] || [ -d "$dst" ] || [ -L "$dst" ]
   then
 
     if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]
