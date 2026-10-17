@@ -18,7 +18,13 @@ fi
 
 INSTALLED_FILE="$(mktemp)"
 trap 'rm -f "$INSTALLED_FILE"' EXIT
-code --list-extensions | sort > "$INSTALLED_FILE"
+
+# Capture before sorting so a failing code CLI is not masked by sort's status
+if ! INSTALLED_LIST="$(code --list-extensions)"; then
+  print_error "code --list-extensions failed, cannot compare extensions"
+  exit 1
+fi
+printf '%s\n' "$INSTALLED_LIST" | sed '/^$/d' | sort > "$INSTALLED_FILE"
 
 # diff exits 1 when the lists differ, which is the output we want, not a failure
 if diff -u "$DOTFILES/src/topics/vs-code/extensions.txt" "$INSTALLED_FILE"; then

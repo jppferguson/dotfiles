@@ -26,6 +26,9 @@ last = ["system"]
 
 [commands]
 "npm" = "npm update --location global --force"
+# Report-only drift check against vs-code/extensions.txt: never installs or
+# removes anything (topgrade's own vscode step handles upgrades)
+"VS Code extensions" = "DOTFILES=$HOME/.dotfiles bash $HOME/.dotfiles/src/topics/vs-code/update.sh"
 
 [post_commands]
 # The gems step installs new versions alongside old ones, and the leftovers

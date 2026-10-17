@@ -87,3 +87,35 @@ STUB
   [ "$status" -eq 0 ]
   [[ "$output" == *"the code CLI is not on PATH"* ]]
 }
+
+@test "vs-code update.sh: fails and reports when code --list-extensions fails" {
+  cat > "$BATS_TEST_TMPDIR/bin/code" <<'STUB'
+#!/bin/sh
+exit 3
+STUB
+  run "$DOTFILES/src/topics/vs-code/update.sh"
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"code --list-extensions failed"* ]]
+  [[ "$output" != *"-aaa.first"* ]]
+}
+
+@test "vs-code update.sh: drift exits 0 and never calls install or uninstall" {
+  INSTALLED="aaa.first ccc.third" run "$DOTFILES/src/topics/vs-code/update.sh"
+  [ "$status" -eq 0 ]
+  run grep -E -- '--(un)?install-extension' "$BATS_TEST_TMPDIR/code.log"
+  [ "$status" -ne 0 ]
+}
+
+@test "topgrade.toml wires vs-code update.sh into the dot update path" {
+  grep -q 'src/topics/vs-code/update.sh' "$REPO/src/topics/topgrade/.config/topgrade.toml.symlink"
+}
+
+@test "topgrade command line runs update.sh with DOTFILES unset in the parent" {
+  command_line=$(sed -n 's/^"VS Code extensions" = "\(.*\)"$/\1/p' "$REPO/src/topics/topgrade/.config/topgrade.toml.symlink")
+  [ -n "$command_line" ]
+  mkdir -p "$HOME/.dotfiles"
+  cp -R "$DOTFILES/src" "$HOME/.dotfiles/src"
+  INSTALLED="aaa.first bbb.second" run env -u DOTFILES bash -c "$command_line"
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"Extensions match"* ]]
+}
