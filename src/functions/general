@@ -259,6 +259,17 @@ newest_backup_for () {
   return 0
 }
 
+# Prints the canonical path a symlink points at. BSD realpath fails on a
+# dangling link, so fall back to resolving the immediate target's directory.
+resolved_link_target () {
+  local link="$1" raw parent
+  realpath "$link" 2>/dev/null && return 0
+  raw=$(readlink "$link") || return 1
+  [[ "$raw" == /* ]] || raw="$(dirname "$link")/$raw"
+  parent=$(realpath "$(dirname "$raw")" 2>/dev/null) || return 1
+  echo "$parent/$(basename "$raw")"
+}
+
 # Reverses bootstrap: removes every $HOME link created from the *.symlink
 # mapping whose target sits inside $DOTFILES. Anything else at the destination
 # is left alone. Pass "true" to first copy back the newest backup of each.
@@ -275,7 +286,7 @@ unlink_dotfiles () {
   do
     dst=$(symlink_destination "$src")
     [ -L "$dst" ] || continue
-    target=$(realpath "$dst" 2>/dev/null) || continue
+    target=$(resolved_link_target "$dst") || continue
     case "$target" in
       "$repo"/*) ;;
       *) continue ;;

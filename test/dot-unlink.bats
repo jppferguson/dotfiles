@@ -132,3 +132,20 @@ link_all() {
   [ -L "$HOME/.zshrc" ]
   [ "$(cat "$DOTFILES_TOPIC_ROOT/shell/zshrc.symlink")" = repo ]
 }
+
+@test "unlink_dotfiles: removes a link into DOTFILES whose repo file is a dangling symlink" {
+  ln -sf "$BATS_TEST_TMPDIR/gone" "$DOTFILES_TOPIC_ROOT/shell/zshrc.symlink"
+  ln -s "$DOTFILES_TOPIC_ROOT/shell/zshrc.symlink" "$HOME/.zshrc"
+
+  unlink_dotfiles
+
+  [ ! -L "$HOME/.zshrc" ]
+}
+
+@test "unlink_dotfiles: leaves a dangling link that points outside DOTFILES" {
+  ln -s "$BATS_TEST_TMPDIR/gone" "$HOME/.zshrc"
+
+  unlink_dotfiles
+
+  [ -L "$HOME/.zshrc" ]
+}
