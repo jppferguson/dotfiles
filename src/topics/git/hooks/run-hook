@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+#
+# Global git hook, reached through core.hooksPath. Every hook name in this
+# directory is a symlink to this script. pre-commit scans the staged changes
+# with gitleaks (bypass a false positive with `git commit --no-verify` and add
+# its fingerprint to .gitleaksignore). It then hands off to the repo's own hook
+# of the same name, because a global core.hooksPath stops git running
+# .git/hooks. Repos that set their own core.hooksPath (husky) bypass this.
+#
+###############################################################################
+
+set -u
+
+hook_name=$(basename "$0")
+
+if [ "$hook_name" = "pre-commit" ]
+then
+  if command -v gitleaks > /dev/null 2>&1
+  then
+    gitleaks git --pre-commit --staged --no-banner --redact || exit $?
+  else
+    echo "gitleaks not found on PATH, skipping the secret scan" >&2
+  fi
+fi
+
+repo_hooks_dir=$(git rev-parse --path-format=absolute --git-common-dir 2> /dev/null)/hooks
+repo_hook="$repo_hooks_dir/$hook_name"
+
+if [ -x "$repo_hook" ] && [ ! -d "$repo_hook" ]
+then
+  exec "$repo_hook" "$@"
+fi

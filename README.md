@@ -47,7 +47,7 @@ You can find this script in `src/bin/`. Run `dot help` to see all available comm
 - **`dot unlink [--restore]`** - Remove the `$HOME` symlinks into the dotfiles; `--restore` copies back the newest `~/.dotfiles_backup` file for each
 - **`dot update`** - Update all packages via topgrade
 - **`dot upgrade`** - Alias for `dot update`
-- **`dot validate`** - Run every check: gitleaks over the full history, shellcheck, zsh syntax, markdownlint and tests. A gitleaks pre-commit hook (`.githooks/`, enabled by `dot symlink`) blocks staged secrets
+- **`dot validate`** - Run every check: gitleaks over the full history, shellcheck, zsh syntax, markdownlint and tests. A global gitleaks pre-commit hook (`src/topics/git/hooks/`, enabled through `core.hooksPath` in the gitconfig) blocks staged secrets in every repo and hands off to each repo's own hooks. Repos that set their own `core.hooksPath` (husky) bypass it and need gitleaks added to their husky config
 
 ### Git-free install
 

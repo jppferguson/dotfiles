@@ -125,6 +125,8 @@
     # Make `git rebase` safer on OS X
     # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
     trustctime = false
+    # Global hooks: gitleaks scan on pre-commit, then hand off to each repo's own hooks
+    hooksPath = ~/.dotfiles/src/topics/git/hooks
     # Fix encoding
     quotepath = false
     # Configure Git on OS X to properly handle line endings
