@@ -1,4 +1,3 @@
-tap 'homebrew/services'
 tap 'dsully/tap'
 brew "dsully/tap/macos-defaults"
 
