@@ -103,6 +103,9 @@ sub_test () {
 }
 
 sub_update () {
+  # Global npm/corepack installs don't regenerate asdf shims, so topgrade's
+  # `pnpm update -g` fails with "No version is set" until they are rebuilt
+  command -v asdf > /dev/null && asdf reshim
   topgrade
 }
 
