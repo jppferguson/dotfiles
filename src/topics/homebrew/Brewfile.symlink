@@ -9,7 +9,9 @@ brew 'bats-core'
 brew 'coreutils'
 brew 'dockutil'
 brew 'duti'
+brew 'gitleaks'
 brew 'jq'
+brew 'shellcheck'
 brew 'topgrade'
 
 # Package management

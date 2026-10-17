@@ -2,20 +2,27 @@ name: Dotfiles Tests
 on: [push]
 
 jobs:
-  shellcheck:
+  secrets:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      - name: Shellcheck
-        # Severity is gated at error for now; ratchet down to warning once
-        # the existing SC2086 quoting debt is paid off.
-        run: |
-          shellcheck --severity=error \
-            src/script/bootstrap src/script/install src/script/update \
-            src/script/init src/script/test src/script/test-dev \
-            $(find src/bin -type f ! -name git-wtf) \
-            $(find src/topics -name 'install.sh' -o -name 'update.sh' -o -name 'set-*.sh' | grep -v prezto)
+        with:
+          fetch-depth: 0
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install zsh
+        run: sudo apt-get update && sudo apt-get install -y zsh
+      - name: Shellcheck and zsh syntax
+        run: bash src/script/validate shellcheck zsh
 
   test:
     runs-on: ubuntu-latest

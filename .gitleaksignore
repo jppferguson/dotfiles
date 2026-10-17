@@ -1,0 +1,7 @@
+# Dead forecast.io (Dark Sky) key from a removed widget; the API shut down in 2023
+d4c71055fc0485abad9d64d09e6d5809e36f6cc0:ubersicht/widgets/weathernow.widget/index.coffee:generic-api-key:2
+fd33d8aded3fb1eb96d91450a5049d6ad47b0693:ubersicht/widgets/weathernow.widget/index.coffee:generic-api-key:2
+
+# TextPastry history entry hashes, not credentials
+470dbd2b77dc9d94bd07ccf81e70d3b5256e59dd:sublime/User/TextPastryHistory.sublime-settings:generic-api-key:15
+470dbd2b77dc9d94bd07ccf81e70d3b5256e59dd:sublime/User/TextPastryHistory.sublime-settings:generic-api-key:29

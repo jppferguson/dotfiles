@@ -27,6 +27,7 @@ sub_help () {
   echo "   test             Run tests"
   echo "   update           Update packages and pkg managers (brew, casks, cargo, pip3, npm, gems, macOS)"
   echo "   upgrade          Alias for update"
+  echo "   validate {check} Run all checks, or only the named ones (secrets shellcheck zsh test)"
 }
 
 sub_clean () {
@@ -65,7 +66,7 @@ sub_claude () {
 }
 
 sub_completion () {
-  echo "cd clean claude dock duti edit help install macos reload symlink test update upgrade"
+  echo "cd clean claude dock duti edit help install macos reload symlink test update upgrade validate"
 }
 
 sub_dock () {
@@ -100,6 +101,10 @@ sub_symlink () {
 
 sub_test () {
   bats "$DOTFILES"/test/*.bats
+}
+
+sub_validate () {
+  "$DOTFILES"/src/script/validate "$@"
 }
 
 sub_update () {

@@ -144,9 +144,16 @@ install_dotfiles () {
   done < <(find "$DOTFILES_TOPIC_ROOT" -maxdepth 3 -name '*.symlink' -print0)
 }
 
+setup_git_hooks () {
+  # Runs the gitleaks pre-commit hook on commits to this repo
+  git -C "$DOTFILES" config core.hooksPath .githooks
+  print_success "git hooks"
+}
+
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]
 then
   create_localrc
   setup_gitconfig
   install_dotfiles
+  setup_git_hooks
 fi

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#
+# Block commits that stage a secret. Enabled per clone by bootstrap
+# (core.hooksPath=.githooks); bypass a false positive with `git commit --no-verify`
+# and add its fingerprint to .gitleaksignore.
+#
+###############################################################################
+
+exec gitleaks git --pre-commit --staged --no-banner --redact

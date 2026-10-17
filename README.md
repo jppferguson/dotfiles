@@ -44,6 +44,7 @@ You can find this script in `src/bin/`. Run `dot help` to see all available comm
 - **`dot symlink`** - Re-run bootstrap to create/update symlinks
 - **`dot test`** - Run tests
 - **`dot update`** - Update all packages via topgrade
+- **`dot validate`** - Run every check: gitleaks over the full history, shellcheck, zsh syntax and tests. A gitleaks pre-commit hook (`.githooks/`, enabled by `dot symlink`) blocks staged secrets
 
 ### Git-free install
 

@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+#
+# Run every dotfiles check: secrets, shellcheck, zsh syntax and the test suite.
+# Pass check names to run a subset, e.g. `validate shellcheck zsh`.
+#
+###############################################################################
+
+cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1
+
+check_secrets () {
+  # Full history, not just the tree: a secret removed in a later commit is still published
+  gitleaks git --no-banner --redact .
+}
+
+check_shellcheck () {
+  # Severity is gated at error for now; ratchet down to warning once
+  # the existing SC2086 quoting debt is paid off.
+  shellcheck --severity=error \
+    src/script/bootstrap src/script/install src/script/update \
+    src/script/init src/script/test src/script/test-dev src/script/validate \
+    .githooks/pre-commit \
+    $(find src/bin -type f ! -name git-wtf) \
+    $(find src/topics -name 'install.sh' -o -name 'update.sh' -o -name 'set-*.sh' | grep -v prezto)
+}
+
+check_zsh () {
+  local failed=0 file
+  while IFS= read -r -d '' file
+  do
+    zsh -n "$file" || failed=1
+  done < <(find src/topics \( -name '*.zsh' -o -name 'z*.symlink' \) -type f -print0)
+  return "$failed"
+}
+
+check_test () {
+  bats test/*.bats
+}
+
+checks=("$@")
+[ ${#checks[@]} -eq 0 ] && checks=(secrets shellcheck zsh test)
+
+failed=()
+for check in "${checks[@]}"
+do
+  echo "==> $check"
+  "check_$check" || failed+=("$check")
+done
+
+if [ ${#failed[@]} -gt 0 ]
+then
+  echo "Failed: ${failed[*]}"
+  exit 1
+fi
+echo "All checks passed"
