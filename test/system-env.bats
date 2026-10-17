@@ -15,3 +15,9 @@ REPO="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
   [ "$status" -eq 0 ]
   [ "$output" = "[unset][unset]" ]
 }
+
+@test "bash_profile: sets the same LANG and does not force LC_ALL" {
+  grep -qx 'export LANG="en_GB.UTF-8"' "$REPO/src/topics/bash/bash_profile.symlink"
+  run grep -n 'LC_ALL=' "$REPO/src/topics/bash/bash_profile.symlink"
+  [ "$status" -ne 0 ]
+}
