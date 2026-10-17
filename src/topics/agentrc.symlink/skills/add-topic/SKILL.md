@@ -64,12 +64,10 @@ Skip this step for a shell-only topic (just `path.zsh`, `aliases.sh` or other `*
 Only use this when:
 
 - The destination directory is *entirely* config (nothing to exclude from Step 1), so symlinking the whole thing (or a whole file) is safe.
-- The path depth fits. Bootstrap runs `find "$DOTFILES_TOPIC_ROOT" -maxdepth 3 -name '*.symlink'` - that only reaches `topics/<name>/file.symlink` or `topics/<name>/subdir/file.symlink`. A path one level deeper, like `topics/<name>/.config/<name>/file.symlink`, is silently skipped and never linked. Verify with `find src/topics -maxdepth 3 -name '*.symlink'` and confirm your new file actually appears before relying on this path. (The `ghostty` topic currently ships a `.symlink` one level too deep and is not actually wired up by bootstrap - don't copy that pattern without checking depth first.)
 
 **Per-item `install.sh`** - see `src/topics/claude/install.sh` and `src/topics/herdr/install.sh` for the template. Use this when:
 
 - The config directory mixes real config with runtime/install state (most `~/.config/<tool>/` directories with logs/sockets/session files).
-- The real path is nested deeper than the `.symlink` convention reaches.
 
 The template's `link_item()` helper: skips if already correctly linked, backs up a pre-existing real file/dir to a timestamped `backups/` folder before replacing it, then `ln -sfn`. Copy that helper rather than re-deriving it.
 

@@ -49,18 +49,14 @@ setup() {
   [ -f "$HOME/.tool/innerfile" ]
 }
 
-@test "install_dotfiles(): known bug - a depth-4 .config/tool/file.symlink (the ghostty shape) is missed by find -maxdepth 3" {
+@test "install_dotfiles(): links a depth-4 .config/tool/file.symlink (the ghostty shape)" {
   DOTFILES_TOPIC_ROOT="$BATS_TEST_TMPDIR/topics"
   mkdir -p "$DOTFILES_TOPIC_ROOT/ghostty/.config/ghostty"
   echo content > "$DOTFILES_TOPIC_ROOT/ghostty/.config/ghostty/config.symlink"
 
   install_dotfiles
 
-  # src/script/bootstrap:151's `find -maxdepth 3` is one level short of this
-  # real ghostty topic shape, so the symlink is silently never created. This
-  # locks in today's (buggy) behaviour; when -maxdepth 3 is fixed, flip this
-  # assertion to expect the symlink so it then guards against regressing back.
-  [ ! -e "$HOME/.config/ghostty/config" ]
+  [ "$(readlink "$HOME/.config/ghostty/config")" = "$DOTFILES_TOPIC_ROOT/ghostty/.config/ghostty/config.symlink" ]
 }
 
 # link_file() <src> <dst> - pre-existing destination branches
