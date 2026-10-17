@@ -44,6 +44,7 @@ sub_help () {
   echo "   symlink          Symlink all dotfiles"
   echo "   symlink --prune [--yes]   List (or, with --yes, remove) dangling \$HOME symlinks left by deleted topics"
   echo "   test             Run tests"
+  echo "   unlink [--restore]   Remove the \$HOME symlinks into the dotfiles (--restore copies back the newest ~/.dotfiles_backup file for each)"
   echo "   update           Update packages and pkg managers (brew, casks, cargo, pip3, npm, gems, macOS)"
   echo "   upgrade          Alias for update"
   echo "   validate {check} Run all checks, or only the named ones (secrets shellcheck zsh markdown test)"
@@ -85,7 +86,7 @@ sub_claude () {
 }
 
 sub_completion () {
-  echo "cd clean claude dock duti edit help install macos reload symlink test update upgrade validate"
+  echo "cd clean claude dock duti edit help install macos reload symlink test unlink update upgrade validate"
 }
 
 sub_dock () {
@@ -131,6 +132,18 @@ sub_test () {
 
 sub_validate () {
   "$DOTFILES"/src/script/validate "$@"
+}
+
+sub_unlink () {
+  local restore=false
+  case "${1:-}" in
+    "") ;;
+    --restore) restore=true ;;
+    *) echo "Usage: $BIN_NAME unlink [--restore]" >&2; return 1 ;;
+  esac
+  . "$DOTFILES/src/functions/general"
+  DOTFILES_TOPIC_ROOT="$DOTFILES/src/topics"
+  unlink_dotfiles "$restore"
 }
 
 sub_update () {

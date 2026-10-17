@@ -141,20 +141,9 @@ install_dotfiles () {
   # Read the file list on fd 3 so link_file's prompt still reads from stdin
   while IFS= read -r -d '' src <&3
   do
-    # Path within the topic, e.g. "zshrc.symlink" or ".config/topgrade.toml.symlink"
-    local rel="${src#"$DOTFILES_TOPIC_ROOT"/}"
-    rel="${rel#*/}"
-    rel="${rel%.symlink}"
-
     local dst
-    if [[ "$rel" == */* ]]
-    then
-      # Nested paths keep their structure relative to $HOME (e.g. ~/.config/...)
-      dst="$HOME/$rel"
-      mkdir -p "$(dirname "$dst")"
-    else
-      dst="$HOME/.$rel"
-    fi
+    dst=$(symlink_destination "$src")
+    mkdir -p "$(dirname "$dst")"
     link_file "$src" "$dst"
   done 3< <(find "$DOTFILES_TOPIC_ROOT" -name '*.symlink' -prune -print0)
 }

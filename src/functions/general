@@ -225,3 +225,70 @@ prune_dead_links () {
     echo "Dry run only — nothing deleted. Re-run with 'dot symlink --prune --yes' to remove the above."
   fi
 }
+
+# Maps a *.symlink file under $DOTFILES_TOPIC_ROOT to its $HOME destination.
+# Shared by bootstrap (linking) and unlink_dotfiles (reversing).
+symlink_destination () {
+  # Path within the topic, e.g. "zshrc.symlink" or ".config/topgrade.toml.symlink"
+  local rel="${1#"$DOTFILES_TOPIC_ROOT"/}"
+  rel="${rel#*/}"
+  rel="${rel%.symlink}"
+
+  if [[ "$rel" == */* ]]
+  then
+    # Nested paths keep their structure relative to $HOME (e.g. ~/.config/...)
+    echo "$HOME/$rel"
+  else
+    echo "$HOME/.$rel"
+  fi
+}
+
+# Prints the newest ~/.dotfiles_backup/<ts>/ copy of the given target's
+# basename (bootstrap's backup() moves files in by basename), or nothing.
+newest_backup_for () {
+  local name ts
+  name=$(basename "$1")
+  while IFS= read -r ts
+  do
+    if [ -e "$HOME/.dotfiles_backup/$ts/$name" ] || [ -L "$HOME/.dotfiles_backup/$ts/$name" ]
+    then
+      echo "$HOME/.dotfiles_backup/$ts/$name"
+      return 0
+    fi
+  done < <(ls -1 "$HOME/.dotfiles_backup" 2>/dev/null | sort -rn)
+  return 0
+}
+
+# Reverses bootstrap: removes every $HOME link created from the *.symlink
+# mapping whose target sits inside $DOTFILES. Anything else at the destination
+# is left alone. Pass "true" to first copy back the newest backup of each.
+unlink_dotfiles () {
+  local restore="${1:-false}"
+  local src dst target backup
+
+  while IFS= read -r -d '' src
+  do
+    dst=$(symlink_destination "$src")
+    [ -L "$dst" ] || continue
+    target=$(readlink "$dst")
+    case "$target" in
+      "$DOTFILES"/*) ;;
+      *) continue ;;
+    esac
+
+    rm "$dst"
+    print_success "removed $dst"
+
+    if [ "$restore" == "true" ]
+    then
+      backup=$(newest_backup_for "$dst")
+      if [ -n "$backup" ]
+      then
+        cp -R "$backup" "$dst"
+        print_success "restored $dst from $backup"
+      else
+        echo "  no backup found for $dst, left removed"
+      fi
+    fi
+  done < <(find "$DOTFILES_TOPIC_ROOT" -name '*.symlink' -prune -print0)
+}

@@ -44,6 +44,7 @@ You can find this script in `src/bin/`. Run `dot help` to see all available comm
 - **`dot symlink`** - Re-run bootstrap to create/update symlinks
 - **`dot symlink --prune [--yes]`** - List (or, with `--yes`, remove) dangling `$HOME` symlinks left by deleted topics
 - **`dot test`** - Run tests
+- **`dot unlink [--restore]`** - Remove the `$HOME` symlinks into the dotfiles; `--restore` copies back the newest `~/.dotfiles_backup` file for each
 - **`dot update`** - Update all packages via topgrade
 - **`dot upgrade`** - Alias for `dot update`
 - **`dot validate`** - Run every check: gitleaks over the full history, shellcheck, zsh syntax, markdownlint and tests. A gitleaks pre-commit hook (`.githooks/`, enabled by `dot symlink`) blocks staged secrets
