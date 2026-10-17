@@ -58,7 +58,7 @@ cask 'hammerspoon'
 # Dev
 brew 'gh'
 cask 'android-studio'
-cask 'docker'
+cask 'docker-desktop'
 cask 'elgato-stream-deck'
 cask 'iterm2'
 cask 'kaleidoscope'

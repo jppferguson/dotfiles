@@ -30,6 +30,10 @@ last = ["system"]
 # removes anything (topgrade's own vscode step handles upgrades)
 "VS Code extensions" = 'DOTFILES="${DOTFILES:-$HOME/.dotfiles}" bash "${DOTFILES:-$HOME/.dotfiles}/src/topics/vs-code/update.sh"'
 
+# topgrade's brew step upgrades but never runs `brew bundle`, so apply the
+# gitignored per-machine overlay here (no-op when the file doesn't exist)
+"Brewfile.local" = 'f="${DOTFILES:-$HOME/.dotfiles}/src/topics/homebrew/Brewfile.local"; [ ! -f "$f" ] || brew bundle --file="$f"'
+
 [post_commands]
 # The gems step installs new versions alongside old ones, and the leftovers
 # trigger "Unresolved or ambiguous specs" warnings on later runs

@@ -108,7 +108,7 @@ The recognised file names are listed under Components below; the "Topic contract
 - **git** - Git configuration and custom commands
 - **hammerspoon** - macOS automation and window management
 - **herdr** - Herdr terminal workspace manager configuration
-- **homebrew** - Package management via Brewfile
+- **homebrew** - Package management via Brewfile; put apps that only belong on one machine in a gitignored `src/topics/homebrew/Brewfile.local` (same syntax), which `dot install homebrew`, `src/script/update` and `dot update` (via a topgrade command) apply after the shared Brewfile
 - **kimi-code** - Adds the Kimi Code CLI to PATH
 - **macos** - macOS system defaults (YAML-based configuration)
 - **node** - Node.js aliases
