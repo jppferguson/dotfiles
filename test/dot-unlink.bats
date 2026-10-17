@@ -98,3 +98,37 @@ link_all() {
   [ "$status" -eq 0 ]
   [ ! -L "$HOME/.zshrc" ]
 }
+
+@test "unlink_dotfiles: removes a relative link and copes with a trailing slash on DOTFILES" {
+  ln -s "../dotfiles/src/topics/shell/zshrc.symlink" "$HOME/.zshrc"
+  DOTFILES="$DOTFILES/"
+
+  unlink_dotfiles
+
+  [ ! -L "$HOME/.zshrc" ]
+}
+
+@test "unlink_dotfiles: leaves a link that only passes through DOTFILES to somewhere else" {
+  echo outside > "$BATS_TEST_TMPDIR/outside"
+  ln -sf "$BATS_TEST_TMPDIR/outside" "$DOTFILES_TOPIC_ROOT/shell/zshrc.symlink"
+  ln -s "$DOTFILES_TOPIC_ROOT/shell/zshrc.symlink" "$HOME/.zshrc"
+
+  unlink_dotfiles
+
+  [ -L "$HOME/.zshrc" ]
+}
+
+@test "unlink_dotfiles true: never restores through a link it failed to remove" {
+  link_all
+  mkdir -p "$HOME/.dotfiles_backup/100"
+  echo backup > "$HOME/.dotfiles_backup/100/.zshrc"
+  # Fail only for the link, and drop the stub before bats cleans up its tmpdir
+  rm () { [ "$1" = "$HOME/.zshrc" ] && return 1; command rm "$@"; }
+
+  run unlink_dotfiles true
+  unset -f rm
+
+  [ "$status" -ne 0 ]
+  [ -L "$HOME/.zshrc" ]
+  [ "$(cat "$DOTFILES_TOPIC_ROOT/shell/zshrc.symlink")" = repo ]
+}

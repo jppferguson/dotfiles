@@ -264,31 +264,47 @@ newest_backup_for () {
 # is left alone. Pass "true" to first copy back the newest backup of each.
 unlink_dotfiles () {
   local restore="${1:-false}"
-  local src dst target backup
+  local src dst target backup repo failed=0
+
+  # Compare canonical paths, so relative links, a trailing slash on $DOTFILES
+  # and symlinked directories inside the repo are all judged by where the link
+  # finally lands
+  repo=$(realpath "$DOTFILES") || return 1
 
   while IFS= read -r -d '' src
   do
     dst=$(symlink_destination "$src")
     [ -L "$dst" ] || continue
-    target=$(readlink "$dst")
+    target=$(realpath "$dst" 2>/dev/null) || continue
     case "$target" in
-      "$DOTFILES"/*) ;;
+      "$repo"/*) ;;
       *) continue ;;
     esac
 
-    rm "$dst"
+    # If the link survives, cp below would follow it and overwrite the repo file
+    if ! rm "$dst" || [ -L "$dst" ]
+    then
+      print_error "could not remove $dst, skipped"
+      failed=1
+      continue
+    fi
     print_success "removed $dst"
 
     if [ "$restore" == "true" ]
     then
       backup=$(newest_backup_for "$dst")
-      if [ -n "$backup" ]
+      if [ -z "$backup" ]
       then
-        cp -R "$backup" "$dst"
+        echo "  no backup found for $dst, left removed"
+      elif cp -R "$backup" "$dst"
+      then
         print_success "restored $dst from $backup"
       else
-        echo "  no backup found for $dst, left removed"
+        print_error "could not restore $dst from $backup"
+        failed=1
       fi
     fi
   done < <(find "$DOTFILES_TOPIC_ROOT" -name '*.symlink' -prune -print0)
+
+  return "$failed"
 }
