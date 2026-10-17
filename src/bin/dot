@@ -103,6 +103,14 @@ sub_test () {
 }
 
 sub_update () {
+  # Anything run with sudo that writes into Homebrew's prefix (e.g. `sudo gem`)
+  # leaves root-owned files behind, and `brew cleanup` then fails on them
+  local brew_prefix=/opt/homebrew
+  if [ -d "$brew_prefix" ] && [ -n "$(find "$brew_prefix" ! -user "$USER" -print -quit 2>/dev/null)" ]; then
+    echo "Fixing ownership of files under $brew_prefix not owned by $USER"
+    sudo find "$brew_prefix" ! -user "$USER" -exec chown -h "$USER":admin {} +
+  fi
+
   # Global npm/corepack installs don't regenerate asdf shims, so topgrade's
   # `pnpm update -g` fails with "No version is set" until they are rebuilt
   command -v asdf > /dev/null && asdf reshim
