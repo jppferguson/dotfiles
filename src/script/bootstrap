@@ -63,6 +63,12 @@ link_file () {
   local overwrite= backup= skip=
   local action=
 
+  if [ -L "$dst" ] && [ "$(readlink "$dst")" == "$src" ]
+  then
+    print_success "already linked $dst"
+    return
+  fi
+
   if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]
   then
 

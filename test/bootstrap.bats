@@ -56,7 +56,7 @@ setup() {
 
   install_dotfiles
 
-  # src/script/bootstrap:145's `find -maxdepth 3` is one level short of this
+  # src/script/bootstrap:151's `find -maxdepth 3` is one level short of this
   # real ghostty topic shape, so the symlink is silently never created. This
   # locks in today's (buggy) behaviour; when -maxdepth 3 is fixed, flip this
   # assertion to expect the symlink so it then guards against regressing back.
@@ -118,4 +118,19 @@ setup() {
   [ ! -L "$HOME/.existing" ]
   [ "$(cat "$HOME/.existing")" = original ]
   [ -L "$HOME/.fresh" ]
+}
+
+@test "link_file(): an existing symlink that already points at src is left alone without prompting" {
+  local src="$BATS_TEST_TMPDIR/src.symlink"
+  local dst="$HOME/existing"
+  echo source > "$src"
+  ln -s "$src" "$dst"
+
+  overwrite_all=false backup_all=false skip_all=false
+  run link_file "$src" "$dst" < /dev/null
+
+  [ "$status" -eq 0 ]
+  # Not [[ != ]]: bash 3.2 (macOS /bin/bash) doesn't trip errexit on a failed [[ ]]
+  [ "${output#*File already exists}" = "$output" ]
+  [ "$(readlink "$dst")" = "$src" ]
 }
