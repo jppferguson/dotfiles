@@ -14,6 +14,9 @@ brew 'topgrade'
 
 # Package management
 brew 'asdf'
+# asdf Pythons link against it for hashlib's blake2; without it listed here
+# `brew autoremove` drops it and pip logs blake2b/blake2s errors
+brew 'libb2'
 
 # Other stuff
 brew 'figlet'
