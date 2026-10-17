@@ -4,19 +4,28 @@
 #
 ###############################################################################
 
-# color output
-cNo=`tput sgr0`
-cRed=`tput setaf 1`
-cGreen=`tput setaf 2`
-cYellow=`tput setaf 3`
-cBlue=`tput setaf 4`
+# color output: only when TERM names a usable terminal (it is unset in
+# non-interactive shells such as ssh host 'dot ...'), otherwise the variables
+# stay empty so output is plain text
+cNo='' cRed='' cGreen='' cYellow='' cBlue=''
 # part of the colour palette for sourcing scripts
 # shellcheck disable=SC2034
-cMagenta=`tput setaf 5`
-cCyan=`tput setaf 6`
+cMagenta=''
+cCyan=''
 # part of the colour palette for sourcing scripts
 # shellcheck disable=SC2034
-cWhite=`tput setaf 7`
+cWhite=''
+if tput colors >/dev/null 2>&1
+then
+  cNo=$(tput sgr0)
+  cRed=$(tput setaf 1)
+  cGreen=$(tput setaf 2)
+  cYellow=$(tput setaf 3)
+  cBlue=$(tput setaf 4)
+  cMagenta=$(tput setaf 5)
+  cCyan=$(tput setaf 6)
+  cWhite=$(tput setaf 7)
+fi
 
 inArray () {
   local e

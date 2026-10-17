@@ -5,6 +5,24 @@
 # `dot` handles installation, updates, things like that. Run it periodically
 # to make sure you're on the latest and greatest.
 
+# Non-interactive shells (e.g. ssh host 'dot ...') never load zshrc, so derive
+# the repo root from this script's own location. An exported DOTFILES wins.
+if [ -z "$DOTFILES" ]
+then
+  dot_source="${BASH_SOURCE[0]}"
+  while [ -L "$dot_source" ]
+  do
+    dot_link=$(readlink "$dot_source")
+    case "$dot_link" in
+      /*) dot_source="$dot_link" ;;
+      *)  dot_source="$(dirname "$dot_source")/$dot_link" ;;
+    esac
+  done
+  DOTFILES=$(cd "$(dirname "$dot_source")/../.." && pwd)
+  export DOTFILES
+  unset dot_source dot_link
+fi
+
 BIN_NAME=$(basename "$0")
 COMMAND_NAME=$1
 SUB_COMMAND_NAME=$2
