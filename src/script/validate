@@ -28,7 +28,7 @@ check_shellcheck () {
   shellcheck --severity=warning \
     src/script/bootstrap src/script/install src/script/update \
     src/script/init src/script/test src/script/test-dev src/script/validate \
-    .githooks/pre-commit \
+    src/topics/git/hooks/run-hook \
     src/functions/general src/functions/common \
     "${scripts[@]}" \
     src/topics/prezto/update.sh
