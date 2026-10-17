@@ -16,6 +16,7 @@ DOTFILES_CLAUDE="$DOTFILES/src/topics/claude"
 AGENTRC="$DOTFILES/src/topics/agentrc.symlink"
 SETTINGS="$CLAUDE_DIR/settings.json"
 SYNC_AGENT="com.jppferguson.claude-settings-sync"
+SYNC_PLIST="$HOME/Library/LaunchAgents/$SYNC_AGENT.plist"
 
 # name|expected-target pairs. settings.json isn't here: install.sh generates
 # it as a merge of settings.json + settings.local.json (see merge-settings.sh)
@@ -54,6 +55,22 @@ show_settings_status() {
     echo -e "  ${GREEN}ok${NC}      $SETTINGS"
 }
 
+# The live plist is rendered from a template (machine-specific paths), so it
+# is compared against a fresh render rather than checked as a symlink
+show_sync_plist_status() {
+    if [ ! -e "$SYNC_PLIST" ] && [ ! -L "$SYNC_PLIST" ]; then
+        echo -e "  ${RED}missing${NC} $SYNC_PLIST"
+        return 1
+    elif [ -L "$SYNC_PLIST" ]; then
+        echo -e "  ${RED}drift${NC}   $SYNC_PLIST (symlink, expected a rendered file)"
+        return 1
+    elif [ "$(cat "$SYNC_PLIST")" != "$(bash "$DOTFILES_CLAUDE/render-plist.sh")" ]; then
+        echo -e "  ${RED}drift${NC}   $SYNC_PLIST (differs from the rendered template)"
+        return 1
+    fi
+    echo -e "  ${GREEN}ok${NC}      $SYNC_PLIST"
+}
+
 show_sync_agent_status() {
     if launchctl print "gui/$(id -u)/$SYNC_AGENT" >/dev/null 2>&1; then
         echo -e "  ${GREEN}ok${NC}      claude-settings-sync LaunchAgent"
@@ -67,6 +84,7 @@ show_status() {
     local broken=0
     info "Claude configuration status:\n"
     show_settings_status || broken=1
+    show_sync_plist_status || broken=1
     show_sync_agent_status || broken=1
     for pair in "${LINKS[@]}"; do
         local dst="${pair%%|*}"

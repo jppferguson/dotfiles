@@ -7,16 +7,16 @@
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>/Users/jppferguson/.dotfiles/src/topics/claude/merge-settings.sh</string>
+        <string>__DOTFILES__/src/topics/claude/merge-settings.sh</string>
     </array>
     <key>WatchPaths</key>
     <array>
-        <string>/Users/jppferguson/.dotfiles/src/topics/claude/settings.json</string>
-        <string>/Users/jppferguson/.dotfiles/src/topics/claude/settings.local.json</string>
+        <string>__DOTFILES__/src/topics/claude/settings.json</string>
+        <string>__DOTFILES__/src/topics/claude/settings.local.json</string>
     </array>
     <key>StandardOutPath</key>
-    <string>/Users/jppferguson/Library/Logs/claude-settings-sync.log</string>
+    <string>__HOME__/Library/Logs/claude-settings-sync.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/jppferguson/Library/Logs/claude-settings-sync.log</string>
+    <string>__HOME__/Library/Logs/claude-settings-sync.log</string>
 </dict>
 </plist>

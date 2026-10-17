@@ -69,11 +69,15 @@ merge_claude_settings() {
 # Installs (or reloads) the LaunchAgent that keeps ~/.claude/settings.json
 # in sync whenever settings.json or settings.local.json changes.
 install_claude_settings_sync() {
-    local plist_src="$DOTFILES_CLAUDE/com.jppferguson.claude-settings-sync.plist"
     local plist_dst="$HOME/Library/LaunchAgents/com.jppferguson.claude-settings-sync.plist"
+    local plist_tmp="$plist_dst.tmp"
 
     mkdir -p "$HOME/Library/LaunchAgents"
-    link_item "$plist_src" "$plist_dst"
+    # Render to a temp file and mv over the destination so an older symlink
+    # to the repo is replaced rather than written through
+    bash "$DOTFILES_CLAUDE/render-plist.sh" > "$plist_tmp"
+    mv -f "$plist_tmp" "$plist_dst"
+    print_success "Rendered $plist_dst"
 
     launchctl bootout "gui/$(id -u)" "$plist_dst" >/dev/null 2>&1 || true
     if launchctl bootstrap "gui/$(id -u)" "$plist_dst" 2>/dev/null; then

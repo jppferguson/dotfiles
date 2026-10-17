@@ -14,7 +14,7 @@ setup() {
 
   mkdir -p "$HOME/.claude" "$TOPIC/agents" "$AGENTRC/skills/some-skill" "$DOTFILES/src/functions"
   cp "$REPO/src/functions/general" "$DOTFILES/src/functions/general"
-  cp "$REPO/src/topics/claude/update.sh" "$REPO/src/topics/claude/merge-settings.sh" "$TOPIC/"
+  cp "$REPO/src/topics/claude/update.sh" "$REPO/src/topics/claude/merge-settings.sh" "$REPO/src/topics/claude/render-plist.sh" "$REPO/src/topics/claude/com.jppferguson.claude-settings-sync.plist.template" "$TOPIC/"
   touch "$TOPIC/statusline.sh" "$AGENTRC/AGENTS.md"
   echo '{"model": "opus", "env": {"A": "public"}}' > "$TOPIC/settings.json"
   echo '{"env": {"A": "local", "B": "local"}}' > "$TOPIC/settings.local.json"
@@ -25,6 +25,10 @@ setup() {
   mkdir -p "$HOME/.claude/skills"
   ln -s "$AGENTRC/skills/some-skill" "$HOME/.claude/skills/some-skill"
   bash "$TOPIC/merge-settings.sh"
+
+  PLIST="$HOME/Library/LaunchAgents/com.jppferguson.claude-settings-sync.plist"
+  mkdir -p "$HOME/Library/LaunchAgents"
+  bash "$TOPIC/render-plist.sh" > "$PLIST"
 
   # launchctl stub: `print` succeeds unless AGENT_LOADED=false
   mkdir -p "$BATS_TEST_TMPDIR/bin"
@@ -82,6 +86,46 @@ EOF
   run bash "$TOPIC/update.sh" status
   [ "$status" -eq 1 ]
   assert_contains "missing $HOME/.claude/settings.json"
+}
+
+@test "render-plist: resolves the placeholders to this HOME and DOTFILES" {
+  run bash "$TOPIC/render-plist.sh"
+  [ "$status" -eq 0 ]
+  refute_contains "__HOME__"
+  refute_contains "__DOTFILES__"
+  assert_contains "<string>$DOTFILES/src/topics/claude/merge-settings.sh</string>"
+  assert_contains "<string>$HOME/Library/Logs/claude-settings-sync.log</string>"
+}
+
+@test "status: reports the rendered LaunchAgent plist as ok" {
+  run bash "$TOPIC/update.sh" status
+  [ "$status" -eq 0 ]
+  assert_contains "ok      $PLIST"
+}
+
+@test "status: reports a missing LaunchAgent plist" {
+  rm "$PLIST"
+
+  run bash "$TOPIC/update.sh" status
+  [ "$status" -eq 1 ]
+  assert_contains "missing $PLIST"
+}
+
+@test "status: flags a LaunchAgent plist that no longer matches the template" {
+  echo "<!-- edited -->" >> "$PLIST"
+
+  run bash "$TOPIC/update.sh" status
+  [ "$status" -eq 1 ]
+  assert_contains "drift   $PLIST (differs from the rendered template)"
+}
+
+@test "status: flags a LaunchAgent plist that is still a symlink" {
+  rm "$PLIST"
+  ln -s "$TOPIC/com.jppferguson.claude-settings-sync.plist.template" "$PLIST"
+
+  run bash "$TOPIC/update.sh" status
+  [ "$status" -eq 1 ]
+  assert_contains "drift   $PLIST (symlink, expected a rendered file)"
 }
 
 @test "backup: copies the live merged settings.json unchanged" {
