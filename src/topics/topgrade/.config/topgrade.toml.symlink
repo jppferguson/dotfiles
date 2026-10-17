@@ -35,3 +35,7 @@ last = ["system"]
 [git]
 repos = ["~/.dotfiles"]
 pull_predefined = false
+
+[containers]
+# Locally built image, nothing to pull from a registry
+ignored_containers = ["hermes-agent*"]

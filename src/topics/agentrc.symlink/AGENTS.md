@@ -45,6 +45,7 @@ Subagents (usage budget):
 
 - Always run subagents on a lighter model: pass `model: sonnet` on every Agent call (`haiku` for pure lookups). Never let a subagent inherit the top-level model unless I explicitly ask for it on that task.
 - Run at most three subagents concurrently, and tell every subagent it must not spawn subagents of its own. A fan-out of eight inheriting agents once burned half a session's usage in five minutes.
+- Never use `subagent_type: "fork"` from a top-tier session: forks always inherit the parent model and ignore `model`.
 - Prefer doing the work directly (grep, sed, psql) when it fits in a handful of tool calls; reserve subagents for genuinely broad reads across many files.
 
 Style essentials (full details in `~/.agentrc/standards/`):
