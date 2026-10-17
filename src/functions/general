@@ -6,22 +6,24 @@
 
 # color output: only when TERM names a usable terminal (it is unset in
 # non-interactive shells such as ssh host 'dot ...'), otherwise the variables
-# stay empty so output is plain text
+# stay empty so output is plain text. Each capability is guarded on its own
+# because a terminal like TERM=dumb passes 'tput colors' but lacks sgr0/setaf,
+# and a failure here would abort any set -e script that sources this file.
 cNo='' cRed='' cGreen='' cYellow='' cBlue='' cMagenta='' cCyan='' cWhite=''
 if tput colors >/dev/null 2>&1
 then
-  cNo=$(tput sgr0)
-  cRed=$(tput setaf 1)
-  cGreen=$(tput setaf 2)
-  cYellow=$(tput setaf 3)
-  cBlue=$(tput setaf 4)
+  cNo=$(tput sgr0 2>/dev/null || true)
+  cRed=$(tput setaf 1 2>/dev/null || true)
+  cGreen=$(tput setaf 2 2>/dev/null || true)
+  cYellow=$(tput setaf 3 2>/dev/null || true)
+  cBlue=$(tput setaf 4 2>/dev/null || true)
   # part of the colour palette for sourcing scripts
   # shellcheck disable=SC2034
-  cMagenta=$(tput setaf 5)
-  cCyan=$(tput setaf 6)
+  cMagenta=$(tput setaf 5 2>/dev/null || true)
+  cCyan=$(tput setaf 6 2>/dev/null || true)
   # part of the colour palette for sourcing scripts
   # shellcheck disable=SC2034
-  cWhite=$(tput setaf 7)
+  cWhite=$(tput setaf 7 2>/dev/null || true)
 fi
 
 inArray () {

@@ -33,6 +33,12 @@ REPO="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
   [ "$output" = "[]" ]
 }
 
+@test "general: sourcing under set -e with TERM=dumb succeeds and leaves colours empty" {
+  run env TERM=dumb bash -c "set -e; . '$REPO/src/functions/general'; echo \"[\$cRed\$cNo\$cCyan]\""
+  [ "$status" -eq 0 ]
+  [ "$output" = "[]" ]
+}
+
 @test "general: sourcing with a valid TERM still populates the colour variables" {
   run env TERM=xterm-256color bash -c ". '$REPO/src/functions/general'; [ -n \"\$cRed\" ] && [ -n \"\$cNo\" ] && echo populated"
   [ "$output" = "populated" ]
