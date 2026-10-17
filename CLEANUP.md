@@ -28,9 +28,6 @@ settings need reverting by hand:
 
 ## Config conflicts to reconcile
 
-- **zshenv collision**: `prezto/zshenv.symlink` and `zsh/zshenv.symlink` both
-  map to `~/.zshenv`. Bootstrap will prompt about the clash every run. Merge
-  them into one file and delete the other.
 - **bun pinned twice**: `.tool-versions` (root) and `src/.tool-versions` both
   pin bun and will drift. Keep one.
 
