@@ -94,7 +94,9 @@ install_claude_settings_sync() {
 info "Installing Claude Code configuration (symlinks)..."
 
 merge_claude_settings
-install_claude_settings_sync
+# Keep linking the rest, but remember a failed render so we exit non-zero
+sync_status=0
+install_claude_settings_sync || sync_status=1
 link_item "$DOTFILES_CLAUDE/statusline.sh" "$CLAUDE_DIR/statusline.sh"
 link_item "$DOTFILES_CLAUDE/agents"        "$CLAUDE_DIR/agents"
 
@@ -125,6 +127,10 @@ if [ -d "$CLAUDE_DIR/backups" ]; then
     ls -t "$CLAUDE_DIR/backups" | tail -n +6 | while read -r old; do
         rm -rf "$CLAUDE_DIR/backups/$old"
     done
+fi
+
+if [ "$sync_status" -ne 0 ]; then
+    exit "$sync_status"
 fi
 
 print_success "Claude configuration installed"

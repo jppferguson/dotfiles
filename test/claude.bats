@@ -116,7 +116,9 @@ EOF
   rm "$TOPIC/com.jppferguson.claude-settings-sync.plist.template"
 
   run bash "$TOPIC/install.sh"
+  [ "$status" -ne 0 ]
   assert_contains "Failed to render $PLIST"
+  refute_contains "Claude configuration installed"
   [ "$(cat "$PLIST")" = "<!-- live -->" ]
   [ ! -e "$PLIST.tmp" ]
 }
