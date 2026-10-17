@@ -36,7 +36,6 @@ cask 'zoom'
 
 # Cloud
 cask 'dropbox'
-cask 'google-drive'
 
 # Media
 # cask 'amazon-music' # Doesnt work on M1 Macs
@@ -46,7 +45,6 @@ cask 'vlc'
 # Productivity
 cask '1password'
 cask 'alfred'
-cask 'evernote'
 cask 'notion'
 cask 'notion-calendar'
 mas 'Things 3', id: 904280696
@@ -58,6 +56,9 @@ cask 'hammerspoon'
 # Dev
 brew 'gh'
 cask 'android-studio'
+cask 'claude'
+cask 'codex'
+cask 'copilot-cli'
 cask 'docker-desktop'
 cask 'elgato-stream-deck'
 cask 'iterm2'
@@ -87,9 +88,9 @@ cask 'firefox'
 cask 'firefox@developer-edition'
 cask 'google-chrome'
 cask 'google-chrome@canary'
-cask 'opera'
 
 # Utilities
+cask 'daisydisk'
 cask 'the-unarchiver'
 
 # Mac Apps
