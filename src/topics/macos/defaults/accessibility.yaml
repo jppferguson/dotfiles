@@ -3,3 +3,11 @@ description: Accessibility
 data:
   com.apple.Accessibility:
     EnhancedBackgroundContrastEnabled: true
+
+  com.apple.universalaccess:
+    # Use scroll gesture with the Ctrl (^) modifier key to zoom
+    closeViewScrollWheelToggle: true
+    HIDScrollZoomModifierMask: 262144
+
+    # Follow the keyboard focus while zoomed in
+    closeViewZoomFollowsFocus: true

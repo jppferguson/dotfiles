@@ -4,3 +4,7 @@ kill: ["cfprefsd"]
 data:
   NSGlobalDomain:
     com.apple.sound.beep.feedback: 0
+
+  com.apple.BluetoothAudioAgent:
+    # Increase sound quality for Bluetooth headphones/headsets
+    "Apple Bitpool Min (editable)": 40

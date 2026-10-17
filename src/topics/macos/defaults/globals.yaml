@@ -50,12 +50,25 @@ data:
     # Adding a context menu item for showing the Web Inspector in web views
     WebKitDeveloperExtras: true
 
+    # Set highlight colour to green
+    AppleHighlightColor: "0.764700 0.976500 0.568600"
+
+    # Set sidebar icon size to medium
+    NSTableViewDefaultSizeMode: 2
+
+    # Display ASCII control characters using caret notation in standard text views
+    NSTextShowsControlCharacters: true
+
     # Turn off auto-termination
     NSDisableAutomaticTermination: true
 
   com.apple.CrashReporter:
     # Disable the crash reporter
     DialogType: none
+
+  com.apple.systempreferences:
+    # Disable Resume in System Settings
+    NSQuitAlwaysKeepsWindows: false
 
   com.apple.helpviewer:
     # Set Help Viewer windows to non-floating mode
@@ -85,3 +98,7 @@ data:
     skip-verify: true
     skip-verify-locked: true
     skip-verify-remote: true
+
+    # Automatically open a new Finder window when a disk image is mounted
+    auto-open-ro-root: true
+    auto-open-rw-root: true

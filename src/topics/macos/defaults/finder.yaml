@@ -5,6 +5,10 @@ data:
     # Show all filename extensions
     AppleShowAllExtensions: true
 
+    # Enable spring loading for directories, with no delay
+    com.apple.springing.enabled: true
+    com.apple.springing.delay: 0
+
   com.apple.desktopservices:
     # Force the Finder to gather all metadata first
     UseBareEnumeration: true
@@ -12,7 +16,22 @@ data:
     # Avoid creation of .DS_Store files on network volumes.
     # DSDontWriteNetworkStores: true
 
+    # Avoid creation of .DS_Store files on USB volumes.
+    DSDontWriteUSBStores: true
+
   com.apple.finder:
+    # Allow quitting via ⌘ + Q; doing so will also hide desktop icons
+    QuitMenuItem: true
+
+    # Display full POSIX path as Finder window title
+    _FXShowPosixPathInTitle: true
+
+    # Automatically open a new Finder window when a volume is mounted
+    OpenWindowForNewRemovableDisk: true
+
+    # Disable the warning before emptying the Trash
+    WarnOnEmptyTrash: false
+
     # Show hidden files by default
     AppleShowAllFiles: true
 
@@ -66,11 +85,13 @@ data:
     FinderSpawnTab: false
 
     # Sort icon views by name, show item info and minimize grid spacing in icon views.
+    # On the desktop, show item info to the right of the icons.
     DesktopViewSettings:
       IconViewSettings:
         arrangeBy: "name"
         gridSpacing: 1.0
         iconSize: 64.0
+        labelOnBottom: false
         showItemInfo: true
 
     FK_StandardViewSettings:

@@ -11,6 +11,24 @@ data:
     # Show indicator lights for open applications in the Dock
     show-process-indicators: true
 
+    # Enable highlight hover effect for the grid view of a stack
+    mouse-over-hilite-stack: true
+
+    # Enable spring loading for all Dock items
+    enable-spring-load-actions-on-all-items: true
+
+    # Don’t animate opening applications from the Dock
+    launchanim: false
+
+    # Speed up Mission Control animations
+    expose-animation-duration: 0.1
+
+    # Don’t group windows by application in Mission Control
+    expose-group-by-app: false
+
+    # Don’t automatically rearrange Spaces based on most recent use
+    mru-spaces: false
+
     # Show only open applications in the Dock
     static-only: false
 
