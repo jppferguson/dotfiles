@@ -31,11 +31,7 @@ brew 'spark'
 
 # Communication
 cask 'slack'
-mas "WhatsApp", id: 1147396723
 cask 'zoom'
-
-# Cloud
-cask 'dropbox'
 
 # Media
 # cask 'amazon-music' # Doesnt work on M1 Macs
@@ -60,7 +56,6 @@ cask 'claude'
 cask 'codex'
 cask 'copilot-cli'
 cask 'docker-desktop'
-cask 'elgato-stream-deck'
 cask 'iterm2'
 cask 'kaleidoscope'
 cask 'local'
