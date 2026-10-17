@@ -18,7 +18,6 @@ config.modulesInclude = {
 }
 -- Exclude modules
 config.modulesExclude = {
-  "misc.weather",
   "system.nightshift",
 }
 
@@ -35,11 +34,6 @@ config.global['system.caffeine'] = {
 -- Nightwatch
 config.global['system.nightshift'] = {
   nightStart = '18:00',
-}
-
--- Weather location
-config.global['misc.weather'] = {
-  location = 'Edinburgh, UK',
 }
 
 -- Window Management
