@@ -102,6 +102,10 @@ dot dock
 
 # Set default apps for file types
 dot duti
+
+# One-time setup that is not a defaults write (Launchpad reset, timezone, Spotlight reindex).
+# Manual only: nothing calls it, including `dot macos`
+bash src/topics/macos/first-run.sh
 ```
 
 ## Development Conventions
