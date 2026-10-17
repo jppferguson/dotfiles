@@ -24,8 +24,8 @@ else
 fi
 
 if ! command_exists macos-defaults; then
-  print_error "ERROR: Please install macos-defaults!"
-  exit 0
+  print_error "ERROR: macos-defaults is missing. Install it with: brew install dsully/tap/macos-defaults"
+  exit 1
 fi
 
 print_warning "If you get 'Could not write domain...' errors below, you may need to add your terminal app (e.g. Terminal.app, iTerm2) to System Preferences -> Privacy -> Full Disk Access"

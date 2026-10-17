@@ -11,8 +11,8 @@ set -e
 print_block "Updating duti"
 
 if ! command_exists duti; then
-  print_error "Please install duti!"
-  exit 0
+  print_error "ERROR: duti is missing. Install it with: brew install duti"
+  exit 1
 fi
 
 # Update file associations
