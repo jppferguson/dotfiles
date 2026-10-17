@@ -19,11 +19,16 @@ cd "$DOTFILES" && git pull --ff-only
 
 # find the update.sh files and run them iteratively
 if [ "$1" = "" ] ; then
-  updates=($( find . -name update.sh ))
+  updates=()
+  while IFS= read -r update_script; do
+    updates+=("$update_script")
+  done < <(find . -name update.sh)
 else
   updates=()
   for search in "${@}"; do
-    updates+=($( find . -name update.sh -path "*${search}*" ))
+    while IFS= read -r update_script; do
+      updates+=("$update_script")
+    done < <(find . -name update.sh -path "*${search}*")
   done
 fi
 

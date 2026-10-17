@@ -86,6 +86,8 @@ sub_edit () {
 sub_install () {
   local SCRIPT="$DOTFILES/src/topics/$SUB_COMMAND_NAME/install.sh"
   if [ -f "$SCRIPT" ]; then
+    # the topic script is chosen at runtime
+    # shellcheck disable=SC1090
     . "$SCRIPT"
   else
     echo "Unable to find script to install $SUB_COMMAND_NAME" >&2

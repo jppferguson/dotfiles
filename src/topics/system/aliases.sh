@@ -1,4 +1,6 @@
 # shellcheck shell=bash
+# These aliases deliberately expand $SHELL and ${colorflag} when defined
+# shellcheck disable=SC2139
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
 

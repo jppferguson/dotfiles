@@ -15,7 +15,7 @@
 . $DOTFILES/src/functions/general
 
 # check this is actually an macOS machine
-if [ $(uname -s) = 'Darwin' ]
+if [ "$(uname -s)" = 'Darwin' ]
 then
   print_block "Setting macOS defaults";
 else

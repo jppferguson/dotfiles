@@ -6,8 +6,10 @@
 
 loadAllAliases () {
     # Get all of our alias files and source them
-    alias_files=($DOTFILES/src/topics/**/aliases.sh)
+    alias_files=("$DOTFILES"/src/topics/**/aliases.sh)
     for alias_file in "${alias_files[@]}"; do
-        source $alias_file
+        # the file list is built at runtime
+        # shellcheck disable=SC1090
+        source "$alias_file"
     done
 }

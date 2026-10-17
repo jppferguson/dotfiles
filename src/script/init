@@ -7,9 +7,10 @@
 
 # Navigate to dotfiles root directory
 # When sourced from src/script/, go up two levels to reach root
-cd "$(dirname "${BASH_SOURCE[0]}")"/../..
+cd "$(dirname "${BASH_SOURCE[0]}")"/../.. || return 1
 
 # Set DOTFILES if not already set (defensive initialization)
 if [[ ! $DOTFILES ]]; then
-  export DOTFILES="$(pwd)"
+  DOTFILES="$(pwd)"
+  export DOTFILES
 fi

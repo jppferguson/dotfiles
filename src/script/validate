@@ -13,19 +13,26 @@ check_secrets () {
 }
 
 check_shellcheck () {
+  local scripts=() script
   # Severity is gated at error for now; ratchet down to warning once
   # the existing SC2086 quoting debt is paid off.
   # Left out because shellcheck cannot parse them: src/bin/git-wtf (Ruby),
   # src/functions/_brew (zsh completion) and src/functions/extract (zsh
   # autoload function). prezto is excluded except update.sh, whose zsh shebang
   # is overridden by a shellcheck shell=bash directive.
+  while IFS= read -r script
+  do
+    scripts+=("$script")
+  done < <(
+    find src/bin -type f ! -name git-wtf
+    find src/topics -name 'aliases.sh' -o -name 'install.sh' -o -name 'update.sh' -o -name 'set-*.sh' | grep -v prezto
+  )
   shellcheck --severity=error \
     src/script/bootstrap src/script/install src/script/update \
     src/script/init src/script/test src/script/test-dev src/script/validate \
     .githooks/pre-commit \
     src/functions/general src/functions/common \
-    $(find src/bin -type f ! -name git-wtf) \
-    $(find src/topics -name 'aliases.sh' -o -name 'install.sh' -o -name 'update.sh' -o -name 'set-*.sh' | grep -v prezto) \
+    "${scripts[@]}" \
     src/topics/prezto/update.sh
 }
 
