@@ -2,9 +2,6 @@
   "env": {
     "ENABLE_TOOL_SEARCH": "true"
   },
-  "permissions": {
-    "defaultMode": "auto"
-  },
   "model": "sonnet",
   "hooks": {
     "SessionStart": [
@@ -73,6 +70,5 @@
   "autoCompactEnabled": true,
   "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "agentPushNotifEnabled": true
 }

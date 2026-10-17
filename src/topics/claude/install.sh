@@ -5,6 +5,8 @@
 # state (projects/, history.jsonl, caches) out of the repo while making
 # every config tweak instantly visible in git.
 #
+# Decision (17 Oct 2026): permissions.defaultMode and skipAutoPermissionPrompt live in the gitignored settings.local.json, not the public settings.json, so the repo does not advertise an auto-mode, prompt-free posture.
+#
 
 . $DOTFILES/src/functions/general
 
