@@ -35,8 +35,15 @@ if ! xcode-select -p > /dev/null 2>&1
 then
   info "Installing the Xcode Command Line Tools: follow the dialog that opens"
   xcode-select --install
+  # A cancelled dialog leaves nothing to wait for, so give up after an hour
+  polls=0
   until xcode-select -p > /dev/null 2>&1
   do
+    polls=$((polls + 1))
+    if [ "$polls" -gt 720 ]
+    then
+      fail "The Command Line Tools are still missing after an hour. Run xcode-select --install, then run setup again."
+    fi
     sleep 5
   done
 fi

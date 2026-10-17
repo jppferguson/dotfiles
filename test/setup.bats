@@ -68,6 +68,16 @@ stub() {
   grep -qx bootstrap "$BATS_TEST_TMPDIR/calls.log"
 }
 
+@test "setup: gives up when the Command Line Tools never arrive" {
+  stub sleep ''
+
+  run bash "$SETUP"
+  [ "$status" -ne 0 ]
+  [[ "$output" == *"still missing after an hour"* ]]
+  [ "$(grep -c '^sleep 5' "$BATS_TEST_TMPDIR/calls.log")" -eq 720 ]
+  ! grep -q '^git ' "$BATS_TEST_TMPDIR/calls.log"
+}
+
 @test "setup: without Homebrew, downloads and runs the official installer" {
   rm "$BATS_TEST_TMPDIR/bin/brew"
   # The "installer" puts brew back on PATH, so setup never looks in the real
