@@ -59,6 +59,24 @@ EOF
   refute_contains "real file, not a symlink"
 }
 
+@test "status: reports invalid JSON rather than ok when repo and live settings both fail to parse" {
+  echo '{"env": ' > "$TOPIC/settings.local.json"
+  echo '{"model": ' > "$HOME/.claude/settings.json"
+
+  run bash "$TOPIC/update.sh" status
+  [ "$status" -eq 1 ]
+  assert_contains "is not valid JSON"
+  refute_contains "ok      $HOME/.claude/settings.json"
+}
+
+@test "status: reports a live settings.json that is not valid JSON" {
+  echo '{"model": ' > "$HOME/.claude/settings.json"
+
+  run bash "$TOPIC/update.sh" status
+  [ "$status" -eq 1 ]
+  assert_contains "invalid $HOME/.claude/settings.json is not valid JSON"
+}
+
 @test "status: treats a missing settings.local.json as a merge of settings.json alone" {
   rm "$TOPIC/settings.local.json"
   bash "$TOPIC/merge-settings.sh"

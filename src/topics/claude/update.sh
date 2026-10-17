@@ -50,13 +50,21 @@ expected_settings() {
 }
 
 show_settings_status() {
+    local live expected
+    if ! expected="$(expected_settings 2>/dev/null)"; then
+        echo -e "  ${RED}invalid${NC} settings.json or settings.local.json in $DOTFILES_CLAUDE is not valid JSON"
+        return 1
+    fi
     if [ -L "$SETTINGS" ]; then
         echo -e "  ${RED}drift${NC}   $SETTINGS (symlink, expected a generated merge)"
         return 1
     elif [ ! -e "$SETTINGS" ]; then
         echo -e "  ${RED}missing${NC} $SETTINGS"
         return 1
-    elif [ "$(jq -S . "$SETTINGS" 2>/dev/null)" != "$(expected_settings)" ]; then
+    elif ! live="$(jq -S . "$SETTINGS" 2>/dev/null)"; then
+        echo -e "  ${RED}invalid${NC} $SETTINGS is not valid JSON"
+        return 1
+    elif [ "$live" != "$expected" ]; then
         echo -e "  ${RED}stale merge${NC} $SETTINGS (differs from settings.json + settings.local.json)"
         return 1
     fi
