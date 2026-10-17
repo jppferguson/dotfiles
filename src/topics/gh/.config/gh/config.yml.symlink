@@ -1,0 +1,8 @@
+# hosts.yml holds OAuth tokens and is deliberately not managed here
+version: 1
+git_protocol: ssh
+editor: code --wait
+prompt: enabled
+aliases:
+  co: pr checkout
+  prs: pr list

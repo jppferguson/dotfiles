@@ -57,6 +57,7 @@ mas 'Toggl Track', id: 1291898086
 cask 'hammerspoon'
 
 # Dev
+brew 'gh'
 cask 'android-studio'
 cask 'docker'
 cask 'elgato-stream-deck'
