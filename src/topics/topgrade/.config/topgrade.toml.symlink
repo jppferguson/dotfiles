@@ -18,6 +18,11 @@ last = ["system"]
 [commands]
 "npm" = "npm update --location global --force"
 
+[post_commands]
+# The gems step installs new versions alongside old ones, and the leftovers
+# trigger "Unresolved or ambiguous specs" warnings on later runs
+"Gem cleanup" = "gem cleanup"
+
 [git]
 repos = ["~/.dotfiles"]
 pull_predefined = false
