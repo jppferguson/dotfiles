@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+#
+# Run the test suite in an Ubuntu container set up like the CI runner, to catch
+# GNU/Linux differences (GNU realpath and sed, bash 5.2) before pushing.
+# Requires Docker. Extra arguments are passed to bats, e.g. a single test file.
+#
+###############################################################################
+
+set -euo pipefail
+
+DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+if ! docker info > /dev/null 2>&1; then
+  echo "test-linux: Docker is not running" >&2
+  exit 1
+fi
+
+# Same version CI installs, read from the workflow so the two cannot drift
+gitleaks_version=$(sed -n 's/^ *GITLEAKS_VERSION: *//p' "$DOTFILES/.github/workflows/tests.yml")
+if [ -z "$gitleaks_version" ]; then
+  echo "test-linux: no GITLEAKS_VERSION in .github/workflows/tests.yml" >&2
+  exit 1
+fi
+
+# amd64 to match the runner. The repo is mounted read-only and copied in, so
+# nothing the tests do can touch this checkout. Tests run as a non-root user,
+# as on the runner, since root ignores file permissions
+docker run --rm --platform linux/amd64 \
+  -v "$DOTFILES":/src:ro \
+  -e GITLEAKS_VERSION="$gitleaks_version" \
+  ubuntu:24.04 bash -euo pipefail -c '
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -qq > /dev/null
+    apt-get install -y -qq bats ca-certificates curl git jq unzip zip zsh > /dev/null
+    cd /tmp
+    base="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+    curl -fsSLO "$base/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+    curl -fsSLO "$base/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+    grep "linux_x64.tar.gz" "gitleaks_${GITLEAKS_VERSION}_checksums.txt" | sha256sum -c - > /dev/null
+    tar -xzf "gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" gitleaks
+    install gitleaks /usr/local/bin/gitleaks
+    useradd -m runner
+    cp -R /src /home/runner/dotfiles
+    chown -R runner /home/runner/dotfiles
+    cd /home/runner/dotfiles
+    if [ "$#" -eq 0 ]; then set -- test/*.bats; fi
+    su runner -c "TERM=xterm bats \"\$@\" < /dev/null" bash "$@"
+  ' bash "$@"

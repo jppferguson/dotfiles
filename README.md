@@ -44,6 +44,7 @@ You can find this script in `src/bin/`. Run `dot help` to see all available comm
 - **`dot symlink`** - Re-run bootstrap to create/update symlinks
 - **`dot symlink --prune [--yes]`** - List (or, with `--yes`, remove) dangling `$HOME` symlinks left by deleted topics
 - **`dot test`** - Run tests
+- **`dot test --linux [file]`** - Run tests in an Ubuntu container set up like CI (needs Docker), to catch GNU/Linux differences before pushing
 - **`dot unlink [--restore]`** - Remove the `$HOME` symlinks into the dotfiles; `--restore` copies back the newest `~/.dotfiles_backup` file for each
 - **`dot update`** - Update all packages via topgrade
 - **`dot upgrade`** - Alias for `dot update`

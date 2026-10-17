@@ -44,6 +44,7 @@ sub_help () {
   echo "   symlink          Symlink all dotfiles"
   echo "   symlink --prune [--yes]   List (or, with --yes, remove) dangling \$HOME symlinks left by deleted topics"
   echo "   test             Run tests"
+  echo "   test --linux [file]  Run tests in an Ubuntu container set up like CI (needs Docker)"
   echo "   unlink [--restore]   Remove the \$HOME symlinks into the dotfiles (--restore copies back the newest ~/.dotfiles_backup file for each)"
   echo "   update           Update packages and pkg managers (brew, casks, cargo, pip3, npm, gems, macOS)"
   echo "   upgrade          Alias for update"
@@ -127,7 +128,12 @@ sub_symlink () {
 }
 
 sub_test () {
-  bats "$DOTFILES"/test/*.bats
+  if [ "${1:-}" = "--linux" ]; then
+    shift
+    "$DOTFILES"/src/script/test-linux "$@"
+  else
+    bats "$DOTFILES"/test/*.bats
+  fi
 }
 
 sub_validate () {
