@@ -382,7 +382,7 @@ teardown_prune_fixtures () {
   setup_prune_fixtures
   HOME="$PRUNE_TEST_HOME" DOTFILES="$PRUNE_TEST_DOTFILES" run prune_dead_links
   [ "$status" -eq 0 ]
-  [[ "$output" == *"no dangling"* ]]
+  assert_output --partial "no dangling"
   teardown_prune_fixtures
 }
 
@@ -392,7 +392,7 @@ teardown_prune_fixtures () {
 
   HOME="$PRUNE_TEST_HOME" DOTFILES="$PRUNE_TEST_DOTFILES" run prune_dead_links
   [ "$status" -eq 0 ]
-  [[ "$output" == *"$PRUNE_TEST_HOME/.gone"* ]]
+  assert_output --partial "$PRUNE_TEST_HOME/.gone"
   [ -L "$PRUNE_TEST_HOME/.gone" ]
   teardown_prune_fixtures
 }
@@ -403,7 +403,8 @@ teardown_prune_fixtures () {
 
   HOME="$PRUNE_TEST_HOME" DOTFILES="$PRUNE_TEST_DOTFILES" run prune_dead_links true
   [ "$status" -eq 0 ]
-  [ ! -e "$PRUNE_TEST_HOME/.gone" ] && [ ! -L "$PRUNE_TEST_HOME/.gone" ]
+  [ ! -e "$PRUNE_TEST_HOME/.gone" ]
+  [ ! -L "$PRUNE_TEST_HOME/.gone" ]
   teardown_prune_fixtures
 }
 
@@ -414,7 +415,7 @@ teardown_prune_fixtures () {
 
   HOME="$PRUNE_TEST_HOME" DOTFILES="$PRUNE_TEST_DOTFILES" run prune_dead_links true
   [ "$status" -eq 0 ]
-  [[ "$output" != *".kept"* ]]
+  refute_line --partial ".kept"
   [ -L "$PRUNE_TEST_HOME/.kept" ]
   teardown_prune_fixtures
 }
@@ -427,7 +428,7 @@ teardown_prune_fixtures () {
 
   HOME="$PRUNE_TEST_HOME" DOTFILES="$PRUNE_TEST_DOTFILES" run prune_dead_links
   [ "$status" -eq 0 ]
-  [[ "$output" != *".unrelated"* ]]
+  refute_line --partial ".unrelated"
   [ -L "$PRUNE_TEST_HOME/.unrelated" ]
   rm -rf "$outside"
   teardown_prune_fixtures
