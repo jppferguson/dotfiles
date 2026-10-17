@@ -113,6 +113,7 @@ The recognised file names are listed under Components below; the "Topic contract
 - **macos** - macOS system defaults (YAML-based configuration)
 - **node** - Node.js aliases
 - **prezto** - Zsh framework configuration
+- **ssh** - Shared SSH client config with an untracked `~/.ssh/config.local` for private hosts
 - **topgrade** - Tool for updating all package managers at once
 - **vs-code** - Visual Studio Code settings and keybindings
 - **zsh** - Zsh shell configuration

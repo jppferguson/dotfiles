@@ -47,6 +47,7 @@ Topics do not have to supply both scripts. In the current tree:
 - `vs-code/` - VS Code settings and keybindings, plus the tracked extension list (`extensions.txt`, installed by `install.sh`, drift shown by `update.sh`)
 - `node/` - Node.js aliases
 - `asdf/` - Version management for Node.js and other tools
+- `ssh/` - Shared `~/.ssh/config` (linked from `.ssh/config.symlink`); private hosts go in the untracked `~/.ssh/config.local`, and `install.sh` creates `~/.ssh/sockets` for connection multiplexing
 
 ## Key Commands & Workflows
 
