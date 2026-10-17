@@ -20,7 +20,7 @@ setup() {
 }
 
 @test "git topic config enables the global hooks directory" {
-  run grep -E '^\s*hooksPath = ~/.dotfiles/src/topics/git/hooks$' "$REPO/src/topics/git/gitconfig.symlink.example"
+  run grep -E '^\s*hooksPath = ~/.dotfiles/src/topics/git/hooks$' "$REPO/src/topics/git/gitconfig.symlink"
   [ "$status" -eq 0 ]
 }
 

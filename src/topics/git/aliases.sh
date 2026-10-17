@@ -1,10 +1,9 @@
 # shellcheck shell=bash
-# Use `hub` as our git wrapper:
-#   http://defunkt.github.com/hub/
-# hub_path=$(which hub)
-# if (( $+commands[hub] )); then
-#   alias git=$hub_path
-# fi
+# core.editor is `code --wait`, which does not exist over SSH
+if [ -n "${SSH_CONNECTION:-}" ]
+then
+  export GIT_EDITOR=vim
+fi
 
 # The rest of my fun git aliases
 alias gl='git pull --prune'

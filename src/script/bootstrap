@@ -42,8 +42,12 @@ backup () {
   print_success "backed up $1"
 }
 
+# Identity and credential helper are per machine, so they live in a small
+# ~/.gitconfig.local that the tracked gitconfig.symlink includes
 setup_gitconfig () {
-  if ! [ -f src/topics/git/gitconfig.symlink ]
+  local gitconfig_local=~/.gitconfig.local
+
+  if ! [ -f "$gitconfig_local" ]
   then
     info 'setup gitconfig'
 
@@ -58,14 +62,15 @@ setup_gitconfig () {
     user ' - What email do you want to use for git commits?'
     read -e git_authoremail
 
-    sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" src/topics/git/gitconfig.symlink.example > src/topics/git/gitconfig.symlink
+    git config --file "$gitconfig_local" user.name "$git_authorname"
+    git config --file "$gitconfig_local" user.email "$git_authoremail"
+    git config --file "$gitconfig_local" credential.helper "$git_credential"
 
-    print_success 'gitconfig'
+    print_success "gitconfig ($gitconfig_local)"
   fi
 }
 
-# Brings a machine set up before the global hooks existed in line: an existing
-# gitconfig.symlink is never regenerated from the example, and the old
+# Brings a machine set up before the global hooks existed in line: the old
 # repo-local core.hooksPath=.githooks would override the global one and now
 # points at a deleted directory, leaving this repo with no secret scan.
 migrate_git_hooks () {
@@ -73,7 +78,7 @@ migrate_git_hooks () {
 
   if [ -f "$gitconfig" ] && ! git config --file "$gitconfig" --get core.hooksPath > /dev/null
   then
-    # Literal ~, which git expands itself, to match gitconfig.symlink.example
+    # Literal ~, which git expands itself, to match gitconfig.symlink
     # shellcheck disable=SC2088
     git config --file "$gitconfig" core.hooksPath '~/.dotfiles/src/topics/git/hooks'
     print_success "enabled the global git hooks in $gitconfig"

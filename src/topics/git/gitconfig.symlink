@@ -1,16 +1,9 @@
-# Sample gitconfig
-#
+# Shared gitconfig, linked to ~/.gitconfig.
+# Identity (user.name, user.email) and credential.helper are per machine and
+# live in ~/.gitconfig.local, written by setup_gitconfig in src/script/bootstrap.
 
-[hub]
-    protocol = https
-
-
-[user]
-  name = AUTHORNAME
-  email = AUTHOREMAIL
-
-[credential]
-    helper = GIT_CREDENTIAL_HELPER
+[include]
+    path = ~/.gitconfig.local
 
 [alias]
 
@@ -132,8 +125,9 @@
     # Configure Git on OS X to properly handle line endings
     autocrlf = input
     safecrlf = warn
-    # Set default git editor
-    editor = vim
+    # Set default git editor; shells over SSH override it with GIT_EDITOR
+    # (see aliases.sh) since VS Code is not available there
+    editor = code --wait
     # don't ignore case
     ignorecase = false
 
@@ -169,36 +163,28 @@
 [merge]
     # Include summaries of merged commits in newly created merge commit messages
     log = true
+    # Show the common ancestor in conflict markers, trimming shared lines
+    conflictStyle = zdiff3
 
-[mergetool "sourcetree"]
-  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-  trustExitCode = true
+[diff]
+    algorithm = histogram
 
+[fetch]
+    prune = true
+
+[init]
+    defaultBranch = main
+
+[pull]
+    rebase = true
+
+[rebase]
+    autoStash = true
 
 [rerere]
-  # one day, when I'm all grown up
-  enabled = false
+  # Remember conflict resolutions and replay them on repeat conflicts
+  enabled = true
 
-
-# URL shorthands
-[url "git@github.com:"]
-    insteadOf = "gh:"
-    pushInsteadOf = "github:"
-    pushInsteadOf = "git://github.com/"
-[url "git://github.com/"]
-    insteadOf = "github:"
-[url "git@gist.github.com:"]
-    insteadOf = "gst:"
-    pushInsteadOf = "gist:"
-    pushInsteadOf = "git://gist.github.com/"
-[url "git://gist.github.com/"]
-    insteadOf = "gist:"
-[url "https://github.com/jppferguson/"]
-  insteadOf = "ghjf://"
-  pushInsteadOf = "ghjf://"
-# forces https to get around corporate firewalls
-[url "https://"]
-    insteadOf = git://
 
 [push]
     # See `git help config` (search for push.default)
@@ -206,3 +192,5 @@
     #
     # Setting to git 2.0 default to surpress warning message
     default = simple
+    # Create the upstream branch on the first push
+    autoSetupRemote = true

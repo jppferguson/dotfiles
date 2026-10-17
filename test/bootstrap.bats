@@ -184,3 +184,30 @@ setup() {
   [ "$status" -ne 0 ]
   [ "$(git -C "$BATS_TEST_TMPDIR/other" config --local --get core.hooksPath)" = .husky/_ ]
 }
+
+# setup_gitconfig()
+#######################################
+
+@test "setup_gitconfig(): writes only ~/.gitconfig.local with the prompted identity" {
+  run setup_gitconfig <<< $'Test Person\ntest@example.com'
+
+  [ "$status" -eq 0 ]
+  [ "$(git config --file "$HOME/.gitconfig.local" --get user.name)" = 'Test Person' ]
+  [ "$(git config --file "$HOME/.gitconfig.local" --get user.email)" = 'test@example.com' ]
+  if [ "$(uname -s)" == Darwin ]
+  then
+    [ "$(git config --file "$HOME/.gitconfig.local" --get credential.helper)" = osxkeychain ]
+  else
+    [ "$(git config --file "$HOME/.gitconfig.local" --get credential.helper)" = cache ]
+  fi
+  [ "$(ls -A "$HOME")" = .gitconfig.local ]
+}
+
+@test "setup_gitconfig(): leaves an existing ~/.gitconfig.local alone" {
+  printf '[user]\n  name = kept\n' > "$HOME/.gitconfig.local"
+
+  run setup_gitconfig </dev/null
+
+  [ "$status" -eq 0 ]
+  [ "$(git config --file "$HOME/.gitconfig.local" --get user.name)" = kept ]
+}
