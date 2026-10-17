@@ -32,7 +32,7 @@ Each topic directory can contain:
 - `git/` - Git configuration and custom commands
 - `homebrew/` - Brewfile for package management
 - `macos/` - macOS defaults in YAML format
-- `vs-code/` - VS Code settings and keybindings
+- `vs-code/` - VS Code settings and keybindings, plus the tracked extension list (`extensions.txt`, installed by `install.sh`, drift shown by `update.sh`)
 - `node/` - Node.js configuration and global packages
 - `asdf/` - Version management for Node.js and other tools
 

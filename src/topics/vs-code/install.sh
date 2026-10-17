@@ -44,4 +44,23 @@ if [[ -d "/Applications/Visual Studio Code - Insiders.app" ]] || [[ -d "${HOME}/
 	installVSCode "${VS_CODE_INSIDERS_DIR}"
 fi
 
+# install the extensions tracked in extensions.txt
+EXTENSIONS_FILE="${DOTFILES}/src/topics/vs-code/extensions.txt"
+
+installExtensions () {
+	if ! command -v code >/dev/null 2>&1; then
+		print_line "Skipping extensions:" "the code CLI is not on PATH"
+		return 0
+	fi
+
+	print_task "Installing VS Code extensions"
+	while IFS= read -r ext || [[ -n "$ext" ]]; do
+		[[ -z "$ext" ]] && continue
+		print_line "Installing:" "${ext}"
+		code --install-extension "${ext}" --force >/dev/null || print_warning "Could not install ${ext}"
+	done < "${EXTENSIONS_FILE}"
+}
+
+installExtensions
+
 print_block_end
