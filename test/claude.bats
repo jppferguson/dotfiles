@@ -123,6 +123,50 @@ EOF
   [ ! -e "$PLIST.tmp" ]
 }
 
+@test "install: backs up a live settings.json that differs from the merge" {
+  jq '.model = "sonnet"' "$HOME/.claude/settings.json" > "$BATS_TEST_TMPDIR/live.json"
+  cp "$BATS_TEST_TMPDIR/live.json" "$HOME/.claude/settings.json"
+
+  run bash "$TOPIC/install.sh"
+  [ "$status" -eq 0 ]
+
+  local backup
+  backup=$(ls -d "$HOME"/.claude/backups/*/)
+  cmp "$BATS_TEST_TMPDIR/live.json" "$backup/settings.json"
+  assert_contains "${backup}settings.json"
+  assert_contains "changes not in settings.json or settings.local.json"
+  [ "$(jq -r .model "$HOME/.claude/settings.json")" = "opus" ]
+}
+
+@test "install: skips the settings.json backup when the live file matches the merge" {
+  jq -S . "$HOME/.claude/settings.json" > "$BATS_TEST_TMPDIR/sorted.json"
+  cp "$BATS_TEST_TMPDIR/sorted.json" "$HOME/.claude/settings.json"
+
+  run bash "$TOPIC/install.sh"
+  [ "$status" -eq 0 ]
+  [ ! -e "$HOME/.claude/backups" ] || [ -z "$(find "$HOME/.claude/backups" -name settings.json)" ]
+  refute_contains "backed up to"
+}
+
+@test "install: neither backs up nor fails when the live settings.json is missing" {
+  rm "$HOME/.claude/settings.json"
+
+  run bash "$TOPIC/install.sh"
+  [ "$status" -eq 0 ]
+  [ -f "$HOME/.claude/settings.json" ]
+  [ ! -e "$HOME/.claude/backups" ] || [ -z "$(find "$HOME/.claude/backups" -name settings.json)" ]
+}
+
+@test "install: neither backs up nor fails when the live settings.json is a symlink" {
+  mv "$HOME/.claude/settings.json" "$BATS_TEST_TMPDIR/elsewhere.json"
+  ln -s "$BATS_TEST_TMPDIR/elsewhere.json" "$HOME/.claude/settings.json"
+
+  run bash "$TOPIC/install.sh"
+  [ "$status" -eq 0 ]
+  [ ! -L "$HOME/.claude/settings.json" ]
+  [ ! -e "$HOME/.claude/backups" ] || [ -z "$(find "$HOME/.claude/backups" -name settings.json)" ]
+}
+
 @test "status: reports the rendered LaunchAgent plist as ok" {
   run bash "$TOPIC/update.sh" status
   [ "$status" -eq 0 ]

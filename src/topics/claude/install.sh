@@ -42,6 +42,20 @@ link_item() {
     print_success "Linked $dst -> $src"
 }
 
+# True when the live settings.json is identical (after jq -S normalisation) to
+# the merge merge-settings.sh is about to write. Uses the same expression.
+live_matches_merge() {
+    local live="$1"
+    local merged
+
+    if [ -f "$DOTFILES_CLAUDE/settings.local.json" ]; then
+        merged=$(jq -S -s '.[0] * .[1]' "$DOTFILES_CLAUDE/settings.json" "$DOTFILES_CLAUDE/settings.local.json") || return 1
+    else
+        merged=$(jq -S . "$DOTFILES_CLAUDE/settings.json") || return 1
+    fi
+    [ "$(jq -S . "$live" 2>/dev/null)" = "$merged" ]
+}
+
 # settings.json is a merge, not a symlink: src/topics/claude/settings.local.json
 # is a gitignored, per-machine overlay (PATH, worktree dirs, autoMode infra
 # notes) that must never reach the public repo. If present, it's deep-merged
@@ -60,6 +74,12 @@ merge_claude_settings() {
         info "Backed up $dst to $BACKUP_DIR/"
     elif [ -L "$dst" ]; then
         rm "$dst"
+    elif [ -f "$dst" ] && ! live_matches_merge "$dst"; then
+        # Copy rather than move: merge-settings.sh replaces the live file itself
+        mkdir -p "$BACKUP_DIR"
+        cp "$dst" "$BACKUP_DIR/settings.json"
+        info "Live $dst differs from the merge; backed up to $BACKUP_DIR/settings.json"
+        info "It holds changes not in settings.json or settings.local.json - split them back by hand if you want to keep them"
     fi
 
     bash "$DOTFILES_CLAUDE/merge-settings.sh"
