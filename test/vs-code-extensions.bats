@@ -111,11 +111,21 @@ STUB
 }
 
 @test "topgrade command line runs update.sh with DOTFILES unset in the parent" {
-  command_line=$(sed -n 's/^"VS Code extensions" = "\(.*\)"$/\1/p' "$REPO/src/topics/topgrade/.config/topgrade.toml.symlink")
+  command_line=$(sed -n "s/^\"VS Code extensions\" = '\(.*\)'$/\1/p" "$REPO/src/topics/topgrade/.config/topgrade.toml.symlink")
   [ -n "$command_line" ]
   mkdir -p "$HOME/.dotfiles"
   cp -R "$DOTFILES/src" "$HOME/.dotfiles/src"
   INSTALLED="aaa.first bbb.second" run env -u DOTFILES bash -c "$command_line"
   [ "$status" -eq 0 ]
   [[ "$output" == *"Extensions match"* ]]
+}
+
+@test "topgrade command line honours an inherited DOTFILES checkout" {
+  command_line=$(sed -n "s/^\"VS Code extensions\" = '\(.*\)'$/\1/p" "$REPO/src/topics/topgrade/.config/topgrade.toml.symlink")
+  alt_checkout="$BATS_TEST_TMPDIR/alt-checkout"
+  mkdir -p "$alt_checkout/src/topics/vs-code"
+  printf '#!/bin/bash\necho "ran from $DOTFILES"\n' > "$alt_checkout/src/topics/vs-code/update.sh"
+  run env DOTFILES="$alt_checkout" bash -c "$command_line"
+  [ "$status" -eq 0 ]
+  [ "$output" = "ran from $alt_checkout" ]
 }
