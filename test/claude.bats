@@ -174,11 +174,44 @@ EOF
   [ "$status" -eq 0 ]
 
   local backup
-  backup=$(ls -d "$HOME"/.claude/backups/*/)
-  cmp "$BATS_TEST_TMPDIR/live.json" "$backup/settings.json"
-  assert_contains "${backup}settings.json"
+  backup=$(ls "$HOME"/.claude/backups/*/settings.json.*)
+  cmp "$BATS_TEST_TMPDIR/live.json" "$backup"
+  assert_contains "$backup"
   assert_contains "changes not in settings.json or settings.local.json"
   [ "$(jq -r .model "$HOME/.claude/settings.json")" = "opus" ]
+}
+
+@test "install: aborts and leaves the live settings.json untouched when the backup cannot be written" {
+  jq '.model = "sonnet"' "$HOME/.claude/settings.json" > "$BATS_TEST_TMPDIR/live.json"
+  cp "$BATS_TEST_TMPDIR/live.json" "$HOME/.claude/settings.json"
+  mkdir "$HOME/.claude/backups"
+  chmod 555 "$HOME/.claude/backups"
+
+  run bash "$TOPIC/install.sh"
+  chmod 755 "$HOME/.claude/backups"
+  [ "$status" -ne 0 ]
+  assert_contains "Could not back up $HOME/.claude/settings.json"
+  refute_contains "Merged"
+  cmp "$BATS_TEST_TMPDIR/live.json" "$HOME/.claude/settings.json"
+}
+
+@test "install: keeps both backups when two syncs land in the same second" {
+  date() { echo "2026-10-17-120000"; }
+  export -f date
+  jq '.model = "first"' "$HOME/.claude/settings.json" > "$BATS_TEST_TMPDIR/first.json"
+  cp "$BATS_TEST_TMPDIR/first.json" "$HOME/.claude/settings.json"
+  run bash "$TOPIC/install.sh"
+  [ "$status" -eq 0 ]
+
+  jq '.model = "second"' "$HOME/.claude/settings.json" > "$BATS_TEST_TMPDIR/second.json"
+  cp "$BATS_TEST_TMPDIR/second.json" "$HOME/.claude/settings.json"
+  run bash "$TOPIC/install.sh"
+  [ "$status" -eq 0 ]
+
+  [ "$(ls "$HOME"/.claude/backups/2026-10-17-120000/ | wc -l)" -eq 2 ]
+  local models
+  models=$(jq -r .model "$HOME"/.claude/backups/2026-10-17-120000/settings.json.* | sort | tr '\n' ' ')
+  [ "$models" = "first second " ]
 }
 
 @test "install: skips the settings.json backup when the live file matches the merge" {

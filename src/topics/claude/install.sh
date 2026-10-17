@@ -75,10 +75,15 @@ merge_claude_settings() {
     elif [ -L "$dst" ]; then
         rm "$dst"
     elif [ -f "$dst" ] && ! live_matches_merge "$dst"; then
-        # Copy rather than move: merge-settings.sh replaces the live file itself
-        mkdir -p "$BACKUP_DIR"
-        cp "$dst" "$BACKUP_DIR/settings.json"
-        info "Live $dst differs from the merge; backed up to $BACKUP_DIR/settings.json"
+        # Copy rather than move: merge-settings.sh replaces the live file itself.
+        # mktemp keeps two syncs in the same second from overwriting each other,
+        # and a failed copy aborts before the live file is replaced.
+        local backup
+        if ! mkdir -p "$BACKUP_DIR" || ! backup=$(mktemp "$BACKUP_DIR/settings.json.XXXXXX") || ! cp "$dst" "$backup"; then
+            print_error "Could not back up $dst to $BACKUP_DIR, leaving it untouched" ""
+            return 1
+        fi
+        info "Live $dst differs from the merge; backed up to $backup"
         info "It holds changes not in settings.json or settings.local.json - split them back by hand if you want to keep them"
     fi
 
@@ -113,7 +118,7 @@ install_claude_settings_sync() {
 
 info "Installing Claude Code configuration (symlinks)..."
 
-merge_claude_settings
+merge_claude_settings || exit 1
 # Keep linking the rest, but remember a failed render so we exit non-zero
 sync_status=0
 install_claude_settings_sync || sync_status=1
