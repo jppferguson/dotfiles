@@ -209,3 +209,5 @@ Uses ZSH with Prezto framework. Key files:
 ## doto
 
 doto project: 60ea0f2f-7c32-4563-b15d-5812a7eec3b3
+
+Backlog: doto project `.dotfiles` - file findings there, not in a markdown list. One-off manual steps for physical machines live in [docs/machine-checklist.md](./docs/machine-checklist.md).
