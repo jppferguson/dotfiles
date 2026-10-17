@@ -8,6 +8,9 @@
 #
 # Persistent preferences belong in defaults/*.yaml instead.
 
+DOTFILES="${DOTFILES:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)}"
+
+# shellcheck disable=SC1091
 . "$DOTFILES/src/functions/general"
 
 print_block "macOS first-run setup"
