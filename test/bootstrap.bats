@@ -130,3 +130,20 @@ setup() {
   [ "${output#*File already exists}" = "$output" ]
   [ "$(readlink "$dst")" = "$src" ]
 }
+
+@test "bootstrap: aborts before creating anything when HOME is unset, empty, relative or missing" {
+  cd "$BATS_TEST_TMPDIR"
+  local bad_home
+  for bad_home in "" "~" "relative/dir" "$BATS_TEST_TMPDIR/does-not-exist"
+  do
+    run env HOME="$bad_home" bash "$BOOTSTRAP"
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"HOME is not a valid absolute directory"* ]]
+  done
+
+  run env -u HOME bash "$BOOTSTRAP"
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"HOME is not a valid absolute directory"* ]]
+
+  [ -z "$(ls -A "$BATS_TEST_TMPDIR" | grep -v '^home$')" ]
+}

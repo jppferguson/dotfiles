@@ -32,3 +32,6 @@ src/topics/vs-code/User/globalStorage
 src/topics/vs-code/User/History
 src/topics/vs-code/User/syncLocalSettings.json
 src/topics/vs-code/User/workspaceStorage
+
+# stray literal "~" directory, created when bootstrap ran with an invalid HOME
+/~/

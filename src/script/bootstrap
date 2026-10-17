@@ -4,6 +4,14 @@
 #
 ###############################################################################
 
+# An unset, empty or literal "~" HOME would make BACKUP_DIR (and every link
+# target) relative, creating a stray ./~ directory in the current directory
+if [[ "${HOME:-}" != /* || ! -d "$HOME" ]]
+then
+  echo "HOME is not a valid absolute directory: '${HOME:-}'" >&2
+  exit 1
+fi
+
 # Initialize dotfiles environment
 . "$(dirname "${BASH_SOURCE[0]}")/init"
 
