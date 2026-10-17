@@ -75,8 +75,17 @@ wt() {
         
         # Open the new worktree folder in the configured editor
         echo "Opening worktree in $EDITOR..."
-        # ${=EDITOR} word-splits so EDITOR values with arguments (code -n) work
-        if ! ${=EDITOR} "$worktree_path"; then
+        # Run EDITOR as git does, through the shell, so values with arguments
+        # (code -n) or quoting work; a bare executable path with spaces runs as-is
+        local open_status
+        if [ -x "$EDITOR" ]; then
+            "$EDITOR" "$worktree_path"
+            open_status=$?
+        else
+            sh -c "$EDITOR \"\$@\"" "$EDITOR" "$worktree_path"
+            open_status=$?
+        fi
+        if [ "$open_status" -ne 0 ]; then
             echo "Error: Failed to open worktree in $EDITOR"
             return 1
         fi

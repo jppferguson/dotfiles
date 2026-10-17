@@ -27,6 +27,22 @@ STUB
   [ "$(cat "$BATS_TEST_TMPDIR/editor.log")" = "-n $PROJECT-worktrees/feature" ]
 }
 
+@test "wt: opens the worktree with an EDITOR path that contains spaces" {
+  mkdir -p "$BATS_TEST_TMPDIR/spaced dir"
+  cp "$BATS_TEST_TMPDIR/editor" "$BATS_TEST_TMPDIR/spaced dir/editor"
+  EDITOR="$BATS_TEST_TMPDIR/spaced dir/editor" run zsh -c "source '$REPO/src/topics/git/worktree.zsh'; wt feature"
+  [ "$status" -eq 0 ]
+  [ "$(cat "$BATS_TEST_TMPDIR/editor.log")" = "$PROJECT-worktrees/feature" ]
+}
+
+@test "wt: opens the worktree with a quoted EDITOR path that has spaces and arguments" {
+  mkdir -p "$BATS_TEST_TMPDIR/spaced dir"
+  cp "$BATS_TEST_TMPDIR/editor" "$BATS_TEST_TMPDIR/spaced dir/editor"
+  EDITOR="'$BATS_TEST_TMPDIR/spaced dir/editor' -n" run zsh -c "source '$REPO/src/topics/git/worktree.zsh'; wt feature"
+  [ "$status" -eq 0 ]
+  [ "$(cat "$BATS_TEST_TMPDIR/editor.log")" = "-n $PROJECT-worktrees/feature" ]
+}
+
 @test "wt: returns non-zero when the editor fails to open" {
   EDITOR="$BATS_TEST_TMPDIR/missing-editor -n" run zsh -c "source '$REPO/src/topics/git/worktree.zsh'; wt feature"
   [ "$status" -ne 0 ]
