@@ -35,15 +35,9 @@ function server() {
 
 # Copy w/ progress
 cp_p () {
-  rsync -WavP --human-readable --progress $1 $2
+  rsync -WavP --human-readable --progress "$1" "$2"
 }
 
-
-# Test if HTTP compression (RFC 2616 + SDCH) is enabled for a given URL.
-# Send a fake UA string for sites that sniff it instead of using the Accept-Encoding header. (Looking at you, ajax.googleapis.com!)
-function httpcompression() {
-    encoding="$(curl -LIs -H 'User-Agent: Mozilla/5 Gecko' -H 'Accept-Encoding: gzip,deflate,compress,sdch' "$1" | grep '^Content-Encoding:')" && echo "$1 is encoded using ${encoding#* }" || echo "$1 is not using any encoding"
-}
 
 # Pretty-print JSON strings or files
 function json() {
@@ -60,7 +54,7 @@ function json() {
 # take this repo and copy it to somewhere else minus the .git stuff.
 function gitexport(){
     mkdir -p "$1"
-    git archive master | tar -x -C "$1"
+    git archive HEAD | tar -x -C "$1"
 }
 
 
@@ -73,9 +67,13 @@ function gz() {
     gzip -c "$1" | wc -c
 }
 
-# All the dig info
+# All the dig info. One query per type, since most resolvers now refuse ANY
+# (RFC 8482) and answer it with nothing useful
 function digga() {
-    dig +nocmd "$1" any +multiline +noall +answer
+    local type
+    for type in A AAAA CNAME MX NS TXT SOA; do
+        dig +nocmd "$1" "$type" +multiline +noall +answer
+    done
 }
 
 # Escape UTF-8 characters into their 3-byte format
@@ -84,8 +82,29 @@ function escape() {
     echo # newline
 }
 
-# Decode \x{ABCD}-style Unicode escape sequences
+# Decode \x{ABCD}-style Unicode escape sequences. The text is passed as data,
+# not spliced into the Perl source, so it can never run as code
 function unidecode() {
-    perl -e "binmode(STDOUT, ':utf8'); print \"$@\""
+    perl -CO -e '$_ = join(" ", @ARGV); s/\\x\{([0-9A-Fa-f]+)\}/chr(hex($1))/ge; print' -- "$@"
     echo # newline
+}
+
+# animated gifs from any video
+# from alex sexton   gist.github.com/SlexAxton/4989674
+gifify() {
+  if [[ -n "$1" ]]; then
+    if [[ $2 == '--good' ]]; then
+      if ! command -v convert > /dev/null; then
+        echo "gifify --good needs ImageMagick: brew install imagemagick" >&2
+        return 1
+      fi
+      ffmpeg -i "$1" -r 10 -vcodec png out-static-%05d.png
+      time convert -verbose +dither -layers Optimize -resize 600x600\> out-static*.png  GIF:- | gifsicle --colors 128 --delay=5 --loop --optimize=3 --multifile - > "$1.gif"
+      rm out-static*.png
+    else
+      ffmpeg -i "$1" -s 600x400 -pix_fmt rgb24 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > "$1.gif"
+    fi
+  else
+    echo "proper usage: gifify <input_movie.mov>. You DO need to include extension."
+  fi
 }

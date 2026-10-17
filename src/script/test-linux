@@ -31,7 +31,7 @@ docker run --rm --platform linux/amd64 \
   ubuntu:24.04 bash -euo pipefail -c '
     export DEBIAN_FRONTEND=noninteractive
     apt-get update -qq > /dev/null
-    apt-get install -y -qq bats ca-certificates curl git jq unzip zip zsh > /dev/null
+    apt-get install -y -qq bats ca-certificates curl git jq rsync unzip zip zsh > /dev/null
     cd /tmp
     base="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
     curl -fsSLO "$base/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"

@@ -23,7 +23,9 @@ brew 'asdf'
 brew 'libb2'
 
 # Other stuff
+brew 'ffmpeg'
 brew 'figlet'
+brew 'gifsicle'
 brew 'git-extras'
 brew 'grc'
 brew 'spark'
