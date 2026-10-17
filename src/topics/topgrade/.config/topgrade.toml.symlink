@@ -2,11 +2,15 @@
 
 [misc]
 assume_yes = true
-disable = ["node"]
+# pnpm: the asdf shim runs an older npm-installed pnpm whose global bin dir
+# differs from Homebrew's, and nothing is installed globally with pnpm anyway
+disable = ["node", "pnpm"]
 display_time = false
 cleanup = true
 pre_sudo = true
 sudo_loop = true
+# softwareupdate prompts for the volume owner password regardless of sudo
+last = ["system"]
 
 [commands]
 "npm" = "npm update --location global --force"
