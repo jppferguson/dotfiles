@@ -5,6 +5,8 @@ assume_yes = true
 disable = ["node"]
 display_time = false
 cleanup = true
+pre_sudo = true
+sudo_loop = true
 
 [commands]
 "npm" = "npm update --location global --force"
