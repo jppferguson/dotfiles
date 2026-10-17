@@ -65,4 +65,5 @@ settings need reverting by hand:
   the purge but look questionable - review on the next `brew bundle` run.
 - `bash` topic kept deliberately as a just-in-case fallback, but its aliases
   duplicate the zsh ones and will drift. Consider generating shared aliases
-  from one source, or accept the drift.
+  from one source, or accept the drift. Shared helpers now live only in
+  `src/functions/`; `bash/functions.symlink` no longer redefines `extract`.

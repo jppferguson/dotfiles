@@ -7,11 +7,17 @@ extract () {
         case $1 in
             *.tar.bz2)  tar -jxvf $1                        ;;
             *.tar.gz)   tar -zxvf $1                        ;;
+            *.tar.xz)   tar -Jxvf $1                        ;;
+            *.tar.Z)    tar -zxvf $1                        ;;
             *.bz2)      bunzip2 $1                          ;;
             *.dmg)      hdiutil mount $1                    ;;
             *.gz)       gunzip $1                           ;;
             *.tar)      tar -xvf $1                         ;;
             *.tbz2)     tar -jxvf $1                        ;;
+            *.tbz)      tar -jxvf $1                        ;;
+            *.tb2)      tar -jxvf $1                        ;;
+            *.taz)      tar -zxvf $1                        ;;
+            *.txz)      tar -Jxvf $1                        ;;
             *.tgz)      tar -zxvf $1                        ;;
             *.zip)      unzip $1                            ;;
             *.ZIP)      unzip $1                            ;;
