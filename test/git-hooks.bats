@@ -116,3 +116,21 @@ setup() {
   [ "$status" -eq 0 ]
   [ "$(cat "$BATS_TEST_TMPDIR/local-pre-commit")" = "ran" ]
 }
+
+@test "pre-commit: fails closed when gitleaks is not on PATH" {
+  git add clean.txt
+  run env PATH="/usr/bin:/bin" git commit -q -m "add clean file"
+  [ "$status" -ne 0 ]
+  [[ "$output" == *"gitleaks not found"* ]]
+}
+
+@test "pre-commit: a repo hook linked back to the global hook does not loop" {
+  ln -s "$HOOKS/pre-commit" .git/hooks/pre-commit
+  git add clean.txt
+  # On a regression the hook re-execs forever, so run it in its own process
+  # group and kill the whole group on timeout rather than leave it spinning
+  run perl -e '$pid = fork; if (!$pid) { setpgrp(0, 0); exec @ARGV }
+    $SIG{ALRM} = sub { kill "KILL", -$pid; exit 124 }; alarm 20;
+    waitpid($pid, 0); exit($? >> 8)' git commit -q -m "add clean file"
+  [ "$status" -eq 0 ]
+}

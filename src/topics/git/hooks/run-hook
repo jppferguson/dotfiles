@@ -15,18 +15,22 @@ hook_name=$(basename "$0")
 
 if [ "$hook_name" = "pre-commit" ]
 then
-  if command -v gitleaks > /dev/null 2>&1
+  # Fail closed: a missing scanner must not quietly let a secret through
+  if ! command -v gitleaks > /dev/null 2>&1
   then
-    gitleaks git --pre-commit --staged --no-banner --redact || exit $?
-  else
-    echo "gitleaks not found on PATH, skipping the secret scan" >&2
+    echo "gitleaks not found on PATH, so the secret scan cannot run." >&2
+    echo "Install it with 'brew install gitleaks', or commit with --no-verify to skip the scan once." >&2
+    exit 1
   fi
+  gitleaks git --pre-commit --staged --no-banner --redact || exit $?
 fi
 
 repo_hooks_dir=$(git rev-parse --path-format=absolute --git-common-dir 2> /dev/null)/hooks
 repo_hook="$repo_hooks_dir/$hook_name"
 
-if [ -x "$repo_hook" ] && [ ! -d "$repo_hook" ]
+# A repo hook that is itself a link to this script would exec it forever
+if [ -x "$repo_hook" ] && [ ! -d "$repo_hook" ] &&
+  [ "$(realpath "$repo_hook")" != "$(realpath "$0")" ]
 then
   exec "$repo_hook" "$@"
 fi

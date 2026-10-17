@@ -147,3 +147,40 @@ setup() {
 
   [ -z "$(ls -A "$BATS_TEST_TMPDIR" | grep -v '^home$')" ]
 }
+
+# migrate_git_hooks()
+#######################################
+
+@test "migrate_git_hooks(): adds core.hooksPath to an existing gitconfig without one" {
+  printf '[user]\n  name = test\n' > "$BATS_TEST_TMPDIR/gitconfig"
+  git init -q "$BATS_TEST_TMPDIR/repo"
+
+  migrate_git_hooks "$BATS_TEST_TMPDIR/gitconfig" "$BATS_TEST_TMPDIR/repo"
+
+  [ "$(git config --file "$BATS_TEST_TMPDIR/gitconfig" --get core.hooksPath)" = '~/.dotfiles/src/topics/git/hooks' ]
+  [ "$(git config --file "$BATS_TEST_TMPDIR/gitconfig" --get user.name)" = test ]
+}
+
+@test "migrate_git_hooks(): leaves an existing core.hooksPath alone" {
+  printf '[core]\n  hooksPath = /somewhere/else\n' > "$BATS_TEST_TMPDIR/gitconfig"
+  git init -q "$BATS_TEST_TMPDIR/repo"
+
+  migrate_git_hooks "$BATS_TEST_TMPDIR/gitconfig" "$BATS_TEST_TMPDIR/repo"
+
+  [ "$(git config --file "$BATS_TEST_TMPDIR/gitconfig" --get core.hooksPath)" = /somewhere/else ]
+}
+
+@test "migrate_git_hooks(): drops the old repo-local .githooks setting but keeps any other" {
+  : > "$BATS_TEST_TMPDIR/gitconfig"
+  git init -q "$BATS_TEST_TMPDIR/old"
+  git init -q "$BATS_TEST_TMPDIR/other"
+  git -C "$BATS_TEST_TMPDIR/old" config core.hooksPath .githooks
+  git -C "$BATS_TEST_TMPDIR/other" config core.hooksPath .husky/_
+
+  migrate_git_hooks "$BATS_TEST_TMPDIR/gitconfig" "$BATS_TEST_TMPDIR/old"
+  migrate_git_hooks "$BATS_TEST_TMPDIR/gitconfig" "$BATS_TEST_TMPDIR/other"
+
+  run git -C "$BATS_TEST_TMPDIR/old" config --local --get core.hooksPath
+  [ "$status" -ne 0 ]
+  [ "$(git -C "$BATS_TEST_TMPDIR/other" config --local --get core.hooksPath)" = .husky/_ ]
+}

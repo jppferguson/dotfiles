@@ -64,6 +64,28 @@ setup_gitconfig () {
   fi
 }
 
+# Brings a machine set up before the global hooks existed in line: an existing
+# gitconfig.symlink is never regenerated from the example, and the old
+# repo-local core.hooksPath=.githooks would override the global one and now
+# points at a deleted directory, leaving this repo with no secret scan.
+migrate_git_hooks () {
+  local gitconfig="${1:-src/topics/git/gitconfig.symlink}" repo="${2:-$DOTFILES}"
+
+  if [ -f "$gitconfig" ] && ! git config --file "$gitconfig" --get core.hooksPath > /dev/null
+  then
+    # Literal ~, which git expands itself, to match gitconfig.symlink.example
+    # shellcheck disable=SC2088
+    git config --file "$gitconfig" core.hooksPath '~/.dotfiles/src/topics/git/hooks'
+    print_success "enabled the global git hooks in $gitconfig"
+  fi
+
+  if [ "$(git -C "$repo" config --local --get core.hooksPath)" == ".githooks" ]
+  then
+    git -C "$repo" config --local --unset core.hooksPath
+    print_success "removed the old .githooks hooksPath from $repo"
+  fi
+}
+
 
 link_file () {
   local src=$1 dst=$2
@@ -168,5 +190,6 @@ then
 
   create_localrc
   setup_gitconfig
+  migrate_git_hooks
   install_dotfiles
 fi
