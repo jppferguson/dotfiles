@@ -94,6 +94,8 @@ included into your shell. Anything with an extension of `.symlink` will get
 symlinked without extension into `$HOME` when you run `src/script/bootstrap`.
 Anything named `aliases.sh` is picked up by `loadAllAliases` (`src/functions/common`) in both zsh and bash.
 
+The recognised file names are listed under Components below; the "Topic contract" section of [AGENT_CONTEXT.md](AGENT_CONTEXT.md) has the full table of when each runs and which topics ship which scripts.
+
 ### Key Topics Included
 
 - **asdf** - Version manager for Node.js, Ruby, and other tools
@@ -107,7 +109,7 @@ Anything named `aliases.sh` is picked up by `loadAllAliases` (`src/functions/com
 - **homebrew** - Package management via Brewfile
 - **kimi-code** - Adds the Kimi Code CLI to PATH
 - **macos** - macOS system defaults (YAML-based configuration)
-- **node** - Node.js configuration and global packages
+- **node** - Node.js aliases and husky hook config
 - **prezto** - Zsh framework configuration
 - **topgrade** - Tool for updating all package managers at once
 - **vs-code** - Visual Studio Code settings and keybindings
@@ -157,6 +159,15 @@ There's a few special files in the hierarchy.
   your `$HOME`. This is so you can keep all of those versioned in your dotfiles
   but still keep those autoloaded files in your home directory. These get
   symlinked in when you run `src/script/bootstrap`.
+  A nested path such as `.config/ghostty/config.symlink` keeps its structure
+  under `$HOME`, and a `*.symlink` directory is linked as a whole.
+- **src/topics/\*/aliases.sh**: Any file named `aliases.sh` is sourced by
+  `loadAllAliases` in both zsh and bash. It is the only topic file bash reads.
+- **src/topics/\*/install.sh**: One-off setup for the topic, run by
+  `dot install <topic>` and offered by `src/script/install`.
+- **src/topics/\*/update.sh**: Maintenance for the topic, run by
+  `src/script/update`. `dot update` itself only runs topgrade. A topic does not
+  need both scripts.
 
 ## Thanks
 

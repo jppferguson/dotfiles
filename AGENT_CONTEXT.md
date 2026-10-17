@@ -14,17 +14,29 @@ This is a personal dotfiles repository based on Holman's dotfiles pattern. It us
 - `src/topics/` - Topic-based configurations (main organisation)
 - `test/` - Bats tests for shell functions
 
-### Topic Organisation
+### Topic contract
 
-Each topic directory can contain:
+Each directory in `src/topics/<name>/` is a topic. These are the file names the loaders recognise; anything else is just a file. Create only what a topic needs, since a topic can be a single `path.zsh`.
 
-- `*.symlink` - Files symlinked to $HOME (without extension)
-- `*.zsh` - Automatically sourced by ZSH
-- `aliases.sh` - Aliases loaded in zsh and bash by `loadAllAliases` (`src/functions/common`)
-- `path.zsh` - Loaded first to setup PATH
-- `completion.zsh` - Loaded last for autocomplete
-- `install.sh` - Topic-specific installation script
-- `update.sh` - Topic-specific update script
+| File | Read by | When it runs | Shell |
+| --- | --- | --- | --- |
+| `path.zsh` | `zsh/zshrc.symlink` | First of the zsh files, in alphabetical topic order (`zshrc.symlink` then re-asserts the asdf shims at the front of PATH) | zsh only |
+| `*.zsh` (any other name) | `zsh/zshrc.symlink` | After every `path.zsh` and before the completions, in alphabetical order | zsh only |
+| `completion.zsh` | `zsh/zshrc.symlink` | Last of the zsh files, after compinit | zsh only |
+| `aliases.sh` | `loadAllAliases` in `src/functions/common`, called by `zsh/zshrc.symlink` and `bash/bash_profile.symlink` | At shell start, after the zsh files | zsh and bash; the only topic file bash reads, so use it for anything bash needs |
+| `<name>.symlink` file | `install_dotfiles()` in `src/script/bootstrap` | When `dot symlink` runs | Linked to `~/.<name>` (extension stripped) |
+| `<name>.symlink` directory | `install_dotfiles()` | When `dot symlink` runs | Linked as a whole, e.g. `agentrc.symlink` to `~/.agentrc` and `hammerspoon/hammerspoon.symlink` to `~/.hammerspoon` |
+| `.config/<tool>/<file>.symlink` | `install_dotfiles()` | When `dot symlink` runs | A path containing a `/` keeps its structure under `$HOME`, e.g. `ghostty/.config/ghostty/config.symlink` to `~/.config/ghostty/config`; parent directories are created |
+| `install.sh` | `dot install <name>` (sourced), and `src/script/install` (offers every topic interactively, homebrew first; topics can be skipped for good via `DOTFILES_IGNORE` in `~/.localrc`) | One-off setup on a machine; must be safe to re-run | bash |
+| `update.sh` | `src/script/update`, which runs every `update.sh` it finds (or those matching the names passed) | When that script is run by hand; `dot update` only runs topgrade, so a check that should run there is also registered in `topgrade.toml.symlink`'s `[commands]` block, as `vs-code` does | bash |
+
+Topics do not have to supply both scripts. In the current tree:
+
+- Many topics ship no install or update script, because the tool is installed elsewhere or the topic is only shell config: `bun` (`path.zsh`, `completion.zsh`), `pnpm`, `docker` and `kimi-code` (`path.zsh` only), `git` and `system` (aliases and shell config), `node`, `asdf`, `bash`, `zsh`.
+- Install-only topics are never touched by an update: `agentrc.symlink`, `hammerspoon`, `herdr`, `php`, `z`.
+- Topics with both scripts pair them: `claude`, `duti`, `fonts`, `homebrew`, `macos`, `prezto`, `vs-code`.
+- No topic is update-only. `node` has `aliases.sh` and `huskyrc.symlink` but no scripts, so there is no `dot install node`; global npm packages are updated by topgrade.
+- `set-*.sh` files (in `macos`) are helpers called from a topic's own scripts, not entry points.
 
 ### Key Topics
 
@@ -33,7 +45,7 @@ Each topic directory can contain:
 - `homebrew/` - Brewfile for package management
 - `macos/` - macOS defaults in YAML format
 - `vs-code/` - VS Code settings and keybindings, plus the tracked extension list (`extensions.txt`, installed by `install.sh`, drift shown by `update.sh`)
-- `node/` - Node.js configuration and global packages
+- `node/` - Node.js aliases and the husky hook config
 - `asdf/` - Version management for Node.js and other tools
 
 ## Key Commands & Workflows
@@ -73,7 +85,7 @@ dot reload
 # Initial setup (creates all symlinks)
 ./src/script/bootstrap
 
-# Install specific topic configuration
+# Install a topic that ships an install.sh (see the topic contract)
 dot install {topic}
 # Example: dot install prezto
 ```
@@ -170,7 +182,7 @@ Uses ZSH with Prezto framework. Key files:
 
 - `zsh/zshrc.symlink` - Main ZSH configuration
 - `zsh/zpreztorc.symlink` - Prezto configuration
-- Files are loaded in this order: path.zsh → *.zsh → completion.zsh
+- Files are loaded in this order: path.zsh → *.zsh → completion.zsh, then `aliases.sh` files via `loadAllAliases` (see the topic contract)
 
 ## Important Files
 
@@ -183,10 +195,10 @@ Uses ZSH with Prezto framework. Key files:
 ## Adding New Configurations
 
 1. Create a new topic directory: `mkdir src/topics/newtopic`
-2. Add configuration files with `.symlink` extension
+2. Add the files the topic needs, using the names in the topic contract (`.symlink` files, `*.zsh`, `aliases.sh`)
 3. Run `dot symlink` to create symlinks
-4. Add any topic-specific scripts (install.sh, update.sh)
-5. Test with `dot test`
+4. Add `install.sh` and, if the topic needs maintenance, `update.sh`
+5. Test with `dot validate`
 
 ## Agent Integration Pattern
 
