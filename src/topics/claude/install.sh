@@ -75,7 +75,11 @@ install_claude_settings_sync() {
     mkdir -p "$HOME/Library/LaunchAgents"
     # Render to a temp file and mv over the destination so an older symlink
     # to the repo is replaced rather than written through
-    bash "$DOTFILES_CLAUDE/render-plist.sh" > "$plist_tmp"
+    if ! bash "$DOTFILES_CLAUDE/render-plist.sh" > "$plist_tmp" || [ ! -s "$plist_tmp" ]; then
+        rm -f "$plist_tmp"
+        print_error "Failed to render $plist_dst, leaving the existing plist in place" ""
+        return 1
+    fi
     mv -f "$plist_tmp" "$plist_dst"
     print_success "Rendered $plist_dst"
 

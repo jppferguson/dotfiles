@@ -14,7 +14,7 @@ setup() {
 
   mkdir -p "$HOME/.claude" "$TOPIC/agents" "$AGENTRC/skills/some-skill" "$DOTFILES/src/functions"
   cp "$REPO/src/functions/general" "$DOTFILES/src/functions/general"
-  cp "$REPO/src/topics/claude/update.sh" "$REPO/src/topics/claude/merge-settings.sh" "$REPO/src/topics/claude/render-plist.sh" "$REPO/src/topics/claude/com.jppferguson.claude-settings-sync.plist.template" "$TOPIC/"
+  cp "$REPO/src/topics/claude/install.sh" "$REPO/src/topics/claude/update.sh" "$REPO/src/topics/claude/merge-settings.sh" "$REPO/src/topics/claude/render-plist.sh" "$REPO/src/topics/claude/com.jppferguson.claude-settings-sync.plist.template" "$TOPIC/"
   touch "$TOPIC/statusline.sh" "$AGENTRC/AGENTS.md"
   echo '{"model": "opus", "env": {"A": "public"}}' > "$TOPIC/settings.json"
   echo '{"env": {"A": "local", "B": "local"}}' > "$TOPIC/settings.local.json"
@@ -95,6 +95,30 @@ EOF
   refute_contains "__DOTFILES__"
   assert_contains "<string>$DOTFILES/src/topics/claude/merge-settings.sh</string>"
   assert_contains "<string>$HOME/Library/Logs/claude-settings-sync.log</string>"
+}
+
+@test "render-plist: keeps sed and XML metacharacters in HOME and DOTFILES literal" {
+  local odd_home="$BATS_TEST_TMPDIR/a&b|c\\d<e>"
+  local odd_dotfiles="$BATS_TEST_TMPDIR/x&y|z"
+  mkdir -p "$odd_dotfiles/src/topics"
+  cp -R "$TOPIC" "$odd_dotfiles/src/topics/claude"
+
+  HOME="$odd_home" run bash "$odd_dotfiles/src/topics/claude/render-plist.sh"
+  [ "$status" -eq 0 ]
+  refute_contains "__HOME__"
+  refute_contains "__DOTFILES__"
+  assert_contains "<string>$BATS_TEST_TMPDIR/x&amp;y|z/src/topics/claude/merge-settings.sh</string>"
+  assert_contains "<string>$BATS_TEST_TMPDIR/a&amp;b|c\\d&lt;e&gt;/Library/Logs/claude-settings-sync.log</string>"
+}
+
+@test "install: leaves the live plist untouched when rendering fails" {
+  echo "<!-- live -->" > "$PLIST"
+  rm "$TOPIC/com.jppferguson.claude-settings-sync.plist.template"
+
+  run bash "$TOPIC/install.sh"
+  assert_contains "Failed to render $PLIST"
+  [ "$(cat "$PLIST")" = "<!-- live -->" ]
+  [ ! -e "$PLIST.tmp" ]
 }
 
 @test "status: reports the rendered LaunchAgent plist as ok" {
