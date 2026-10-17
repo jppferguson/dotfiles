@@ -2,6 +2,12 @@
 # deliberate just-in-case copy: src/functions/ is canonical for shared helpers
 # (e.g. extract), so do not redefine those here.
 
+# zsh autoloads src/functions/, bash does not, so source the shared helpers
+# bash needs from there
+if [ -n "$BASH_VERSION" ]; then
+    . "${DOTFILES:-$HOME/.dotfiles}/src/functions/extract"
+fi
+
 # Create a new directory and enter it
 function mkd() {
     mkdir -p "$@" && cd "$@"
