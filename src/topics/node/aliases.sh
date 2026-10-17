@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 alias ni="npm install"
 alias n="npm -s"
 alias nr="n run"
