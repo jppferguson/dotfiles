@@ -40,6 +40,17 @@ STUB
   [ "$(grep -c "git -C $HOME/.zprezto pull" "$BATS_TEST_TMPDIR/git.log")" -eq 2 ]
 }
 
+@test "prezto install.sh: updates submodules after the pull on a re-run" {
+  run bash "$REPO/src/topics/prezto/install.sh"
+  [ "$status" -eq 0 ]
+  run bash "$REPO/src/topics/prezto/install.sh"
+  [ "$status" -eq 0 ]
+  pull_line="$(grep -n "git -C $HOME/.zprezto pull" "$BATS_TEST_TMPDIR/git.log" | cut -d: -f1)"
+  submodule_line="$(grep -n "git -C $HOME/.zprezto submodule update --init --recursive" "$BATS_TEST_TMPDIR/git.log" | cut -d: -f1)"
+  [ -n "$pull_line" ]
+  [ "$submodule_line" -gt "$pull_line" ]
+}
+
 @test "prezto install.sh: leaves an existing non-git ~/.zprezto alone" {
   mkdir -p "$HOME/.zprezto"
   run bash "$REPO/src/topics/prezto/install.sh"

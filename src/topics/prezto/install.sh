@@ -22,6 +22,7 @@ if [ ! -d "${PREZTO_DIR}" ]; then
 elif [ -d "${PREZTO_DIR}/.git" ]; then
   print_block "Updating prezto"
   git -C "${PREZTO_DIR}" pull
+  git -C "${PREZTO_DIR}" submodule update --init --recursive
 else
   echo "\033[0;33mYou already have Prezto! YAY!";
   echo "\033[0mYou'll need to remove $PREZTO_DIR if you want to re-install.";
