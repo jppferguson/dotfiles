@@ -29,7 +29,7 @@ Notes:
 - A topic can be just a `path.zsh` (see `bun`, `docker`, `kimi-code`). That is a valid, complete topic.
 - `install.sh` and `update.sh` are independent and both optional. Most topics ship neither (shell-only), some only `install.sh` (`herdr`, `hammerspoon`, `z`), and a topic with both keeps them paired (`vs-code`, `fonts`). Don't add an `update.sh` that `dot update` will never run: either register it in `topgrade.toml.symlink`'s `[commands]` block, as `vs-code` does, or leave it out.
 - A `*.symlink` can be a directory (`hammerspoon/hammerspoon.symlink` becomes `~/.hammerspoon`), and a path with a `/` such as `.config/<tool>/file.symlink` keeps its structure under `$HOME`.
-- `aliases.sh` is the only alias file bash reads; `*.zsh` is zsh only. Put aliases bash also needs in `aliases.sh`.
+- `aliases.sh` is the only per-topic alias file bash reads (bash also sources the `bash` topic's own `aliases.symlink` and `functions.symlink`); `*.zsh` is zsh only. Put aliases bash also needs in `aliases.sh`.
 - The authoritative table is the "Topic contract" section of `AGENT_CONTEXT.md`; keep the two in step.
 
 ## Step 0: Decide whether a topic is viable

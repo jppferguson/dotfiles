@@ -162,7 +162,8 @@ There's a few special files in the hierarchy.
   A nested path such as `.config/ghostty/config.symlink` keeps its structure
   under `$HOME`, and a `*.symlink` directory is linked as a whole.
 - **src/topics/\*/aliases.sh**: Any file named `aliases.sh` is sourced by
-  `loadAllAliases` in both zsh and bash. It is the only topic file bash reads.
+  `loadAllAliases` in both zsh and bash. It is the only per-topic file bash reads; bash also sources
+  `~/.aliases` and `~/.functions` from the `bash` topic.
 - **src/topics/\*/install.sh**: One-off setup for the topic, run by
   `dot install <topic>` and offered by `src/script/install`.
 - **src/topics/\*/update.sh**: Maintenance for the topic, run by

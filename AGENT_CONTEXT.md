@@ -23,7 +23,7 @@ Each directory in `src/topics/<name>/` is a topic. These are the file names the 
 | `path.zsh` | `zsh/zshrc.symlink` | First of the zsh files, in alphabetical topic order (`zshrc.symlink` then re-asserts the asdf shims at the front of PATH) | zsh only |
 | `*.zsh` (any other name) | `zsh/zshrc.symlink` | After every `path.zsh` and before the completions, in alphabetical order | zsh only |
 | `completion.zsh` | `zsh/zshrc.symlink` | Last of the zsh files, after compinit | zsh only |
-| `aliases.sh` | `loadAllAliases` in `src/functions/common`, called by `zsh/zshrc.symlink` and `bash/bash_profile.symlink` | At shell start, after the zsh files | zsh and bash; the only topic file bash reads, so use it for anything bash needs |
+| `aliases.sh` | `loadAllAliases` in `src/functions/common`, called by `zsh/zshrc.symlink` and `bash/bash_profile.symlink` | At shell start, after the zsh files | zsh and bash; the only per-topic file bash reads, so use it for anything bash needs (bash also sources `~/.aliases` and `~/.functions`, linked from `bash/aliases.symlink` and `bash/functions.symlink`) |
 | `<name>.symlink` file | `install_dotfiles()` in `src/script/bootstrap` | When `dot symlink` runs | Linked to `~/.<name>` (extension stripped) |
 | `<name>.symlink` directory | `install_dotfiles()` | When `dot symlink` runs | Linked as a whole, e.g. `agentrc.symlink` to `~/.agentrc` and `hammerspoon/hammerspoon.symlink` to `~/.hammerspoon` |
 | `.config/<tool>/<file>.symlink` | `install_dotfiles()` | When `dot symlink` runs | A path containing a `/` keeps its structure under `$HOME`, e.g. `ghostty/.config/ghostty/config.symlink` to `~/.config/ghostty/config`; parent directories are created |
@@ -36,7 +36,7 @@ Topics do not have to supply both scripts. In the current tree:
 - Install-only topics are never touched by an update: `agentrc.symlink`, `hammerspoon`, `herdr`, `php`, `z`.
 - Topics with both scripts pair them: `claude`, `duti`, `fonts`, `homebrew`, `macos`, `prezto`, `vs-code`.
 - No topic is update-only. `node` has `aliases.sh` and `huskyrc.symlink` but no scripts, so there is no `dot install node`; global npm packages are updated by topgrade.
-- `set-*.sh` files (in `macos`) are helpers called from a topic's own scripts, not entry points.
+- `set-*.sh` files (in `macos`) are helpers called from a topic's own scripts, except `set-dock.sh`, which `dot dock` sources directly, so changing it changes that command.
 
 ### Key Topics
 
