@@ -55,7 +55,7 @@ You can find this script in `src/bin/`. Run `dot help` to see all available comm
 To install these dotfiles without Git:
 
 ```bash
-cd; curl -#L https://github.com/jppferguson/dotfiles/tarball/master | tar -xzv --strip-components 1 --exclude={README.md}
+cd; curl -#L https://github.com/jppferguson/dotfiles/tarball/main | tar -xzv --strip-components 1 --exclude={README.md}
 src/script/bootstrap
 ```
 
