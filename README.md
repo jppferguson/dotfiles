@@ -111,7 +111,7 @@ The recognised file names are listed under Components below; the "Topic contract
 - **homebrew** - Package management via Brewfile
 - **kimi-code** - Adds the Kimi Code CLI to PATH
 - **macos** - macOS system defaults (YAML-based configuration)
-- **node** - Node.js aliases and husky hook config
+- **node** - Node.js aliases
 - **prezto** - Zsh framework configuration
 - **topgrade** - Tool for updating all package managers at once
 - **vs-code** - Visual Studio Code settings and keybindings

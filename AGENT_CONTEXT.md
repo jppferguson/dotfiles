@@ -32,10 +32,10 @@ Each directory in `src/topics/<name>/` is a topic. These are the file names the 
 
 Topics do not have to supply both scripts. In the current tree:
 
-- Many topics ship no install or update script, because the tool is installed elsewhere or the topic is only shell config: `bun` (`path.zsh`, `completion.zsh`), `pnpm`, `docker` and `kimi-code` (`path.zsh` only), `git` and `system` (aliases and shell config), `node`, `asdf`, `bash`, `zsh`.
-- Install-only topics are never touched by an update: `agentrc.symlink`, `hammerspoon`, `herdr`, `php`, `z`.
+- Many topics ship no install or update script, because the tool is installed elsewhere or the topic is only shell config: `bun` (`path.zsh`, `completion.zsh`), `pnpm`, `php`, `docker` and `kimi-code` (`path.zsh` only), `git` and `system` (aliases and shell config), `node`, `asdf`, `bash`, `zsh`.
+- Install-only topics are never touched by an update: `agentrc.symlink`, `hammerspoon`, `herdr`, `z`.
 - Topics with both scripts pair them: `claude`, `duti`, `fonts`, `homebrew`, `macos`, `prezto`, `vs-code`.
-- No topic is update-only. `node` has `aliases.sh` and `huskyrc.symlink` but no scripts, so there is no `dot install node`; global npm packages are updated by topgrade.
+- No topic is update-only. `node` has only `aliases.sh` and no scripts, so there is no `dot install node`; global npm packages are updated by topgrade.
 - `set-*.sh` files (in `macos`) are helpers called from a topic's own scripts, except `set-dock.sh`, which `dot dock` sources directly, so changing it changes that command.
 
 ### Key Topics
@@ -45,7 +45,7 @@ Topics do not have to supply both scripts. In the current tree:
 - `homebrew/` - Brewfile for package management
 - `macos/` - macOS defaults in YAML format
 - `vs-code/` - VS Code settings and keybindings, plus the tracked extension list (`extensions.txt`, installed by `install.sh`, drift shown by `update.sh`)
-- `node/` - Node.js aliases and the husky hook config
+- `node/` - Node.js aliases
 - `asdf/` - Version management for Node.js and other tools
 
 ## Key Commands & Workflows
