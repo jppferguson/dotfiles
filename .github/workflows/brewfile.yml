@@ -1,0 +1,19 @@
+name: Brewfile Check
+on:
+  schedule:
+    # 06:00 UTC on the 1st of each month
+    - cron: "0 6 1 * *"
+  workflow_dispatch:
+
+jobs:
+  brewfile:
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v7
+      # Not `brew bundle check`: on a clean runner it reports every entry as
+      # missing, so it could never pass. This asserts instead that each
+      # declared tap, formula and cask still exists and is not deprecated,
+      # disabled or renamed.
+      - name: Check Brewfile entries still exist
+        run: bash src/script/brewfile-check

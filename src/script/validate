@@ -27,7 +27,7 @@ check_shellcheck () {
   )
   shellcheck --severity=warning \
     src/script/bootstrap src/script/install src/script/update \
-    src/script/init src/script/test src/script/test-dev src/script/test-linux src/script/validate \
+    src/script/brewfile-check src/script/init src/script/test src/script/test-dev src/script/test-linux src/script/validate \
     src/topics/git/hooks/run-hook \
     src/functions/general src/functions/common \
     "${scripts[@]}" \

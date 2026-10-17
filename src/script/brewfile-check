@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+#
+# Check that every tap, formula and cask declared in a Brewfile still exists
+# and is installable. Catches Homebrew rot (renamed, removed or disabled
+# entries) before it breaks a fresh machine setup.
+#
+# Usage: brewfile-check [path/to/Brewfile]   (defaults to homebrew/Brewfile.symlink)
+#
+# Decisions:
+# - Deprecated, disabled and renamed entries FAIL rather than warn. A warning
+#   on a monthly CI run is never read, and each of those states means the
+#   Brewfile needs editing before it stops working. A rename shows up as
+#   `brew info` resolving to a different name than the one declared.
+# - `mas` entries are skipped: the Mac App Store cannot be queried on a runner.
+# - Each entry is checked separately so one bad line cannot hide the others.
+#
+###############################################################################
+
+cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1
+
+brewfile="${1:-src/topics/homebrew/Brewfile.symlink}"
+
+if [ ! -f "$brewfile" ]
+then
+  echo "Brewfile not found: $brewfile" >&2
+  exit 2
+fi
+
+failed=()
+checked=0
+
+fail () {
+  echo "FAIL $1: $2"
+  failed+=("$1")
+}
+
+list_entries () {
+  brew bundle list --file="$brewfile" "--$1" 2>/dev/null
+}
+
+# Taps first, so tap-qualified formulae and casks resolve below
+while IFS= read -r tap
+do
+  [ -z "$tap" ] && continue
+  checked=$((checked + 1))
+  if brew tap "$tap" >/dev/null 2>&1
+  then
+    echo "ok   tap $tap"
+  else
+    fail "tap $tap" "brew tap failed"
+  fi
+done < <(list_entries tap)
+
+check_package () {
+  local kind="$1" name="$2" info resolved problem
+  checked=$((checked + 1))
+
+  if ! info=$(brew info "--json=v2" "--$kind" "$name" 2>/dev/null)
+  then
+    fail "$kind $name" "not found"
+    return
+  fi
+
+  if [ "$kind" = "formula" ]
+  then
+    resolved=$(jq -r '.formulae[0] | [.name, .full_name] | @tsv' <<< "$info")
+    problem=$(jq -r '.formulae[0] | if .disabled then "disabled" elif .deprecated then "deprecated" else empty end' <<< "$info")
+  else
+    resolved=$(jq -r '.casks[0] | [.token, .full_token] | @tsv' <<< "$info")
+    problem=$(jq -r '.casks[0] | if .disabled then "disabled" elif .deprecated then "deprecated" else empty end' <<< "$info")
+  fi
+
+  if [ -n "$problem" ]
+  then
+    fail "$kind $name" "$problem"
+  elif [[ "$name" != "${resolved%%$'\t'*}" && "$name" != "${resolved##*$'\t'}" ]]
+  then
+    fail "$kind $name" "renamed to ${resolved%%$'\t'*}"
+  else
+    echo "ok   $kind $name"
+  fi
+}
+
+while IFS= read -r formula
+do
+  [ -n "$formula" ] && check_package formula "$formula"
+done < <(list_entries formula)
+
+while IFS= read -r cask
+do
+  [ -n "$cask" ] && check_package cask "$cask"
+done < <(list_entries cask)
+
+echo
+echo "Checked $checked entries, ${#failed[@]} failed"
+[ ${#failed[@]} -eq 0 ]

@@ -150,7 +150,7 @@ There's a few special files in the hierarchy.
 - **src/bin/**: Anything in `src/bin/` will get added to your `$PATH` and be made
   available everywhere.
 - **src/functions/**: Shell functions that get loaded into your environment.
-- **src/script/**: Installation and maintenance scripts (bootstrap, install, test, etc.).
+- **src/script/**: Installation and maintenance scripts (bootstrap, install, test, etc.). `src/script/brewfile-check [Brewfile]` verifies every declared tap, formula and cask still exists and is not deprecated, disabled or renamed; a monthly workflow runs it.
 - **src/topics/\*/\*.zsh**: Any files ending in `.zsh` get loaded into your
   environment.
 - **src/topics/\*/path.zsh**: Any file named `path.zsh` is loaded first and is
