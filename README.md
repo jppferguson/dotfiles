@@ -4,11 +4,19 @@ Dotfiles are all those files beginning with a "." in your user directory and mak
 
 ## Installation
 
-### Using Git and the bootstrap script
+### One command (fresh Mac)
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/jppferguson/dotfiles/main/src/script/setup)"
+```
+
+`src/script/setup` installs the [Xcode Command Line Tools](https://developer.apple.com/downloads) (click through the dialog that opens) and Homebrew if they are missing, clones the repo to `~/.dotfiles` (or pulls if it is already there), then runs `src/script/bootstrap`. It is safe to re-run. Use `bash -c "$(curl …)"` rather than `curl … | bash`, so the bootstrap prompts can still read from the terminal. macOS only for now.
+
+### Manual install with Git and the bootstrap script
 
 You can clone the repository wherever you want. (I like to keep it in `~/.dotfiles`).
 
-The installation step requires the [XCode Command Line Tools](https://developer.apple.com/downloads), although you *should* be prompted to install these if you don't have them installed already.
+This needs the Xcode Command Line Tools for `git`; run `xcode-select --install` first on a fresh Mac.
 
 ### Backups
 
@@ -50,7 +58,7 @@ You can find this script in `src/bin/`. Run `dot help` to see all available comm
 - **`dot upgrade`** - Alias for `dot update`
 - **`dot validate`** - Run every check: gitleaks over the full history, shellcheck, zsh syntax, markdownlint and tests. A global gitleaks pre-commit hook (`src/topics/git/hooks/`, enabled through `core.hooksPath` in the gitconfig) blocks staged secrets in every repo and hands off to each repo's own hooks. Repos that set their own `core.hooksPath` (husky) bypass it and need gitleaks added to their husky config. On a machine set up before the global hook existed, `dot symlink` adds `core.hooksPath` to the existing gitconfig and drops this repo's old `.githooks` setting; check with `git config --show-origin --get core.hooksPath`. The hook refuses to commit when gitleaks is not installed
 
-### Git-free install
+### Manual Git-free install
 
 To install these dotfiles without Git:
 

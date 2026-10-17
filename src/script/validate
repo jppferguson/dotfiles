@@ -26,7 +26,7 @@ check_shellcheck () {
     find src/topics -name 'aliases.sh' -o -name 'install.sh' -o -name 'update.sh' -o -name 'set-*.sh' | grep -v prezto
   )
   shellcheck --severity=warning \
-    src/script/bootstrap src/script/install src/script/update \
+    src/script/bootstrap src/script/install src/script/setup src/script/update \
     src/script/brewfile-check src/script/init src/script/test src/script/test-dev src/script/test-linux src/script/validate \
     src/topics/git/hooks/run-hook \
     src/functions/general src/functions/common \

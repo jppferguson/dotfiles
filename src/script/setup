@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+#
+# One-command setup for a fresh Mac: installs the Xcode Command Line Tools and
+# Homebrew, clones (or updates) ~/.dotfiles, then hands over to bootstrap.
+#
+#   bash -c "$(curl -fsSL https://raw.githubusercontent.com/jppferguson/dotfiles/main/src/script/setup)"
+#
+# Runs before the repo exists locally, so it must not source src/script/init or
+# src/functions/general. Safe to re-run on a machine that is already set up.
+#
+###############################################################################
+
+set -euo pipefail
+
+DOTFILES="${DOTFILES:-$HOME/.dotfiles}"
+DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/jppferguson/dotfiles.git}"
+
+info () {
+  printf '\r  [ \033[00;34m..\033[0m ] %s\n' "$1"
+}
+
+fail () {
+  printf '\r\033[2K  [\033[0;31mFAIL\033[0m] %s\n' "$1" >&2
+  exit 1
+}
+
+if [ "$(uname -s)" != "Darwin" ]
+then
+  fail "$(uname -s) is not supported yet: only macOS is. Linux and Raspberry Pi support is tracked in the Raspberry Pi epic (doto c947aa29)."
+fi
+
+# xcode-select --install only opens a GUI dialog and returns straight away,
+# so wait for the tools to land before anything needs git
+if ! xcode-select -p > /dev/null 2>&1
+then
+  info "Installing the Xcode Command Line Tools: follow the dialog that opens"
+  xcode-select --install
+  until xcode-select -p > /dev/null 2>&1
+  do
+    sleep 5
+  done
+fi
+
+if ! command -v brew > /dev/null 2>&1
+then
+  info "Installing Homebrew"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # The installer does not add brew to this shell's PATH
+  if ! command -v brew > /dev/null 2>&1
+  then
+    for brew_bin in /opt/homebrew/bin/brew /usr/local/bin/brew
+    do
+      if [ -x "$brew_bin" ]
+      then
+        eval "$("$brew_bin" shellenv)"
+        break
+      fi
+    done
+  fi
+fi
+
+if [ -d "$DOTFILES/.git" ]
+then
+  info "Updating $DOTFILES"
+  git -C "$DOTFILES" pull --ff-only
+else
+  info "Cloning $DOTFILES_REPO to $DOTFILES"
+  git clone "$DOTFILES_REPO" "$DOTFILES"
+fi
+
+exec "$DOTFILES/src/script/bootstrap"
