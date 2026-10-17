@@ -75,7 +75,11 @@ wt() {
         
         # Open the new worktree folder in the configured editor
         echo "Opening worktree in $EDITOR..."
-        "$EDITOR" "$worktree_path"
+        # ${=EDITOR} word-splits so EDITOR values with arguments (code -n) work
+        if ! ${=EDITOR} "$worktree_path"; then
+            echo "Error: Failed to open worktree in $EDITOR"
+            return 1
+        fi
         echo "Successfully created worktree '$feature_name'"
     else
         echo "Error: Failed to create worktree"
