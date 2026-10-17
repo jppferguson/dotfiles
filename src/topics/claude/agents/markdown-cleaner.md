@@ -1,7 +1,7 @@
 ---
 name: markdown-cleaner
 description: Use this agent when markdown files need formatting cleanup, markdownlint fixes, British English standardisation, or structural consistency improvements (headings, lists, tables, links). Works on single files or batches.
-tools: Read, Edit, MultiEdit, Write, Bash, Glob, Grep, WebFetch
+tools: Read, Edit, Write, Bash, Glob, Grep, WebFetch
 model: haiku
 color: yellow
 ---

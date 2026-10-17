@@ -34,7 +34,7 @@ Dev servers:
 Verification:
 
 - After a fix, verify it yourself (run the test, check the output, tail the logs) before telling me it works. For visual/CSS changes, confirm the rendered result rather than assuming.
-- If the project has a validation script (`yarn validate`, lint, tests), run it before presenting work as done.
+- If the project has a validation script (`yarn validate`, lint, tests), run it after making changes and fix any failures before presenting work as done.
 
 Scope:
 
