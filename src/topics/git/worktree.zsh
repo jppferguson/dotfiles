@@ -1,6 +1,3 @@
-# Prepend claude to PATH to take precedence over asdf
-export PATH="$HOME/.claude/local:$HOME/.claude/local/node_modules/.bin:$PATH"
-
 # Function to create a git worktree with a dedicated worktrees folder
 wt() {
     # Array of additional directories to copy (customize this list as needed)
@@ -76,9 +73,9 @@ wt() {
             fi
         done
         
-        # Open the new worktree folder in VSCode
-        echo "Opening worktree in VSCode..."
-        code -n "$worktree_path"
+        # Open the new worktree folder in the configured editor
+        echo "Opening worktree in $EDITOR..."
+        "$EDITOR" "$worktree_path"
         echo "Successfully created worktree '$feature_name'"
     else
         echo "Error: Failed to create worktree"

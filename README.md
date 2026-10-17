@@ -69,6 +69,8 @@ The repository includes several custom git commands in `src/topics/git/`:
 - **`git-undo`** - Undo the last commit
 - **`git-unpushed`** - Show unpushed commits
 - **`git-wtf`** - Show the current git status in detail
+- **`wt`** - Create a git worktree and branch in a sibling `-worktrees` folder, then open it in `$EDITOR`
+- **`wt-clean`** - Remove a worktree created by `wt` and delete its branch
 
 ### Other Utilities
 
