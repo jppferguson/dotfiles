@@ -4,7 +4,10 @@
 assume_yes = true
 # pnpm: the asdf shim runs an older npm-installed pnpm whose global bin dir
 # differs from Homebrew's, and nothing is installed globally with pnpm anyway
-disable = ["node", "pnpm"]
+# opencode, uv: installed and updated by Homebrew; topgrade can't parse
+# `opencode -v` and the uv step blocks on the cache lock held by long-running
+# uvx MCP servers, with no uv tools or managed Pythons to upgrade
+disable = ["node", "pnpm", "opencode", "uv"]
 display_time = false
 cleanup = true
 pre_sudo = true
