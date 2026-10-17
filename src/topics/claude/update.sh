@@ -41,7 +41,9 @@ done
 # What merge-settings.sh would write right now, key-sorted for comparison
 expected_settings() {
     if [ -f "$DOTFILES_CLAUDE/settings.local.json" ]; then
-        jq -s '.[0] * .[1]' "$DOTFILES_CLAUDE/settings.json" "$DOTFILES_CLAUDE/settings.local.json" | jq -S .
+        # One jq call, so invalid JSON in either file is a non-zero exit
+        # rather than empty output from the second stage of a pipe
+        jq -S -s '.[0] * .[1]' "$DOTFILES_CLAUDE/settings.json" "$DOTFILES_CLAUDE/settings.local.json"
     else
         jq -S . "$DOTFILES_CLAUDE/settings.json"
     fi
@@ -124,7 +126,11 @@ show_diff() {
         return 1
     fi
 
-    local live
+    local live expected
+    if ! expected="$(expected_settings 2>/dev/null)"; then
+        echo "dot claude diff: settings.json or settings.local.json in $DOTFILES_CLAUDE is not valid JSON" >&2
+        return 1
+    fi
     if [ -L "$SETTINGS" ]; then
         echo "$SETTINGS is a symlink, expected a generated merge"
     elif [ ! -e "$SETTINGS" ]; then
@@ -133,7 +139,7 @@ show_diff() {
         echo "$SETTINGS is not valid JSON"
     else
         diff -u --label "merge of settings.json + settings.local.json" \
-            --label "$SETTINGS" <(expected_settings) <(echo "$live") || true
+            --label "$SETTINGS" <(echo "$expected") <(echo "$live") || true
     fi
 
     local pair dst src

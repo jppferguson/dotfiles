@@ -109,6 +109,18 @@ setup() {
   [[ "$output" == *"missing $TOPIC/merge-settings.sh"* ]]
 }
 
+@test "diff: exits 1 when a repo settings file is not valid JSON" {
+  for broken in settings.json settings.local.json; do
+    cp "$TOPIC/$broken" "$BATS_TEST_TMPDIR/$broken.good"
+    echo '{"env": ' > "$TOPIC/$broken"
+    run bash "$TOPIC/update.sh" diff
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"is not valid JSON"* ]]
+    [[ "$output" != *"+++"* ]]
+    cp "$BATS_TEST_TMPDIR/$broken.good" "$TOPIC/$broken"
+  done
+}
+
 @test "diff: no longer falls through to the usage message" {
   run bash "$TOPIC/update.sh" diff
   [[ "$output" != *"Usage"* ]]
