@@ -69,7 +69,7 @@ setup_gitconfig () {
 # repo-local core.hooksPath=.githooks would override the global one and now
 # points at a deleted directory, leaving this repo with no secret scan.
 migrate_git_hooks () {
-  local gitconfig="${1:-src/topics/git/gitconfig.symlink}" repo="${2:-$DOTFILES}"
+  local gitconfig="$1" repo="$2"
 
   if [ -f "$gitconfig" ] && ! git config --file "$gitconfig" --get core.hooksPath > /dev/null
   then
@@ -190,6 +190,6 @@ then
 
   create_localrc
   setup_gitconfig
-  migrate_git_hooks
+  migrate_git_hooks src/topics/git/gitconfig.symlink "$DOTFILES"
   install_dotfiles
 fi

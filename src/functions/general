@@ -259,11 +259,13 @@ newest_backup_for () {
   return 0
 }
 
-# Prints the canonical path a symlink points at. BSD realpath fails on a
-# dangling link, so fall back to resolving the immediate target's directory.
+# Prints the canonical path a symlink points at. For a dangling link, resolve
+# only the immediate target's directory: BSD realpath fails outright there,
+# while GNU realpath follows the chain to the missing file, so neither can be
+# used as is without the two platforms disagreeing.
 resolved_link_target () {
   local link="$1" raw parent
-  realpath "$link" 2>/dev/null && return 0
+  [ -e "$link" ] && realpath "$link" && return 0
   raw=$(readlink "$link") || return 1
   [[ "$raw" == /* ]] || raw="$(dirname "$link")/$raw"
   parent=$(realpath "$(dirname "$raw")" 2>/dev/null) || return 1

@@ -11,13 +11,12 @@ DOTFILES_CLAUDE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES="$(cd "$DOTFILES_CLAUDE/../../.." && pwd)"
 
 # Escape a value for use as a sed replacement (\ & and the | delimiter), after
-# XML-escaping it since the result lands inside <string> elements
+# XML-escaping it since the result lands inside <string> elements. Done in sed
+# rather than ${value//</&lt;}, because bash 5.2 expands & in that replacement
+# to the matched text while macOS's bash 3.2 does not
 escape_replacement() {
-    local value="$1"
-    value="${value//&/&amp;}"
-    value="${value//</&lt;}"
-    value="${value//>/&gt;}"
-    printf '%s' "$value" | sed -e 's/[\\&|]/\\&/g'
+    printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' \
+        -e 's/[\\&|]/\\&/g'
 }
 
 home_escaped="$(escape_replacement "$HOME")"
