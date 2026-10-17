@@ -149,4 +149,4 @@ This file is part of the Agentrc standards system. These global tech stack defau
 
 ---
 
-_Customize this file with your organization's preferred tech stack. These defaults are used when initializing new projects with Agentrc._
+*Customize this file with your organization's preferred tech stack. These defaults are used when initializing new projects with Agentrc.*

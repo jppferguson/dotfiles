@@ -1,0 +1,67 @@
+// Encodes ~/.agentrc/standards/markdown-style.md. Run via `dot validate markdown`.
+{
+  "config": {
+    "default": true,
+
+    // Headings: ATX only, single H1, sequential levels, no trailing punctuation
+    "MD001": true,
+    "MD003": { "style": "atx" },
+    "MD025": true,
+    "MD026": { "punctuation": ".,;:!" },
+
+    // Lists: hyphens, 2-space nesting, blank lines around blocks
+    "MD004": { "style": "dash" },
+    "MD007": { "indent": 2 },
+    "MD029": { "style": "one_or_ordered" },
+    "MD032": true,
+
+    // Code: fenced with a backtick fence and a language on every block
+    "MD031": true,
+    "MD040": true,
+    "MD046": { "style": "fenced" },
+    "MD048": { "style": "backtick" },
+
+    // Spacing: no trailing whitespace, LF endings, one trailing newline
+    "MD009": { "br_spaces": 0 },
+    "MD010": true,
+    "MD022": true,
+    "MD047": true,
+
+    // Emphasis and rules: *italic*, **bold**, ---
+    "MD035": { "style": "---" },
+    "MD049": { "style": "asterisk" },
+    "MD050": { "style": "asterisk" },
+
+    // Disabled, with reasons:
+
+    // The style guide sets no line length, and prose here is deliberately
+    // left unwrapped so diffs stay per-sentence
+    "MD013": false,
+
+    // The style guide's own examples and the standards files use bold lead-in
+    // lines as labels; promoting each to a heading would change their structure
+    "MD036": false,
+
+    // The style guide wants two blank lines before major headings, which
+    // markdownlint cannot require, and MD012 would forbid; the single blank
+    // line before headings is enforced by MD022 instead
+    "MD012": false,
+
+    // code-style.md shows an HTML example with a <div> outside a code fence;
+    // the style guide has no rule against inline HTML
+    "MD033": false,
+
+    // The style guide prefers a descriptive first heading but does not require
+    // one on every file (e.g. skill files start with YAML front matter)
+    "MD041": false
+  },
+
+  // Vendored, generated or per-machine markdown, plus agent prompt files
+  // whose front matter and prose layout are consumed by Claude Code itself
+  "ignores": [
+    "**/node_modules/**",
+    "**/_backup/**",
+    "**/gstack/**",
+    "src/topics/claude/agents/**"
+  ]
+}

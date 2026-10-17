@@ -119,7 +119,7 @@ dot duti
 - Mirror the function under test (e.g., `functions.bats` for `src/functions/general`)
 - Follow the `@test "function(): does thing"` pattern
 - Remove `skip` guards once a scenario is implemented
-- Always run `dot validate` (secrets, shellcheck, zsh syntax, tests) before opening a PR
+- Always run `dot validate` (secrets, shellcheck, zsh syntax, markdown, tests) before opening a PR
 - Extend coverage whenever introducing new shell utilities
 - Capture terminal excerpts or screenshots when you touch interactive commands so reviewers can confirm UX changes.
 

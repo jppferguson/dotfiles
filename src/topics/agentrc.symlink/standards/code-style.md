@@ -111,4 +111,4 @@ end
 
 ---
 
-_Customize this file with your team's specific style preferences. These formatting rules apply to all code written by humans and AI agents._
+*Customize this file with your team's specific style preferences. These formatting rules apply to all code written by humans and AI agents.*

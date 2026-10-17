@@ -12,6 +12,7 @@ brew 'dockutil'
 brew 'duti'
 brew 'gitleaks'
 brew 'jq'
+brew 'markdownlint-cli2'
 brew 'shellcheck'
 brew 'topgrade'
 

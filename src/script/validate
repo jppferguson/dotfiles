@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Run every dotfiles check: secrets, shellcheck, zsh syntax and the test suite.
+# Run every dotfiles check: secrets, shellcheck, zsh syntax, markdown and the test suite.
 # Pass check names to run a subset, e.g. `validate shellcheck zsh`.
 #
 ###############################################################################
@@ -43,12 +43,18 @@ check_zsh () {
   return "$failed"
 }
 
+check_markdown () {
+  # Tracked files only, so untracked scratch notes never fail the check;
+  # vendored and generated paths are excluded in .markdownlint-cli2.jsonc
+  git ls-files -z '*.md' | xargs -0 markdownlint-cli2
+}
+
 check_test () {
   bats test/*.bats
 }
 
 checks=("$@")
-[ ${#checks[@]} -eq 0 ] && checks=(secrets shellcheck zsh test)
+[ ${#checks[@]} -eq 0 ] && checks=(secrets shellcheck zsh markdown test)
 
 failed=()
 for check in "${checks[@]}"

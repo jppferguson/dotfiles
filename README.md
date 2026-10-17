@@ -8,11 +8,11 @@ Dotfiles are all those files beginning with a "." in your user directory and mak
 
 You can clone the repository wherever you want. (I like to keep it in `~/.dotfiles`).
 
-The installation step requires the [XCode Command Line Tools](https://developer.apple.com/downloads), although you _should_ be prompted to install these if you don't have them installed already.
+The installation step requires the [XCode Command Line Tools](https://developer.apple.com/downloads), although you *should* be prompted to install these if you don't have them installed already.
 
 ### Backups
 
-Fair warning: The bootstrap script _attempts_ to backup existing dotfiles in your HOME directory, but to be safe you should probably make your own copy...
+Fair warning: The bootstrap script *attempts* to backup existing dotfiles in your HOME directory, but to be safe you should probably make your own copy...
 
 ```sh
 git clone https://github.com/jppferguson/dotfiles.git ~/.dotfiles
@@ -46,7 +46,7 @@ You can find this script in `src/bin/`. Run `dot help` to see all available comm
 - **`dot test`** - Run tests
 - **`dot update`** - Update all packages via topgrade
 - **`dot upgrade`** - Alias for `dot update`
-- **`dot validate`** - Run every check: gitleaks over the full history, shellcheck, zsh syntax and tests. A gitleaks pre-commit hook (`.githooks/`, enabled by `dot symlink`) blocks staged secrets
+- **`dot validate`** - Run every check: gitleaks over the full history, shellcheck, zsh syntax, markdownlint and tests. A gitleaks pre-commit hook (`.githooks/`, enabled by `dot symlink`) blocks staged secrets
 
 ### Git-free install
 

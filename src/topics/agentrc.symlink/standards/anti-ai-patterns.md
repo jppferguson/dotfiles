@@ -13,6 +13,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
 ### Typography and Formatting
 
 **Never use em dashes (—)**
+
 - Use hyphens (-) or restructure sentences instead
 - Em dashes are a telltale sign of AI-generated content
 - Examples:
@@ -21,6 +22,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
   - ✅ "This function (which calculates totals) is critical"
 
 **Never use emojis**
+
 - Do not add emojis to code, comments, or commit messages
 - Exception: Only when explicitly requested by the user
 - Examples:
@@ -32,6 +34,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
 ### Comments and Documentation
 
 **Never add unnecessary comments above code**
+
 - Do not comment code that is self-explanatory
 - Only comment the "why" behind non-obvious decisions
 - Never comment what the code does if it's clear from reading it
@@ -44,6 +47,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
     `processBatch(items, BATCH_SIZE)`
 
 **Never over-explain obvious code**
+
 - Avoid verbose documentation for simple, self-evident functions
 - Don't add docstrings that just restate the function name
 - Examples:
@@ -52,6 +56,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
   - ✅ `function getUserName() { ... }` (no comment needed)
 
 **Avoid conversational language in code**
+
 - Never use "Let's", "We'll", "Now we", etc. in comments
 - Write declarative statements instead
 - Examples:
@@ -61,6 +66,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
   - ✅ "// Validate input format"
 
 **Avoid qualifying language**
+
 - Never use "simply", "just", "easily", "obviously" in comments or docs
 - These words are filler and often condescending
 - Examples:
@@ -72,6 +78,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
 ### Variable and Function Naming
 
 **Never use generic placeholder names**
+
 - Avoid: `data`, `result`, `response`, `temp`, `value`, `item` (unless truly generic)
 - Use specific, descriptive names that indicate purpose
 - Examples:
@@ -81,6 +88,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
   - ✅ `const monthlyTotal = calculate(x, y)`
 
 **Never create single-use "helper" functions**
+
 - Don't abstract code that's only used once
 - Don't create utilities for one-time operations
 - Inline the logic instead
@@ -89,6 +97,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
 ### Code Completeness
 
 **Never add TODO or placeholder comments**
+
 - Either implement the feature completely or don't add it
 - Never leave "TODO: implement this" comments
 - Never use placeholder text like "your code here"
@@ -99,6 +108,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
   - ✅ Implement error handling completely or leave it out
 
 **Never add incomplete implementations**
+
 - Don't scaffold code with the intention of "filling it in later"
 - Don't create empty functions or classes
 - Either build it completely or don't create it
@@ -106,6 +116,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
 ### Code Organization
 
 **Never add backwards-compatibility hacks**
+
 - Don't rename unused variables with underscore prefix (`_unused`)
 - Don't re-export types for backwards compatibility
 - Don't add `// removed` comments for deleted code
@@ -116,6 +127,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
   - ✅ Delete the unused code entirely
 
 **Never over-engineer solutions**
+
 - Don't add configuration options for hypothetical future needs
 - Don't create abstractions for code that appears only once or twice
 - Three similar lines of code is better than a premature abstraction
@@ -127,6 +139,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
 ### Git Commits
 
 **Never write generic commit messages**
+
 - Avoid vague messages like "update files", "fix bug", "changes"
 - Be specific about what changed and why
 - Examples:
@@ -139,6 +152,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
 ### Error Handling
 
 **Don't add defensive checks for impossible scenarios**
+
 - Trust internal code and framework guarantees
 - Only validate at system boundaries (user input, external APIs)
 - Don't add error handling for scenarios that can't happen
@@ -151,6 +165,7 @@ This file is part of the Agentrc standards system. These rules specifically targ
 ### Language and Tone
 
 **Avoid overly formal or academic language**
+
 - Write clear, direct comments in plain language
 - Don't use unnecessarily complex words
 - Examples:
@@ -170,4 +185,4 @@ This file is part of the Agentrc standards system. These rules specifically targ
 
 ---
 
-_These rules help ensure AI-generated code is indistinguishable from human-written code. Update this file as new AI patterns emerge._
+*These rules help ensure AI-generated code is indistinguishable from human-written code. Update this file as new AI patterns emerge.*

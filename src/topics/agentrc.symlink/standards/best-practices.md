@@ -57,4 +57,4 @@ When adding third-party dependencies:
 
 ---
 
-_Customize this file with your team's specific practices. These guidelines apply to all code written by humans and AI agents._
+*Customize this file with your team's specific practices. These guidelines apply to all code written by humans and AI agents.*

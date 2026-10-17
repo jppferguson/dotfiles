@@ -46,7 +46,7 @@ sub_help () {
   echo "   test             Run tests"
   echo "   update           Update packages and pkg managers (brew, casks, cargo, pip3, npm, gems, macOS)"
   echo "   upgrade          Alias for update"
-  echo "   validate {check} Run all checks, or only the named ones (secrets shellcheck zsh test)"
+  echo "   validate {check} Run all checks, or only the named ones (secrets shellcheck zsh markdown test)"
 }
 
 sub_clean () {
