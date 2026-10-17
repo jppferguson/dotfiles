@@ -42,8 +42,10 @@ You can find this script in `src/bin/`. Run `dot help` to see all available comm
 - **`dot macos`** - Apply macOS system defaults
 - **`dot reload`** - Reload shell configuration
 - **`dot symlink`** - Re-run bootstrap to create/update symlinks
+- **`dot symlink --prune [--yes]`** - List (or, with `--yes`, remove) dangling `$HOME` symlinks left by deleted topics
 - **`dot test`** - Run tests
 - **`dot update`** - Update all packages via topgrade
+- **`dot upgrade`** - Alias for `dot update`
 - **`dot validate`** - Run every check: gitleaks over the full history, shellcheck, zsh syntax and tests. A gitleaks pre-commit hook (`.githooks/`, enabled by `dot symlink`) blocks staged secrets
 
 ### Git-free install
@@ -59,23 +61,25 @@ src/script/bootstrap
 
 ### Git Helpers
 
-The repository includes several custom git commands in `src/topics/git/`:
+The repository includes several custom git commands in `src/bin/`:
 
 - **`git-all`** - Stage all unstaged files
 - **`git-amend`** - Amend commits easily
+- **`git-copy-branch-name`** - Copy the current branch name to the clipboard
 - **`git-nuke`** - Remove branches locally and remotely
-- **`git-switcheroo`** - Switch between branches quickly
-- **`git-track`** - Track remote branches
+- **`git-switcheroo`** - Switch a git remote between HTTPS and SSH
 - **`git-undo`** - Undo the last commit
 - **`git-unpushed`** - Show unpushed commits
 - **`git-wtf`** - Show the current git status in detail
-- **`wt`** - Create a git worktree and branch in a sibling `-worktrees` folder, then open it in `$EDITOR`
-- **`wt-clean`** - Remove a worktree created by `wt` and delete its branch
+- **`wt`** (`src/topics/git/worktree.zsh`) - Create a git worktree and branch in a sibling `-worktrees` folder, then open it in `$EDITOR`
+- **`wt-clean`** (`src/topics/git/worktree.zsh`) - Remove a worktree created by `wt` and delete its branch
 
 ### Other Utilities
 
 Additional commands available in `src/bin/`:
 
+- **`agrep`** - Search for strings across files in large websites
+- **`claude-usage`** - Track Claude Code session usage against monthly limits
 - **`e`** - Quick edit command
 - **`gitgui`** - Open git GUI
 - **`search`** - Search for files
@@ -88,6 +92,7 @@ forked dotfiles — say, "Java" — you can simply add a `java` directory under 
 files in there. Anything with an extension of `.zsh` will get automatically
 included into your shell. Anything with an extension of `.symlink` will get
 symlinked without extension into `$HOME` when you run `src/script/bootstrap`.
+Anything named `aliases.sh` is picked up by `loadAllAliases` (`src/functions/common`) in both zsh and bash.
 
 ### Key Topics Included
 
@@ -113,25 +118,26 @@ symlinked without extension into `$HOME` when you run `src/script/bootstrap`.
 Two topics manage AI coding agent configuration, wired into place with per-item symlinks so every tweak is tracked in git:
 
 - **`src/topics/agentrc.symlink/`** (symlinked to `~/.agentrc`) - agent-agnostic config shared by Claude Code, Codex, Gemini and OpenCode: global instructions (`AGENTS.md`), skills and standards. See its [README](src/topics/agentrc.symlink/README.md).
-- **`src/topics/claude/`** - Claude Code specifics: `settings.json`, `statusline.sh` and subagents (`agents/`).
+- **`src/topics/claude/`** - Claude Code specifics: `settings.json`, a gitignored `settings.local.json` overlay, `statusline.sh`, hooks and subagents (`agents/`).
 
 ### How it's wired
 
 `src/topics/claude/install.sh` symlinks individual items into `~/.claude` (never the whole directory, which holds runtime state):
 
-- `~/.claude/settings.json`, `statusline.sh`, `agents/` → `src/topics/claude/`
+- `~/.claude/statusline.sh`, `agents/` → `src/topics/claude/`
+- `~/.claude/settings.json` is a generated merge of `settings.json` and the gitignored `settings.local.json` (see `merge-settings.sh`), kept current by a `claude-settings-sync` LaunchAgent whose plist is rendered from `com.jppferguson.claude-settings-sync.plist.template` into `~/Library/LaunchAgents/`
 - `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.gemini/GEMINI.md`, `~/.config/opencode/AGENTS.md` → `src/topics/agentrc.symlink/AGENTS.md`
 - `~/.claude/skills/<name>` → `src/topics/agentrc.symlink/skills/<name>` (individual links; the skills directory itself stays real because other tools install skills there too)
 
 ### Commands
 
-- **`dot claude status`** - Check symlink health
-- **`dot claude sync`** - Repair symlinks (pre-existing real files are backed up to `~/.claude/backups/`)
+- **`dot claude status`** - Check symlink, merged settings and LaunchAgent health
+- **`dot claude sync`** - Re-merge settings, re-render and reload the LaunchAgent, and repair symlinks (pre-existing real files are backed up to `~/.claude/backups/`)
 - **`dot claude backup`** - Create a manual backup of the linked config
 
 ### Workflow
 
-Edit files in the repo (or in `~/.claude` - symlinks write through), then commit from the dotfiles repo. Changes apply to new agent sessions immediately; no sync step needed.
+Edit files in the repo (or in `~/.claude` - symlinks write through), then commit from the dotfiles repo. Changes apply to new agent sessions immediately. Edit `settings.json` or `settings.local.json` in the repo, not the generated `~/.claude/settings.json`: the LaunchAgent re-merges within seconds.
 
 ## Components
 

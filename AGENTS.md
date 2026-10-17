@@ -8,7 +8,7 @@ This guide outlines Codex-specific practices for collaborating on the dotfiles r
 
 - Treat `AGENT_CONTEXT.md` as the canonical source for structure, commands, style, and testing expectations.
 - If you add general guidance, update the shared context first and then reference it here—never duplicate content that other agents will need.
-- Keep the marker `<!-- AGENT_CONTEXT: ./AGENT_CONTEXT.md -->` intact so tooling can locate the shared file; mirror this pattern in other agent docs.
+- Keep the marker `<!-- AGENT_CONTEXT: ./AGENT_CONTEXT.md -->` intact as a pointer to the shared file; nothing in the repo parses it, so it is a convention for readers. Mirror this pattern in other agent docs.
 
 ## Codex Workflow
 

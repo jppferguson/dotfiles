@@ -20,6 +20,7 @@ Each topic directory can contain:
 
 - `*.symlink` - Files symlinked to $HOME (without extension)
 - `*.zsh` - Automatically sourced by ZSH
+- `aliases.sh` - Aliases loaded in zsh and bash by `loadAllAliases` (`src/functions/common`)
 - `path.zsh` - Loaded first to setup PATH
 - `completion.zsh` - Loaded last for autocomplete
 - `install.sh` - Topic-specific installation script
@@ -74,7 +75,7 @@ dot reload
 
 # Install specific topic configuration
 dot install {topic}
-# Example: dot install node
+# Example: dot install prezto
 ```
 
 ### macOS-specific Commands
@@ -109,7 +110,6 @@ dot duti
 - Use topic-based organization for new configurations
 - Files ending in `.zsh` auto-load into shell environment
 - `.symlink` files map into `$HOME` when `dot symlink` runs
-- Keep personal notes in `___NOTES.md`
 - Leave shared docs under the repo root
 
 ## Testing Guidelines
@@ -134,16 +134,16 @@ bats test/functions.bats
 ## Package Management
 
 - **Primary**: Homebrew (see Brewfile.symlink)
-- **Node.js**: asdf version manager (Node.js 23.1.0)
+- **Node.js and other runtimes**: managed by asdf; the versions are pinned per machine in `~/.tool-versions` (which differs between machines), so check that file rather than relying on a version written here
 - **Updates**: topgrade updates all package managers at once; `topgrade.toml.symlink`'s `[commands]` block owns global npm package updates (`npm update --location global --force`) — `node/npm-global` and `node/update.sh` were removed as dead code, since `dot update` never called them
 
 ## Security & Configuration
 
 - Treat dotfiles as public: never commit secrets or machine-specific tokens
 - Use `~/.localrc` for local machine-specific configuration (not in git)
-- Claude/agent assets are symlinked live: `~/.claude/*` items link into `src/topics/claude/`, and `~/.agentrc` links to `src/topics/agentrc.symlink/` (shared cross-agent config: AGENTS.md, skills, standards). Edits apply immediately; run `dot claude status` to verify link health, `dot claude sync` only to repair links
+- Claude/agent assets are symlinked live: `~/.claude/*` items link into `src/topics/claude/` (except `~/.claude/settings.json`, a generated merge of `settings.json` and the gitignored `settings.local.json`, re-merged by a LaunchAgent rendered from `com.jppferguson.claude-settings-sync.plist.template`), and `~/.agentrc` links to `src/topics/agentrc.symlink/` (shared cross-agent config: AGENTS.md, skills, standards). Edits apply immediately; run `dot claude status` to verify link health, `dot claude sync` only to repair links
 - Review `zsh/zshrc.symlink` updates carefully—call out any path changes in PRs
-- Keep shared documentation under the repository root and reserve `___NOTES.md` for personal scratch notes.
+- Keep shared documentation under the repository root
 
 ## Git Workflow & Conventions
 
@@ -155,12 +155,14 @@ bats test/functions.bats
 
 ### Custom Git Commands
 
-The repository includes many custom git commands in `src/topics/git/`:
+The repository includes custom git commands in `src/bin/` (the `git-*` files there; `ls src/bin` is the source of truth), for example:
 
-- `git-all` - Operations on all repos in a directory
+- `git-all` - Stage all unstaged files
 - `git-amend` - Amend commits
-- `git-nuke` - Remove branches
-- `git-track` - Track remote branches
+- `git-nuke` - Remove branches locally and remotely
+- `git-undo` - Undo the last commit
+
+The `wt` and `wt-clean` worktree helpers are shell functions in `src/topics/git/worktree.zsh`.
 
 ## Shell Environment
 
@@ -188,7 +190,7 @@ Uses ZSH with Prezto framework. Key files:
 
 ## Agent Integration Pattern
 
-- Add the marker `<!-- AGENT_CONTEXT: ./AGENT_CONTEXT.md -->` near the top of each agent file so automation can discover the shared guidance.
+- Add the marker `<!-- AGENT_CONTEXT: ./AGENT_CONTEXT.md -->` near the top of each agent file as a convention for pointing at the shared guidance (nothing in this repo reads it programmatically).
 - Link to `[AGENT_CONTEXT.md](./AGENT_CONTEXT.md)` within agent docs for easy human navigation.
 - Keep agent-specific nuances (editor setup, tooling differences, prompt guidance) in their dedicated files while updating this context for anything shared across agents.
 
