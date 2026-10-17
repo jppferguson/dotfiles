@@ -32,6 +32,12 @@ for skill in "$AGENTRC"/skills/*/; do
     LINKS+=("$CLAUDE_DIR/skills/$name|${skill%/}")
 done
 
+# Repo hooks are linked individually too (~/.claude/hooks stays real so
+# machine-local hooks can live there); only the repo's own hooks are checked
+for hook in "$DOTFILES_CLAUDE"/hooks/*; do
+    LINKS+=("$CLAUDE_DIR/hooks/$(basename "$hook")|$hook")
+done
+
 # What merge-settings.sh would write right now, key-sorted for comparison
 expected_settings() {
     if [ -f "$DOTFILES_CLAUDE/settings.local.json" ]; then

@@ -15,13 +15,16 @@ setup() {
   mkdir -p "$HOME/.claude" "$TOPIC/agents" "$AGENTRC/skills/some-skill" "$DOTFILES/src/functions"
   cp "$REPO/src/functions/general" "$DOTFILES/src/functions/general"
   cp "$REPO/src/topics/claude/install.sh" "$REPO/src/topics/claude/update.sh" "$REPO/src/topics/claude/merge-settings.sh" "$REPO/src/topics/claude/render-plist.sh" "$REPO/src/topics/claude/com.jppferguson.claude-settings-sync.plist.template" "$TOPIC/"
-  touch "$TOPIC/statusline.sh" "$AGENTRC/AGENTS.md"
+  mkdir -p "$TOPIC/hooks" "$HOME/.claude/hooks"
+  touch "$TOPIC/statusline.sh" "$AGENTRC/AGENTS.md" "$TOPIC/hooks/session-start-title.sh" "$TOPIC/hooks/user-prompt-title.sh"
   echo '{"model": "opus", "env": {"A": "public"}}' > "$TOPIC/settings.json"
   echo '{"env": {"A": "local", "B": "local"}}' > "$TOPIC/settings.local.json"
 
   ln -s "$TOPIC/statusline.sh" "$HOME/.claude/statusline.sh"
   ln -s "$TOPIC/agents" "$HOME/.claude/agents"
   ln -s "$AGENTRC/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+  ln -s "$TOPIC/hooks/session-start-title.sh" "$HOME/.claude/hooks/session-start-title.sh"
+  ln -s "$TOPIC/hooks/user-prompt-title.sh" "$HOME/.claude/hooks/user-prompt-title.sh"
   mkdir -p "$HOME/.claude/skills"
   ln -s "$AGENTRC/skills/some-skill" "$HOME/.claude/skills/some-skill"
   bash "$TOPIC/merge-settings.sh"
@@ -62,6 +65,46 @@ EOF
 
   run bash "$TOPIC/update.sh" status
   [ "$status" -eq 0 ]
+}
+
+@test "status: reports each linked repo hook as ok" {
+  run bash "$TOPIC/update.sh" status
+  [ "$status" -eq 0 ]
+  assert_contains "ok      $HOME/.claude/hooks/session-start-title.sh"
+  assert_contains "ok      $HOME/.claude/hooks/user-prompt-title.sh"
+}
+
+@test "status: reports a missing hook link and exits 1" {
+  rm "$HOME/.claude/hooks/session-start-title.sh"
+
+  run bash "$TOPIC/update.sh" status
+  [ "$status" -eq 1 ]
+  assert_contains "missing $HOME/.claude/hooks/session-start-title.sh"
+}
+
+@test "status: flags a hook replaced by a real file" {
+  rm "$HOME/.claude/hooks/user-prompt-title.sh"
+  echo "#!/bin/sh" > "$HOME/.claude/hooks/user-prompt-title.sh"
+
+  run bash "$TOPIC/update.sh" status
+  [ "$status" -eq 1 ]
+  assert_contains "drift   $HOME/.claude/hooks/user-prompt-title.sh (real file, not a symlink)"
+}
+
+@test "status: ignores machine-local hooks that are not in the repo" {
+  echo "#!/bin/sh" > "$HOME/.claude/hooks/herdr-agent-state.sh"
+
+  run bash "$TOPIC/update.sh" status
+  [ "$status" -eq 0 ]
+  refute_contains "herdr-agent-state.sh"
+}
+
+@test "status: picks up a new repo hook without editing update.sh" {
+  touch "$TOPIC/hooks/new-hook.sh"
+
+  run bash "$TOPIC/update.sh" status
+  [ "$status" -eq 1 ]
+  assert_contains "missing $HOME/.claude/hooks/new-hook.sh"
 }
 
 @test "status: reports the LaunchAgent as not loaded" {
