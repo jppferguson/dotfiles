@@ -56,7 +56,7 @@ setup() {
 
   install_dotfiles
 
-  # src/script/bootstrap:144's `find -maxdepth 3` is one level short of this
+  # src/script/bootstrap:145's `find -maxdepth 3` is one level short of this
   # real ghostty topic shape, so the symlink is silently never created. This
   # locks in today's (buggy) behaviour; when -maxdepth 3 is fixed, flip this
   # assertion to expect the symlink so it then guards against regressing back.
@@ -104,4 +104,18 @@ setup() {
   [ -L "$dst" ]
   [ "$(readlink "$dst")" = "$src" ]
   [ "$(cat "$BACKUP_DIR/existing")" = original ]
+}
+
+@test "install_dotfiles(): the existing-file prompt reads the answer from stdin, not the find loop" {
+  DOTFILES_TOPIC_ROOT="$BATS_TEST_TMPDIR/topics"
+  mkdir -p "$DOTFILES_TOPIC_ROOT/sometopic"
+  echo content > "$DOTFILES_TOPIC_ROOT/sometopic/existing.symlink"
+  echo content > "$DOTFILES_TOPIC_ROOT/sometopic/fresh.symlink"
+  echo original > "$HOME/.existing"
+
+  install_dotfiles <<< 'S'
+
+  [ ! -L "$HOME/.existing" ]
+  [ "$(cat "$HOME/.existing")" = original ]
+  [ -L "$HOME/.fresh" ]
 }

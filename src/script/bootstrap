@@ -124,7 +124,8 @@ install_dotfiles () {
 
   local overwrite_all=false backup_all=false skip_all=false
 
-  while IFS= read -r -d '' src
+  # Read the file list on fd 3 so link_file's prompt still reads from stdin
+  while IFS= read -r -d '' src <&3
   do
     # Path within the topic, e.g. "zshrc.symlink" or ".config/topgrade.toml.symlink"
     local rel="${src#"$DOTFILES_TOPIC_ROOT"/}"
@@ -141,7 +142,7 @@ install_dotfiles () {
       dst="$HOME/.$rel"
     fi
     link_file "$src" "$dst"
-  done < <(find "$DOTFILES_TOPIC_ROOT" -maxdepth 3 -name '*.symlink' -print0)
+  done 3< <(find "$DOTFILES_TOPIC_ROOT" -maxdepth 3 -name '*.symlink' -print0)
 }
 
 setup_git_hooks () {
