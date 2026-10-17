@@ -2,9 +2,6 @@
 # Identity (user.name, user.email) and credential.helper are per machine and
 # live in ~/.gitconfig.local, written by setup_gitconfig in src/script/bootstrap.
 
-[include]
-    path = ~/.gitconfig.local
-
 [alias]
 
     ####################
@@ -125,9 +122,9 @@
     # Configure Git on OS X to properly handle line endings
     autocrlf = input
     safecrlf = warn
-    # Set default git editor; shells over SSH override it with GIT_EDITOR
-    # (see aliases.sh) since VS Code is not available there
-    editor = code --wait
+    # VS Code locally, vim over SSH or without `code`; absolute path because
+    # non-interactive SSH commands do not have src/bin on PATH
+    editor = ~/.dotfiles/src/bin/code-or-vim
     # don't ignore case
     ignorecase = false
 
@@ -194,3 +191,8 @@
     default = simple
     # Create the upstream branch on the first push
     autoSetupRemote = true
+
+
+# Last so per-machine values override the shared ones above
+[include]
+    path = ~/.gitconfig.local

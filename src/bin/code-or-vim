@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# Git editor: VS Code locally, vim over SSH or where `code` is missing.
+# Set as core.editor in the git topic's gitconfig.symlink. A script rather than
+# a GIT_EDITOR export so non-interactive SSH commands (which never source
+# aliases.sh) get the fallback too.
+###############################################################################
+
+if [ -n "${SSH_CONNECTION:-}" ] || [ -n "${SSH_TTY:-}" ] || ! command -v code >/dev/null 2>&1
+then
+  exec vim "$@"
+fi
+
+exec code --wait "$@"
