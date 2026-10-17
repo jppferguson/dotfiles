@@ -6,7 +6,9 @@
 REPO="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
 
 @test "dot: derives DOTFILES from its own location when unset" {
-  run env -u DOTFILES -u TERM "$REPO/src/bin/dot" cd --help
+  # dot cd execs an interactive $SHELL, so give it EOF or it waits on the
+  # caller's stdin forever
+  run env -u DOTFILES -u TERM SHELL=/bin/sh "$REPO/src/bin/dot" cd </dev/null
   [[ "$output" != *"No such file or directory"* ]]
   run env -u DOTFILES -u TERM bash -c "$REPO/src/bin/dot help >/dev/null && echo ok"
   [ "$status" -eq 0 ]
