@@ -25,6 +25,17 @@ xattr -d com.apple.FinderInfo "${HOME}/Library" 2> /dev/null || true
 # Show the /Volumes folder
 sudo chflags nohidden /Volumes
 
+# The next two are root-owned files, so they cannot live in defaults/*.yaml:
+# macos-defaults backs up a plist before changing it, and that copy fails for
+# /Library/Preferences even with sudo: true
+
+# Reveal IP address, hostname, OS version, etc. when clicking the clock in the
+# login window
+sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+
+# Disable automatic Time Machine backups
+sudo defaults write /Library/Preferences/com.apple.TimeMachine AutoBackup -bool false
+
 # Remove duplicates in the “Open With” menu
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
