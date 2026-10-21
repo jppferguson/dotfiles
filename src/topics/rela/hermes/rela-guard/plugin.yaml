@@ -1,0 +1,7 @@
+name: rela-guard
+version: 1.0.0
+description: "Blocks tool calls in a checkout whose Rela .context/policy.yaml denies Hermes or its model's vendor."
+author: "jppferguson"
+kind: standalone
+provides_hooks:
+  - pre_tool_call

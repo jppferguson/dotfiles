@@ -33,7 +33,7 @@ Each directory in `src/topics/<name>/` is a topic. These are the file names the 
 Topics do not have to supply both scripts. In the current tree:
 
 - Many topics ship no install or update script, because the tool is installed elsewhere or the topic is only shell config: `bun` (`path.zsh`, `completion.zsh`), `pnpm`, `php`, `docker` and `kimi-code` (`path.zsh` only), `git` and `system` (aliases and shell config), `node`, `asdf`, `bash`, `zsh`.
-- Install-only topics are never touched by an update: `agentrc.symlink`, `hammerspoon`, `herdr`, `z`.
+- Install-only topics are never touched by an update: `agentrc.symlink`, `hammerspoon`, `herdr`, `rela`, `z`.
 - Topics with both scripts pair them: `claude`, `duti`, `fonts`, `homebrew`, `macos`, `prezto`, `vs-code`.
 - No topic is update-only. `node` has only `aliases.sh` and no scripts, so there is no `dot install node`; global npm packages are updated by topgrade.
 - `set-*.sh` files (in `macos`) are helpers called from a topic's own scripts, except `set-dock.sh`, which `dot dock` sources directly, so changing it changes that command.

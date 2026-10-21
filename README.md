@@ -121,6 +121,7 @@ The recognised file names are listed under Components below; the "Topic contract
 - **macos** - macOS system defaults (YAML-based configuration)
 - **node** - Node.js aliases
 - **prezto** - Zsh framework configuration
+- **rela** - Rela local agent guard: a `codex` wrapper, a Claude Code hook and a Hermes plugin that refuse to run where a checkout's `.context/policy.yaml` denies the agent
 - **ssh** - Shared SSH client config with an untracked `~/.ssh/config.local` for private hosts
 - **topgrade** - Tool for updating all package managers at once
 - **vs-code** - Visual Studio Code settings and keybindings

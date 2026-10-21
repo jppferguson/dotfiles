@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Rela guard wrapper: refuses to start Codex where .context/policy.yaml denies it, otherwise hands off to the real
+# codex further down PATH. Running codex by absolute path skips it (see lib/guard.sh).
+
+self_dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+. "$self_dir/../lib/guard.sh"
+
+rela_guard codex "$PWD" || exit 1
+
+IFS=: read -ra path_dirs <<< "$PATH"
+for dir in "${path_dirs[@]}"; do
+    [ -n "$dir" ] || continue
+    [ "$(cd -P -- "$dir" 2>/dev/null && pwd)" = "$self_dir" ] && continue
+    if [ -x "$dir/codex" ] && [ ! -d "$dir/codex" ]; then
+        exec "$dir/codex" "$@"
+    fi
+done
+
+echo "rela guard: no codex on PATH besides this wrapper ($self_dir/codex)" >&2
+exit 127
