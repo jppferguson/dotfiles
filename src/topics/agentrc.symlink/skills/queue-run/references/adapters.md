@@ -13,14 +13,14 @@ Load the version-matched guide first: `orca skills get orchestration`.
 | `reply` | `orca orchestration reply --run <run> --id <msg id> --body "..."` |
 | `send` | `orca orchestration send --run <run> --to dispatch:<ctx> --subject ... --body ...` |
 | `wait()` | `orca orchestration check --run <run> --ack <last delivery> --wait --types "worker_done,escalation,question,status" --timeout-ms 590000 --json`, run in the background |
-| `release` | `orca orchestration worker-release --dispatch <ctx>` |
+| `release` | `orca terminal rename --terminal <term> --title "DONE, safe to close: <task>"`, then `orca orchestration worker-release --dispatch <ctx>`; `<term>` is the dispatch's `agentTerminalHandle` from `worker-list --json` |
 
 Notes:
 
 - Only one active waiter per run (`waiter_exists`). "You have N orchestration messages" nudges do not need a second check while a waiter is running; if they repeat with no waiter wake-up, peek with `check --json` (no `--wait`): they are usually heartbeats, which you acknowledge with `--ack`.
 - Output interleaves `_keepalive` lines with JSON objects. Parse with a streaming JSON decoder in a script file, not an inline one-liner.
 - `--worktree current` puts every worker in the coordinator's checkout; the task workflow itself must create per-task worktrees.
-- A finished worker's terminal can stay open (`user_owned`, `retained`). Releasing is still correct; the user can close the tab.
+- Release refuses to close a terminal it considers taken over by the user (`retained`, `user_takeover`), and merely opening or focusing the tab can trigger that. Never substitute `terminal close`. Renaming the tab before releasing means a retained tab still says it is finished and safe to close.
 - `worker-read --dispatch <ctx> --source terminal` shows what a quiet worker is doing.
 
 ## Claude Code subagents (Agent tool)
