@@ -4,5 +4,5 @@ git_protocol: ssh
 editor: code --wait
 prompt: enabled
 aliases:
-  co: pr checkout
-  prs: pr list
+    co: pr checkout
+    prs: pr list
