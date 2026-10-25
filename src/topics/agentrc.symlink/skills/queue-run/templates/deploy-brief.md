@@ -6,6 +6,7 @@ Batch (task id, merge sha, review verdict, deploy need):
 {{BATCH}}
 
 Steps:
+
 1. If every line is deploy=skip-*, go to step 4.
 2. Request a deploy: {{DEPLOY_REQUEST}}. One request covers the whole batch.
 3. Wait until a successful deploy covers every SHA. Coverage is the ONLY exit condition: a deploy covers a SHA when `git merge-base --is-ancestor <sha> <deployed commit>` succeeds. Never wait for "nothing pending"; other work keeps shipping. Read status with {{DEPLOY_STATUS}} and history with {{DEPLOY_HISTORY}}. Poll every 60 s inside a single command; give up after {{DEPLOY_TIMEOUT}} and report. On a failed deploy, find which app failed.

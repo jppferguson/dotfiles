@@ -3,6 +3,7 @@ Target: {{REPO_PATH}} and the {{TRACKER}} queue.
 Change: pick up and complete exactly ONE task by running {{PICKUP}}. Let it choose the task, so priority order and claim exclusivity come from the tracker. Other workers are doing the same in parallel; if your claim is rejected because another worker holds the task, let it pick another.
 
 Constraints:
+
 - Follow {{PICKUP}} in full, with TWO exceptions:
   1. SHIP LOCK. Before shipping, use the blocking ask to send the coordinator: "READY TO SHIP <task id prefix> <title>". Do not ship until the reply is GO (if WAIT, ask again later). The moment your merge is pushed to main, send a non-blocking "SHIP DONE <task id prefix> <sha>".
   2. DEPLOYS ARE DELEGATED. Do not deploy and do not finalise the task; a deploy worker does both. After SHIP DONE, only: (a) record the merge commit on the task; (b) record an honest review verdict (passed | needs_human), saying the deploy is delegated; (c) finish.

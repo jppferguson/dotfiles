@@ -58,7 +58,7 @@ Concurrent squash-merges onto a shared main race each other. Workers therefore a
 
 Task workers stop at the push. After SHIP DONE they record the commit and their review verdict in the tracker, then finish with a done message whose first line is exactly:
 
-```
+```text
 HANDOFF <task id> sha=<merge sha> verdict=<passed|needs_human|none> deploy=<needed|skip-test-only|skip-no-app> acs=<checked>/<total>
 ```
 
