@@ -51,8 +51,21 @@ Concurrent squash-merges onto a shared main race each other. Workers therefore a
 - If nobody holds the lock, reply `GO` and record the holder. Otherwise queue the question by its message id and reply later, in order.
 - The worker sends `SHIP DONE <task> <sha>` the moment its merge is pushed. That releases the lock. Deploying is **not** inside the lock.
 - In every GO, name what has landed on main since the worker started if it may conflict ("rebase; X just reshaped file Y").
+- Before replying GO, check that the worker's two numstats (`main...HEAD` and `main HEAD`) match. If they differ, its base is stale and the merge would revert another commit, so reply "rebase first" instead. On one run, 5 of 9 ships needed this.
+- Every GO names the head sha it approves. A worker ships only at that sha, so a GO that arrives late or twice cannot ship unreviewed work.
+- Put every instruction in the GO itself ("don't finalise", "no deploy"). A follow-up correction can arrive after the worker has acted on it.
+- On an orchestrator where idle notices and replies cross (Claude Code subagents), expect duplicate replies. Resend a GO only once, and ignore a repeated SHIP DONE.
 
-**Conditional GO for live-host work.** If the task touches something running on the host (launchd/systemd jobs, a reverse-proxy config, process killers, cron definitions, credentials), make the GO conditional: the worker must confirm that no committed test can reach the real thing (stubs injected by absolute path or environment, not PATH order alone) and that its own testing left the live config unchanged. Check it yourself after the ship.
+**Conditional GO for live-host work.** If the task touches something running on the host (launchd/systemd jobs, a reverse-proxy config, process killers, cron definitions, credentials), make the GO conditional: the worker must confirm that no committed test can reach the real thing (stubs injected by absolute path or environment, not PATH order alone) and that its own testing left the live config unchanged. Check it yourself after the ship. Once the change is live, check the running result as well as the config: which domain or session the service now runs in, whether its children still reach the credentials they need, and whether the process count is unchanged. A watchdog moved to a system domain once left every child process without login-keychain access, and nothing noticed for an hour.
+
+### Epics: one integration branch, one deploy
+
+When the user wants an epic's children built in parallel but shipped together:
+
+- Cut a local integration branch from main.
+- Workers branch from it and stay in their own scope. They squash, then fast-forward into it with `git push --no-verify . HEAD:refs/heads/<branch>`. Skip the pre-push hook on these local pushes: its lock can block for minutes, and the worker's own checks are the gate.
+- Run children that touch disjoint files in parallel, and start dependants only once their base has landed.
+- When all children are in, rebase a copy onto main in a fresh worktree and run the affected checks once. Then squash it to main as one commit referencing every child, request one deploy, and verify the live result.
 
 ### Hand-off and deploy batching
 
@@ -81,6 +94,20 @@ Workers escalate when they hit something only the coordinator or user can fix (t
 ### Interruptions from the user
 
 The user may ask questions mid-run. Answer them, and keep the waiter running; do not let a conversation stall the queue.
+
+### Resuming after a coordinator restart
+
+A coordinator restart (a resume, a crash, or compaction into a new process) can kill the background workers with no notice. Before you spawn anything new, reconcile every worker the state file lists as active:
+
+- If the task is in review with a commit on its branch that is not on main, review it and ship it yourself.
+- If the task is in progress with an expired lease, check its worktree. Hand the task back to the queue with a reason if nothing was committed, or resume it in that worktree if work exists.
+- If you find uncommitted churn that is only build output (lockfiles, generated pod files), discard it and remove the worktree.
+
+Record what you did in the state file.
+
+### Deploy coverage when one app keeps failing
+
+If a single app fails every drain for an unrelated reason, no drain ever reports overall success. Judge coverage per app instead: the drain's head contains the batch SHAs, and every app the batch touched shows `done`. Report the failing app separately.
 
 ## Step 3: Winding down
 
