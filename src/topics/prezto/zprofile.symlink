@@ -50,9 +50,12 @@ typeset -gU cdpath fpath mailpath path
 # Set the list of directories that Zsh searches for programs.
 # asdf's shims go first so version-managed tools beat Homebrew's copies (e.g.
 # node) in login shells that never read .zshrc, such as `zsh -lc` from a
-# LaunchAgent, where asdf/path.zsh doesn't load.
+# LaunchAgent, where asdf/path.zsh doesn't load. ~/.local/bin is here for the
+# same reason: user-installed CLIs (claude, hermes, pipx tools) live there and
+# system/path.zsh only adds it for interactive shells.
 path=(
   ${ASDF_DATA_DIR:-$HOME/.asdf}/shims(N)
+  $HOME/.local/bin(N)
   $HOME/{,s}bin(N)
   /opt/{homebrew,local}/{,s}bin(N)
   /usr/local/{,s}bin(N)
