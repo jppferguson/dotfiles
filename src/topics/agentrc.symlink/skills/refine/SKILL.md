@@ -25,6 +25,8 @@ Rela projects are keyed by the doto project ID, so the same ID is normally the R
 
 Actor: `agent:claude-code` when Claude runs this, `agent:codex` when Codex does.
 
+Doto server: use the local `doto` MCP tools when they can see the project (`get_project` succeeds). If the local server reports the project as not found but the claude.ai Doto connector can see it, use the connector and say so in the report. The connector refuses `requiresHumanReview` and `refinementStatus` and has no `refine_task`, `break_down_task` or link tools: write everything else with `update_task`, and list the refused fields and any break-down as manual steps in the refinement comment.
+
 ## Step 1: Load the rules
 
 1. Field guidelines: read `~/Development/Personal/personal-os/apps/doto/lib/refine-prompt.md`. It is the single source of truth for every `refine_task` field (description, ACs, requirements, `requiresHumanReview`, type classification, eli5, icon, break-down of l/xl work). It is written for personal-os, so translate its specifics (the `pnpm validate` command, Mac Mini infrastructure, `apps/<slug>` project inference) to this project's equivalents. If the file is unavailable (cloud session), follow the field descriptions in the `refine_task` tool schema.
@@ -33,7 +35,7 @@ Actor: `agent:claude-code` when Claude runs this, `agent:codex` when Codex does.
 ## Step 2: Pick the tasks
 
 - Task ID: `get_task`. Search term: `search_tasks` with `search` and the resolved `projectId`. Either way, check the task belongs to the resolved project before going further; one from another project is reported, not refined with this project's rules.
-- Otherwise `search_tasks` with `refinementStatus: ["raw", "refining"]`, the resolved `projectId`, `sortBy: "priority"` and `limit: 30` (page with `cursor` if every result shares the top priority). Within a priority tier prefer `refining` over `raw`, then tasks that are not blocked. Take up to `--limit`.
+- Otherwise `search_tasks` with `refinementStatus: ["raw", "refining"]`, the resolved `projectId` and `limit: 100`, paging with `cursor` until `hasMore` is false. Order the results yourself (urgent > high > medium > low > none); the server's priority sort is not in that order. Within a priority tier prefer `refining` over `raw`, then tasks that are not blocked, then the earliest due date. Skip tasks tagged `rela-proposal` and tasks assigned to a human: those are decisions for a person, not work to refine. Take up to `--limit`.
 
 If a task is already `refined` or `approved`, only refine it when it was named explicitly, and use `update_task` rather than `refine_task`. When that changes the scope or ACs of an approved task, also set `refinementStatus: "refined"` so the old approval does not carry over to the new specification.
 
