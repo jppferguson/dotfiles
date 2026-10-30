@@ -22,6 +22,7 @@ Notes:
 - `--worktree current` puts every worker in the coordinator's checkout; the task workflow itself must create per-task worktrees.
 - Release refuses to close a terminal it considers taken over by the user (`retained`, `user_takeover`), and merely opening or focusing the tab can trigger that. Never substitute `terminal close`. Renaming the tab before releasing means a retained tab still says it is finished and safe to close.
 - `worker-read --dispatch <ctx> --source terminal` shows what a quiet worker is doing.
+- **Codex workers:** the same `worker-start` with `--agent codex` (and a Codex `--model` if the profile names one), each in its own worktree via `--worktree new-child`. A Codex worker's cross-model review uses Claude (`claude -p --permission-mode plan`).
 
 ## Claude Code subagents (Agent tool)
 

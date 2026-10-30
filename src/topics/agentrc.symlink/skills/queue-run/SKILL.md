@@ -34,7 +34,9 @@ Also read the adapter for the orchestrator you are running under. If the user ha
 
 ## Step 1: Set up the run
 
-- **Worker count:** what the user asked for. Default 3. Each worker is a full agent session, so check host memory before going above 4.
+- **Worker count:** run `~/.agentrc/scripts/agent-capacity.sh` (pass the profile's `--per-worker-gb` if it sets one) and use the smaller of its `workers=` figure and what the user asked for (default 3). Re-run it before every replacement worker; if it has dropped, let the pool shrink instead of replacing. If it reports 0, start nothing: tell the user the machine is short of memory and re-check every few minutes (a background `until` loop on the script, not a sleep).
+- **Model mix:** if the profile allows Codex workers, alternate Claude and Codex workers. Each worker's cross-model review then uses the other family, as the pickup skill requires.
+- **Rela baselines:** each task's baseline is its own `Rela snapshot:` line (from refinement, or taken when its worker claims it). Record each in the state file next to the task.
 - **Models:** task workers on the profile's model (often the session default); the deploy worker on a cheap model (it only runs commands and reads status).
 - **Scratchpad:** write the filled-in worker brief (`templates/worker-brief.md` + profile), the deploy brief (`templates/deploy-brief.md` + profile), and a state file `queue-state.md` (layout below).
 - Start N task workers.
@@ -52,6 +54,7 @@ Concurrent squash-merges onto a shared main race each other. Workers therefore a
 - The worker sends `SHIP DONE <task> <sha>` the moment its merge is pushed. That releases the lock. Deploying is **not** inside the lock.
 - In every GO, name what has landed on main since the worker started if it may conflict ("rebase; X just reshaped file Y").
 - Before replying GO, check that the worker's two numstats (`main...HEAD` and `main HEAD`) match. If they differ, its base is stale and the merge would revert another commit, so reply "rebase first" instead. On one run, 5 of 9 ships needed this.
+- Before every GO, run the Rela drift check from `~/.agentrc/references/rela-gate.md` against that task's own baseline. Never advance a shared baseline. If a decision or an open brief proposal affects the task, reply `HOLD <reason>` instead of GO: the worker comments on the task, hands it back and finishes without shipping. Tell the user once per change, not once per worker.
 - Every GO names the head sha it approves. A worker ships only at that sha, so a GO that arrives late or twice cannot ship unreviewed work.
 - Put every instruction in the GO itself ("don't finalise", "no deploy"). A follow-up correction can arrive after the worker has acted on it.
 - On an orchestrator where idle notices and replies cross (Claude Code subagents), expect duplicate replies. Resend a GO only once, and ignore a repeated SHIP DONE.
@@ -99,7 +102,7 @@ The user may ask questions mid-run. Answer them, and keep the waiter running; do
 
 A coordinator restart (a resume, a crash, or compaction into a new process) can kill the background workers with no notice. Before you spawn anything new, reconcile every worker the state file lists as active:
 
-- If the task is in review with a commit on its branch that is not on main, review it and ship it yourself.
+- If the task is in review with a commit on its branch that is not on main, first check how it ships under the profile. If it ships by PR (for example `requiresHumanReview: true`) and a PR already exists, leave it for the human. Otherwise review it, run the Rela drift check against its baseline, take the ship lock and ship it yourself the way the profile says.
 - If the task is in progress with an expired lease, check its worktree. Hand the task back to the queue with a reason if nothing was committed, or resume it in that worktree if work exists.
 - If you find uncommitted churn that is only build output (lockfiles, generated pod files), discard it and remove the worktree.
 
@@ -130,12 +133,13 @@ Keep `queue-state.md` current after every message, so a compaction or crash lose
 - How the loop runs: the exact commands and templates for this orchestrator
 - Current: lock holder and queue, active worker handles, deploy worker and its batch, deploy queue, last acknowledged message id
 - Results: per task, outcome and SHA
-- Decisions the user made, incidents and their workarounds
+- Decisions the user made (also written to Rela, per the gate's write-back rules), incidents and their workarounds
+- Each in-flight task's Rela baseline snapshot line
 
 ## Hard-won rules
 
 - One waiter. A second fails, or worse, steals messages.
 - Write wrapper scripts to files and test them on a sample before relying on them. A quoting bug in an inline parser can silently eat a delivery.
-- Watch host memory. N task workers + a deploy worker + you is N+2 agent sessions; on a 16 GB machine, 4 task workers is about the limit.
+- Watch host memory. N task workers + a deploy worker + you is N+2 agent sessions plus N validation runs. `agent-capacity.sh` accounts for that; trust it over a fixed number.
 - A slot spent deploying is a slot not implementing. That is why deploys are delegated.
 - Code that the deploy pipeline itself runs (the deployer, cron definitions outside the app tree) is usually not redeployed by a normal deploy. The profile should list these and the manual step each needs.

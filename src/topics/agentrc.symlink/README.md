@@ -12,9 +12,16 @@ Anything Claude-specific (settings.json, subagents, statusline) lives in `src/to
   - `~/.gemini/GEMINI.md -> ~/.agentrc/AGENTS.md` (if Gemini is installed)
   - `~/.config/opencode/AGENTS.md -> ~/.agentrc/AGENTS.md` (if OpenCode is installed)
 - `skills/` - global skills, one directory per skill with a `SKILL.md`. Symlinked to `~/.claude/skills`; other agents that support the skills format can point at the same directory.
-  - `next-task` - work the next doto ticket end to end and hand off for review
+  - `next-task` - work the next doto ticket end to end and hand off for review (`--ship` to merge or open a PR per the project's shipping policy)
+  - `refine` - refine raw doto tasks against the code and the Rela brief, with a cross-model review before writing back
+  - `queue-run` - coordinate parallel Claude and Codex workers through the doto queue, one ship at a time
   - `session-wrap` - end-of-session housekeeping (memory, skill suggestions, stale artifacts)
   - `init-agent-context` - set up the AGENT_CONTEXT.md cross-agent pattern in a project
+- `references/` - procedures shared by several skills:
+  - `rela-gate.md` - Rela snapshots, the drift check before irreversible steps, and writing decisions back
+- `scripts/` - helpers the skills call:
+  - `agent-capacity.sh` - how many parallel workers the machine's free memory allows
+  - `check-codex-review-model.sh` - keep the Codex review profile's model current
 - `standards/` - reference standards, read on demand rather than preloaded:
   - `code-style.md`, `markdown-style.md`, `tech-stack.md`, `best-practices.md`, `anti-ai-patterns.md`
 

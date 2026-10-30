@@ -17,7 +17,9 @@ Instructions for all AI coding agents (Claude Code, Codex, Gemini, OpenCode, etc
 
 ## Task management
 
-Tasks live in doto (personal OS, exposed via the doto MCP server). When a project is wired to a doto project, use the next-task skill (`~/.agentrc/skills/next-task/`) to work tickets end to end.
+Tasks live in doto (personal OS, exposed via the doto MCP server). When a project is wired to a doto project, use the next-task skill (`~/.agentrc/skills/next-task/`) to work tickets end to end, and the refine skill to refine them.
+
+Project knowledge (brief, decisions, log) lives in Rela, keyed by the doto project ID. Before committing, merging or opening a PR for doto work, check the direction has not moved, and write decisions back, as `~/.agentrc/references/rela-gate.md` describes.
 
 ## Working rules
 
