@@ -22,7 +22,12 @@ Use the actor `agent:claude-code` for all doto calls.
 
 Call `mcp__doto__pick_next_task` scoped to the resolved project. If no eligible task is found, stop and tell the user there is nothing to pick up. Do not invent work.
 
-Skip tasks tagged `cloud`: they are reserved for cloud sessions (the `cloud-run` skill). Search the project for that tag first and pass those IDs as `excludeTaskIds`, unless the user named the task.
+Before picking, build `excludeTaskIds`, unless the user named the task:
+
+- Tasks tagged `cloud`. They're reserved for cloud sessions (the `cloud-run` skill).
+- With `--lane <name>` (passed by a `queue-run` coordinator, or by the user): tasks tagged with any other lane, such as `lane:mini` when you are `lane:mbp`. Your own lane's tasks and untagged tasks stay in the pool. Lanes are soft: they keep two machines out of the same files, and the lease, not the lane, is what stops two workers taking one task.
+
+Search the project by those tags (`search_tasks` with `tags`, status `todo`) and pass the IDs.
 
 Read the returned task carefully: acceptance criteria, type (task/bug/exploration/spike/research), blocking links, open sub-tasks. Briefly summarise which task you picked, then continue automatically unless the task is ambiguous or needs product decisions.
 
@@ -33,6 +38,8 @@ Run the drift check in `~/.agentrc/references/rela-gate.md` against the task's `
 ## Step 2: Move it to in_progress
 
 Call `mcp__doto__start_task` before writing any code. If the lease is rejected (409: another process holds it), stop and report that the task is already being worked.
+
+Keep the lease alive while you work: call `mcp__doto__refresh_lease` after each commit and before and after every `pnpm validate` or other run longer than a few minutes. A task left `in_progress` with a dead lease and no commits looks abandoned, and a coordinator on either machine may hand it back.
 
 ## Step 3: Do the work
 
@@ -84,7 +91,7 @@ Ship only when the user passed `--ship`, asked to ship in their own words, or a 
 
 Follow the project's `## Shipping` section in `AGENTS.md` (or `CLAUDE.md`). If there is none, ask the user how to ship rather than guessing. Typical policies:
 
-- **Local merge:** commit on the task branch, rebase onto main, rerun validation, squash-merge to main and push.
+- **Local merge:** commit on the task branch, rebase onto main, rerun validation, squash-merge to main and push. Never force-push. Another machine may push `main` first. If the push is rejected as non-fast-forward, `git fetch`, rebase the squash commit onto `origin/main`, rerun validation and push again. After three rejections, stop and report instead of looping.
 - **Pull request:** commit, push the branch and open a PR with `gh pr create`, linking the doto task. Leave merging to the human.
 
 Run the Rela drift check once more immediately before the merge or `gh pr create`; it is the last cheap moment to stop. Record the commit with `link_commit`.

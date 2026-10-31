@@ -59,6 +59,25 @@ Concurrent squash-merges onto a shared main race each other. Workers therefore a
 - Put every instruction in the GO itself ("don't finalise", "no deploy"). A follow-up correction can arrive after the worker has acted on it.
 - On an orchestrator where idle notices and replies cross (Claude Code subagents), expect duplicate replies. Resend a GO only once, and ignore a repeated SHIP DONE.
 
+### Two coordinators on two machines
+
+Two coordinators can run the same project from different machines, for example one per Mac. They share nothing but doto and the git remote, so the protocol leans on those:
+
+- **One lane each.** The profile's `## Lanes` section maps each coordinator to a lane tag (`lane:<name>`). Pass `--lane <name>` in every worker brief so `next-task` skips the other lane's tasks. Untagged tasks are shared. The doto lease decides who gets one, because `pick_next_task` never returns a task that is already in progress.
+- **The ship lock stays local; git is the lock between machines.** Each coordinator still serialises its own workers' ships. Across machines, the push to `main` is atomic. A worker whose push is rejected rebases, revalidates and pushes again, as `next-task` describes. Before a GO, also check whether `origin/main` moved since the worker's last rebase. If it did, reply "rebase first", as for a stale base.
+- **Only hand back your own tasks.** The stale-claim sweep below may return a task to the queue only if it was claimed by one of your workers (the `leaseHost` field, or the actor in your state file). Report anything else that looks stuck to the user, rather than touching it.
+- **A pre-deploy check on both machines** is harmless, because the push itself triggers the deploy (see the profile). If the profile has a deploy command instead, only the coordinator that pushed requests it.
+- **Same-machine alternative.** If the orchestrator can place workers on another machine (Orca: `worker-start --on <environment>`), one coordinator can run both lanes with a single ship lock. Prefer that while both machines are awake. Use two coordinators when one machine sleeps or travels.
+
+### Stale claims
+
+Every 30 minutes, and on every resume, look for your own `in_progress` tasks where the lease has lapsed and the worker's branch has no commit for 30 minutes:
+
+1. Ask the worker. If it's alive and working (a long build, say), let it refresh its lease.
+2. If the worker is gone, or it's alive but the task has no commits, hand the task back with `return_task_to_todo` and a reason comment, and remove the worktree once anything worth keeping is pushed to a branch.
+
+An unattended claim with no lease and no work blocks everything behind it until someone notices.
+
 **Conditional GO for live-host work.** If the task touches something running on the host (launchd/systemd jobs, a reverse-proxy config, process killers, cron definitions, credentials), make the GO conditional: the worker must confirm that no committed test can reach the real thing (stubs injected by absolute path or environment, not PATH order alone) and that its own testing left the live config unchanged. Check it yourself after the ship. Once the change is live, check the running result as well as the config: which domain or session the service now runs in, whether its children still reach the credentials they need, and whether the process count is unchanged. A watchdog moved to a system domain once left every child process without login-keychain access, and nothing noticed for an hour.
 
 ### Epics: one integration branch, one deploy
