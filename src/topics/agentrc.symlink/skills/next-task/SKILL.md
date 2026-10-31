@@ -22,6 +22,8 @@ Use the actor `agent:claude-code` for all doto calls.
 
 Call `mcp__doto__pick_next_task` scoped to the resolved project. If no eligible task is found, stop and tell the user there is nothing to pick up. Do not invent work.
 
+Skip tasks tagged `cloud`: they are reserved for cloud sessions (the `cloud-run` skill). Search the project for that tag first and pass those IDs as `excludeTaskIds`, unless the user named the task.
+
 Read the returned task carefully: acceptance criteria, type (task/bug/exploration/spike/research), blocking links, open sub-tasks. Briefly summarise which task you picked, then continue automatically unless the task is ambiguous or needs product decisions.
 
 ## Step 1b: Check the direction has not moved

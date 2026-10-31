@@ -15,6 +15,7 @@ Anything Claude-specific (settings.json, subagents, statusline) lives in `src/to
   - `next-task` - work the next doto ticket end to end and hand off for review (`--ship` to merge or open a PR per the project's shipping policy)
   - `refine` - refine raw doto tasks against the code and the Rela brief, with a cross-model review before writing back
   - `queue-run` - coordinate parallel Claude and Codex workers through the doto queue, one ship at a time
+  - `cloud-run` - launch self-contained doto tasks in Claude Code cloud sessions, review their branches on a Mac, open the PR and retro every run
   - `session-wrap` - end-of-session housekeeping (memory, skill suggestions, stale artifacts)
   - `init-agent-context` - set up the AGENT_CONTEXT.md cross-agent pattern in a project
 - `references/` - procedures shared by several skills:
@@ -22,6 +23,9 @@ Anything Claude-specific (settings.json, subagents, statusline) lives in `src/to
 - `scripts/` - helpers the skills call:
   - `agent-capacity.sh` - how many parallel workers the machine's free memory allows
   - `check-codex-review-model.sh` - keep the Codex review profile's model current
+  - `cloud-launch.sh` - start a cloud session from a prompt file and print its ID and URL
+  - `watch-cloud-branch.sh` - wait for a cloud branch's `cloud: report` commit
+  - `check-cloud-diff.mjs` - untrusted-diff gate for a cloud branch (protected paths, secrets, trailers)
 - `standards/` - reference standards, read on demand rather than preloaded:
   - `code-style.md`, `markdown-style.md`, `tech-stack.md`, `best-practices.md`, `anti-ai-patterns.md`
 
