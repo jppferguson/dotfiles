@@ -140,8 +140,10 @@ The branch is untrusted contractor output until it passes the gate.
    - **Clean:**
      - Check that `git ls-remote origin <branch>` still points at the gated SHA. If the session pushed again, gate and review the new SHA first.
      - Open the PR from the Mac with `gh pr create --head <branch> --base main`. The body is the report plus the Codex findings and how each was handled, and it links the doto task. The PR review jobs then run.
-     - `check_ac_batch` the met ACs.
-     - `submit_for_review` with the PR link and the fresh Rela snapshot.
+     - Post the Mac's Codex review as a PR comment headed `## Codex review (local)`: every pass, each finding and how it was handled.
+     - `submit_for_review` with the PR link, the fresh Rela snapshot, and the two sections next-task Step 7 requires (acceptance criteria with evidence, cross-model review).
+     - Straight after, `check_ac_batch` every AC you verified yourself in step 5 (the `agent:cloud` lease blocks it before the submit). Never leave an agent-verifiable AC for the human.
+     - When the GitHub review jobs have commented, read them before telling the user the PR is ready, and fix valid findings on the branch in one round.
      - Write `CLOUD_CLOSED` with `outcome: reviewed` and the PR URL.
      - Merging follows the project's `## Shipping` rules, with this Mac review standing in for the local cross-model review. `requiresHumanReview: true` means Jamie merges the PR. `false` means the Mac may squash-merge the gated SHA, but only when the user asked to ship.
    - **Abandon** (wrong approach, or too big to fix):

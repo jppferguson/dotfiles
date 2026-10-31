@@ -75,6 +75,14 @@ Treat Codex as a peer reviewer, not an authority: fix valid findings and re-vali
 
 Use `mcp__doto__check_ac_batch` (`changedBy: agent:claude-code`). Only check criteria that are genuinely met; leave unmet ones unchecked and explain why in the review comment.
 
+The human reviewer should find every criterion an agent can verify already checked. Before handing off:
+
+- Verify each criterion yourself against the code, the tests and the output (name the test, the command or the file and line). Don't tick from memory or from another agent's report.
+- If a criterion is mechanically checkable but not yet met, do the work or run the check now rather than leaving it for the reviewer.
+- Leave unchecked only what genuinely needs a human (a sign-off, a device, a dashboard, a decision). Split a mixed criterion in the comment: say which part is met and which part is the human's.
+- `check_ac_batch` can fail while another actor's lease is held (for example `agent:cloud`). Call it again straight after `submit_for_review`; never skip it.
+- Never use `force` on `submit_for_review` to get past criteria you could have verified.
+
 ## Step 6b: Re-check Rela
 
 Run the drift check again against the snapshot from Step 1b. The direction can change while you work; do not hand off or ship work built on a decision that has since been reversed. Record any decision the user made during the task as the gate's **Write-back** section says.
@@ -83,7 +91,12 @@ Run the drift check again against the snapshot from Step 1b. The direction can c
 
 If the project's `## Shipping` section says PRs open automatically and the task follows the pull-request policy, open the PR first (Step 7b's pull-request steps, including the last drift check) without waiting to be asked, and include its link in the summary below. Merging and local pushes to main still wait for `--ship`.
 
-Call `mcp__doto__submit_for_review` with a concise completion summary: what changed, which files, how it was verified, what the reviewer should focus on, any unmet criteria. For exploration/spike/research tasks also pass `findings` and a `decision`. Include the gate's `Rela checked` note and fresh `Rela snapshot:` line.
+Call `mcp__doto__submit_for_review` with a concise completion summary: what changed, which files, how it was verified, what the reviewer should focus on, any unmet criteria. The summary always has two sections the reviewer can scan:
+
+- **Acceptance criteria:** one line per criterion, met or not, with its evidence.
+- **Cross-model review:** which reviewer ran (or why it couldn't), each finding, and whether it was fixed (with the commit) or rejected (with the reason). "No findings" is a result; say so.
+
+When a PR is open, post the same cross-model review as a PR comment headed `## Codex review (local)` (or `## Claude review (local)` when Codex wrote it), so it sits next to the GitHub review jobs. Before telling anyone a PR is ready, read the GitHub review job comments on it and fix the valid findings in one round, as the project's PR rules describe. For exploration/spike/research tasks also pass `findings` and a `decision`. Include the gate's `Rela checked` note and fresh `Rela snapshot:` line.
 
 The human gate stays: a human signs off review to done.
 
