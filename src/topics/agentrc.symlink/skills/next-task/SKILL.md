@@ -81,13 +81,15 @@ Run the drift check again against the snapshot from Step 1b. The direction can c
 
 ## Step 7: Hand off for review
 
+If the project's `## Shipping` section says PRs open automatically and the task follows the pull-request policy, open the PR first (Step 7b's pull-request steps, including the last drift check) without waiting to be asked, and include its link in the summary below. Merging and local pushes to main still wait for `--ship`.
+
 Call `mcp__doto__submit_for_review` with a concise completion summary: what changed, which files, how it was verified, what the reviewer should focus on, any unmet criteria. For exploration/spike/research tasks also pass `findings` and a `decision`. Include the gate's `Rela checked` note and fresh `Rela snapshot:` line.
 
 The human gate stays: a human signs off review to done.
 
 ## Step 7b: Ship (only when asked)
 
-Ship only when the user passed `--ship`, asked to ship in their own words, or a `queue-run` brief tells you to. Otherwise stop at Step 7.
+Ship only when the user passed `--ship`, asked to ship in their own words, or a `queue-run` brief tells you to. Otherwise stop at Step 7. The one exception is a PR the project says opens automatically (Step 7).
 
 Follow the project's `## Shipping` section in `AGENTS.md` (or `CLAUDE.md`). If there is none, ask the user how to ship rather than guessing. Typical policies:
 
@@ -103,5 +105,5 @@ Summarise: task picked (title + id, now in review), what was implemented, files 
 ## Rules
 
 - Always move to in_progress before changing code; always end in review. Never leave a task half-transitioned.
-- Do not commit or push except under Step 7b. Without `--ship`, an explicit request or a queue-run brief, this skill implements and hands off; it does not ship.
+- Do not commit or push except under Step 7b, or to open a PR the project says opens automatically. Without `--ship`, an explicit request or a queue-run brief, this skill implements and hands off; it does not merge or push `main`.
 - Never check off acceptance criteria you have not actually satisfied.
