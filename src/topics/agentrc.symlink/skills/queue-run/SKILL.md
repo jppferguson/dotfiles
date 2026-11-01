@@ -30,6 +30,8 @@ The project-specific parts (how to pick a task, how to ship, how to deploy, how 
 
 If none exists, build one with the user from `templates/profile.md` before starting any worker. Do not guess deploy or ship commands.
 
+The branch tasks land on is the profile's `BASE_BRANCH`, or, without one, the base branch the `next-task` skill resolves (Step 0). Wherever this skill and its templates say "main", read that branch. Never push a separate production branch from a queue run.
+
 Also read the adapter for the orchestrator you are running under. If the user has not said which, use whichever multi-agent tool the session actually has, and say which you picked.
 
 ## Step 1: Set up the run

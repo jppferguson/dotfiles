@@ -6,6 +6,7 @@ Copy to `.agents/queue/profile.md` (or `.claude/queue/profile.md`) in the projec
 
 - REPO_PATH: absolute path of the main checkout
 - TRACKER: the task tracker (e.g. doto project <id>)
+- BASE_BRANCH: the branch tasks land on (default: the repo's default branch, usually `main`). If production is a different branch, name it here too and say who moves it.
 
 ## Pickup
 

@@ -18,6 +18,14 @@ Find the doto project ID for the current repository, in this order:
 
 Use the actor `agent:claude-code` for all doto calls.
 
+Then resolve the **base branch**, the branch work lands on, in this order:
+
+1. A `Base branch:` line in the project's `AGENTS.md` or `CLAUDE.md`
+2. The repository's default branch: `gh repo view --json defaultBranchRef -q .defaultBranchRef.name`
+3. `main`
+
+Wherever this skill says "the base branch", use that name. A project whose production branch differs from its base branch (for example `develop` for work, `main` for production) never has `main` pushed by this skill.
+
 ## Step 1: Pick the next task
 
 Call `mcp__doto__pick_next_task` scoped to the resolved project. If no eligible task is found, stop and tell the user there is nothing to pick up. Do not invent work.
@@ -89,7 +97,7 @@ Run the drift check again against the snapshot from Step 1b. The direction can c
 
 ## Step 7: Hand off for review
 
-If the project's `## Shipping` section says PRs open automatically and the task follows the pull-request policy, open the PR first (Step 7b's pull-request steps, including the last drift check) without waiting to be asked, and include its link in the summary below. Merging and local pushes to main still wait for `--ship`.
+If the project's `## Shipping` section says PRs open automatically and the task follows the pull-request policy, open the PR first (Step 7b's pull-request steps, including the last drift check) without waiting to be asked, and include its link in the summary below. Merging and local pushes to the base branch still wait for `--ship`.
 
 Call `mcp__doto__submit_for_review` with a concise completion summary: what changed, which files, how it was verified, what the reviewer should focus on, any unmet criteria. The summary always has two sections the reviewer can scan:
 
@@ -106,8 +114,8 @@ Ship only when the user passed `--ship`, asked to ship in their own words, or a 
 
 Follow the project's `## Shipping` section in `AGENTS.md` (or `CLAUDE.md`). If there is none, ask the user how to ship rather than guessing. Typical policies:
 
-- **Local merge:** commit on the task branch, rebase onto main, rerun validation, squash-merge to main and push. Never force-push. Another machine may push `main` first. If the push is rejected as non-fast-forward, `git fetch`, rebase the squash commit onto `origin/main`, rerun validation and push again. After three rejections, stop and report instead of looping.
-- **Pull request:** commit, push the branch and open a PR with `gh pr create`, linking the doto task. Leave merging to the human.
+- **Local merge:** commit on the task branch, rebase onto the base branch, rerun validation, squash-merge to the base branch and push. Never force-push. Another machine may push the base branch first. If the push is rejected as non-fast-forward, `git fetch`, rebase the squash commit onto `origin/<base branch>`, rerun validation and push again. After three rejections, stop and report instead of looping.
+- **Pull request:** commit, push the branch and open a PR with `gh pr create --base <base branch>`, linking the doto task. Leave merging to the human.
 
 Run the Rela drift check once more immediately before the merge or `gh pr create`; it is the last cheap moment to stop. Record the commit with `link_commit`.
 
@@ -118,5 +126,5 @@ Summarise: task picked (title + id, now in review), what was implemented, files 
 ## Rules
 
 - Always move to in_progress before changing code; always end in review. Never leave a task half-transitioned.
-- Do not commit or push except under Step 7b, or to open a PR the project says opens automatically. Without `--ship`, an explicit request or a queue-run brief, this skill implements and hands off; it does not merge or push `main`.
+- Do not commit or push except under Step 7b, or to open a PR the project says opens automatically. Without `--ship`, an explicit request or a queue-run brief, this skill implements and hands off; it does not merge or push the base branch.
 - Never check off acceptance criteria you have not actually satisfied.
