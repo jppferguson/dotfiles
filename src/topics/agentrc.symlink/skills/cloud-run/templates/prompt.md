@@ -25,6 +25,10 @@ Task type: {{TYPE}}. Effort: {{EFFORT}}. Due: {{DUE}}. Human review required: {{
 
 {{LAUNCH_NOTES}}
 
+## Gates, lints and pattern checks
+
+If the task adds or narrows a gate, a lint, a ratchet or a pattern check, write the tests for the ways round it first: renames, inline disables, exclusions, and the cases the old pattern already caught. Review on the Mac looks for these first.
+
 ## Names you don't find defined
 
 If the task needs a shared name, type list or constant that isn't defined on {{BASE_BRANCH}}, in the task text or in the notes above (a list of letter types, say), don't invent the values. Use what the task's description or the project brief says. If neither defines it, choose the smallest placeholder, mark it clearly as unconfirmed in code, and list it first under "Needs the Mac" in the report.

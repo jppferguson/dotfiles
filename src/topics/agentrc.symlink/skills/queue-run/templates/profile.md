@@ -4,7 +4,7 @@ Copy to `.agents/queue/profile.md` (or `.claude/queue/profile.md`) in the projec
 
 ## Repo
 
-- REPO_PATH: absolute path of the main checkout
+- REPO_PATH: absolute path of the main checkout, or a command that derives it (for example `dirname "$(git rev-parse --path-format=absolute --git-common-dir)"`) when the checkout lives in different places on different machines
 - TRACKER: the task tracker (e.g. doto project <id>)
 - BASE_BRANCH: the branch tasks land on (default: the repo's default branch, usually `main`). If production is a different branch, name it here too and say who moves it.
 

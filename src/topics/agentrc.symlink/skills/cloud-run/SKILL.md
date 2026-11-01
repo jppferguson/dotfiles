@@ -135,7 +135,7 @@ The branch is untrusted contractor output until it passes the gate.
 
 5. **Check every AC yourself** against the diff and the tests; don't trust the report's ticks. For visible changes, check the committed screenshots against the UI review checklist. Run the app screens the report listed under "Needs the Mac" if a simulator is available, or list them for Jamie.
 6. **Decide:**
-   - **Fixes needed:** write a `CLOUD_REWORK` comment: attempt, findings with evidence, and numbered instructions. Then pick one:
+   - **Fixes needed:** write a `CLOUD_REWORK` comment: attempt, findings with evidence, and numbered instructions. When the branch needs `<base>`, the instruction is to merge `origin/<base>` into it, never to rebase or force-push: the Mac gates each round by SHA. Then pick one:
      - The session is under about 2 hours old: send the instructions to it with `claude -p "<instructions>" --cloud <session id> --output-format json`, and ask for a new `cloud: report` commit at the end. Then watch again, passing the old report's SHA as the third argument so it doesn't count as done.
      - Otherwise, or after two cloud rounds: either relaunch as attempt n+1 with the rework in `{{LAUNCH_NOTES}}`, or fix it in the worktree, commit on the branch and push. Small fixes go on the Mac.
    - **Clean:**
@@ -145,7 +145,7 @@ The branch is untrusted contractor output until it passes the gate.
      - **PRs paused:** no PR and no GitHub review jobs. Put the Codex review (every pass, each finding and how it was handled) in the doto review comment instead. Squash-merge the gated SHA onto `<base>` only when the user asked to ship, whatever the review flag, and leave `requiresHumanReview: true` tasks in review for the human.
      - `submit_for_review` with the PR link or merge SHA, the fresh Rela snapshot, and the two sections next-task Step 7 requires (acceptance criteria with evidence, cross-model review).
      - Straight after, `check_ac_batch` every AC you verified yourself in step 5 (the `agent:cloud` lease blocks it before the submit). Never leave an agent-verifiable AC for the human.
-     - Write `CLOUD_CLOSED` with `outcome: reviewed` and the PR URL (or the merge SHA).
+     - Write `CLOUD_CLOSED` with `outcome: reviewed`, the PR URL (or the merge SHA), the rework round count and a `gate:` line copying the gate's PASS line and any WARN lines, so the retro has them.
    - **Abandon** (wrong approach, or too big to fix):
      - Write `CLOUD_CLOSED` with `outcome: handed_back` and the reason.
      - Call `return_task_to_todo` as `agent:cloud`, which clears the reservation.
