@@ -145,6 +145,7 @@ The branch is untrusted contractor output until it passes the gate.
      - **PRs paused:** no PR and no GitHub review jobs. Put the Codex review (every pass, each finding and how it was handled) in the doto review comment instead. Squash-merge the gated SHA onto `<base>` only when the user asked to ship, whatever the review flag, and leave `requiresHumanReview: true` tasks in review for the human.
      - `submit_for_review` with the PR link or merge SHA, the fresh Rela snapshot, and the two sections next-task Step 7 requires (acceptance criteria with evidence, cross-model review).
      - Straight after, `check_ac_batch` every AC you verified yourself in step 5 (the `agent:cloud` lease blocks it before the submit). Never leave an agent-verifiable AC for the human.
+     - Then `complete_ai_review` as `agent:claude-code`: verdict `passed` or `needs_human` (any AC only a human can check means `needs_human`), with a summary of every Codex pass and how each finding was handled. This sets the task's AI-reviewed tag; the review comment alone doesn't. It only works while the task is in review, so do it before telling the user.
      - Write `CLOUD_CLOSED` with `outcome: reviewed`, the PR URL (or the merge SHA), the rework round count and a `gate:` line copying the gate's PASS line and any WARN lines, so the retro has them.
    - **Abandon** (wrong approach, or too big to fix):
      - Write `CLOUD_CLOSED` with `outcome: handed_back` and the reason.

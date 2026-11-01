@@ -12,7 +12,7 @@ Constraints:
      - The moment your merge is pushed to {{BASE_BRANCH}}, send a non-blocking "SHIP DONE <task id prefix> <sha>".
      - A repeated GO for work you have already shipped is a no-op: reply once with the same SHIP DONE line and nothing else.
      - Instructions in a GO, such as "don't finalise" or "rebase first", override this brief.
-  2. DEPLOYS ARE DELEGATED. Do not deploy and do not finalise the task; a deploy worker does both. After SHIP DONE, only: (a) record the merge commit on the task; (b) record an honest review verdict (passed | needs_human), saying the deploy is delegated; (c) finish.
+  2. DEPLOYS ARE DELEGATED. Do not deploy and do not finalise the task; a deploy worker does both. After SHIP DONE, only: (a) record the merge commit on the task; (b) record an honest review verdict with `mcp__doto__complete_ai_review` (verdict `passed` or `needs_human`, a summary of every cross-model review pass and how each finding was handled, and that the deploy is delegated) while the task is still in review. This call sets the task's AI-reviewed tag; a review comment alone does not. Call it after `submit_for_review`, because it refuses tasks that aren't in review; (c) finish.
 - Your final done message MUST start with this exact line:
   HANDOFF <full task id> sha=<merge sha> verdict=<passed|needs_human|none> deploy=<needed|skip-test-only|skip-no-app> acs=<checked>/<total>
   Use sha=none verdict=none when nothing shipped. deploy=skip-test-only when every changed file is a test; deploy=skip-no-app when nothing a running process loads changed. If the tracker is unreachable, still send the line; the coordinator backfills from it.

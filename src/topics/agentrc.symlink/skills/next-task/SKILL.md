@@ -106,6 +106,12 @@ Call `mcp__doto__submit_for_review` with a concise completion summary: what chan
 
 When a PR is open, post the same cross-model review as a PR comment headed `## Codex review (local)` (or `## Claude review (local)` when Codex wrote it), so it sits next to the GitHub review jobs. Before telling anyone a PR is ready, read the GitHub review job comments on it and fix the valid findings in one round, as the project's PR rules describe. For exploration/spike/research tasks also pass `findings` and a `decision`. Include the gate's `Rela checked` note and fresh `Rela snapshot:` line.
 
+Straight after the submit, call `mcp__doto__complete_ai_review` (`actor: agent:claude-code`):
+- Verdict `passed`, or `needs_human` when any criterion only a person can check is open.
+- The summary covers every cross-model review pass and how each finding was handled.
+- This call sets the task's AI-reviewed tag; the review comment alone does not.
+- It refuses a task that isn't in review, so do it before shipping or handing over. A human may move the task to done soon after.
+
 The human gate stays: a human signs off review to done.
 
 ## Step 7b: Ship (only when asked)
