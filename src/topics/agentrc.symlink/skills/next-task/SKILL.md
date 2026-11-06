@@ -91,6 +91,14 @@ The human reviewer should find every criterion an agent can verify already check
 - `check_ac_batch` can fail while another actor's lease is held (for example `agent:cloud`). Call it again straight after `submit_for_review`; never skip it.
 - Never use `force` on `submit_for_review` to get past criteria you could have verified.
 
+### Attaching evidence (screenshots, samples, logs)
+
+Attach evidence files to the task rather than describing them. Pick the route by where the file is relative to doto:
+
+- **Default, from any machine:** `~/.agentrc/scripts/doto-attach.sh <taskId> <file> [--comment <commentId>]`. It uploads the file straight from your machine with `curl`, so the bytes never enter the conversation, and it needs `DOTO_MCP_TOKEN` in the environment. Any path works (scratchpad, `$TMPDIR`, repo, worktree). It prints `attached <file> to <taskId>: <attachmentId>` and exits non-zero with a reason on failure. To attach under a comment, `add_comment` first and pass the returned id.
+- **`upload_attachment_from_path`** only when the file is on the machine doto runs on (the Mac mini) and that machine's doto MCP is the one connected. It reads the path on the doto server, so from any other machine it fails with "not found" or "outside the allowed directories".
+- **Never `upload_attachment`** for a screenshot or any non-trivial file: it puts the whole file into the tool call as base64 (tens of thousands of tokens per image).
+
 ## Step 6b: Re-check Rela
 
 Run the drift check again against the snapshot from Step 1b. The direction can change while you work; do not hand off or ship work built on a decision that has since been reversed. Record any decision the user made during the task as the gate's **Write-back** section says.
