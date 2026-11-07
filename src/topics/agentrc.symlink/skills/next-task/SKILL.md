@@ -52,6 +52,7 @@ Keep the lease alive while you work: call `mcp__doto__refresh_lease` after each 
 ## Step 3: Do the work
 
 - Detect the package manager from the lockfile and use it consistently.
+- Name the branch and worktree the way the project's `AGENTS.md` says. Without a rule there, use `<type>/<id8>-<slug>` for the branch (`<id8>` the first 8 characters of the task ID, `<type>` one of `feat`, `fix`, `chore`, `spike`) and `<id8>-<slug>` for the worktree folder.
 - Match existing patterns in the area you are touching; use project skills when one fits.
 - Keep changes scoped to the task. Surface anything larger rather than expanding silently.
 - Add or update tests where the acceptance criteria imply verification.
@@ -128,7 +129,7 @@ Ship only when the user passed `--ship`, asked to ship in their own words, or a 
 
 Follow the project's `## Shipping` section in `AGENTS.md` (or `CLAUDE.md`). If there is none, ask the user how to ship rather than guessing. Typical policies:
 
-- **Local merge:** commit on the task branch, rebase onto the base branch, rerun validation, squash-merge to the base branch and push. Never force-push. Another machine may push the base branch first. If the push is rejected as non-fast-forward, `git fetch`, rebase the squash commit onto `origin/<base branch>`, rerun validation and push again. After three rejections, stop and report instead of looping.
+- **Local merge:** commit on the task branch, rebase onto the base branch, rerun validation, squash-merge to the base branch and push. Never force-push. Another machine may push the base branch first. If the push is rejected as non-fast-forward, `git fetch`, rebase the squash commit onto `origin/<base branch>`, rerun validation and push again. After three rejections, stop and report instead of looping. Once the push lands, remove the task's worktree and branch: with the project's prune script if `AGENTS.md` names one, otherwise `git worktree remove` and `git branch -D` after checking every file the branch changed is on the base branch as the branch has it (a squash merge means `git branch -d` refuses).
 - **Pull request:** commit, push the branch and open a PR with `gh pr create --base <base branch>`, linking the doto task. Leave merging to the human.
 
 Run the Rela drift check once more immediately before the merge or `gh pr create`; it is the last cheap moment to stop. Record the commit with `link_commit`.
