@@ -57,7 +57,9 @@ Draft every field the guidelines require for each task, in a scratch file (one m
 - The Rela entries and code paths the draft relies on
 - Open questions: anything that needs a product decision you cannot make from the brief, the code or sensible defaults
 
-Do not invent answers to product questions. Put them in the description under **Open questions** and, where they block work, as a requirement with `isExternal: true`.
+Do not invent answers to product questions. Put them in the description under **Open questions** and, where they block the start of work, as a requirement with `isExternal: true`.
+
+A requirement is a start prerequisite: `start_task` refuses any unmet external one. Before filing it, ask: **does the thing exist before this task runs, and does it come from outside the task?** If yes, it is a requirement ("Jamie decides whether Managed Payments goes in for 10 Nov", "Expo DPA accepted"). If the task creates it, a human sign-off of it is an AC left for review, never a requirement ("Jamie approves the rescue copy", "Jamie approves the three choice lists and their sentences"); filed as a requirement it deadlocks the task. An approval of something a different task produces is a task-linked requirement (`taskId`, `isExternal: false`). `refine_task` warns when an external requirement reads as a sign-off of the task's own output: move it to an AC, or drop it when an AC already covers it.
 
 ## Step 5: Cross-model review
 
