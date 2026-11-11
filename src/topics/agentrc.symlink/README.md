@@ -14,6 +14,7 @@ Anything Claude-specific (settings.json, subagents, statusline) lives in `src/to
 - `skills/` - global skills, one directory per skill with a `SKILL.md`. Symlinked to `~/.claude/skills`; other agents that support the skills format can point at the same directory.
   - `next-task` - work the next doto ticket end to end and hand off for review (`--ship` to merge or open a PR per the project's shipping policy)
   - `refine` - refine raw doto tasks against the code and the Rela brief, with a cross-model review before writing back
+  - `audit` - codebase health audit through review lenses (security, data, database, performance, privacy, architecture, testing, tooling, agent tooling), verified and filed in doto; a project's own audit command or `## Audit` section adds its nuances
   - `queue-run` - coordinate parallel Claude and Codex workers through the doto queue, one ship at a time
   - `cloud-run` - launch self-contained doto tasks in Claude Code cloud sessions, review their branches on a Mac, open the PR and retro every run
   - `session-wrap` - end-of-session housekeeping (memory, skill suggestions, stale artifacts)

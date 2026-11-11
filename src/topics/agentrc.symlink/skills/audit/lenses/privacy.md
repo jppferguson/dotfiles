@@ -1,0 +1,21 @@
+# Lens: privacy and data protection
+
+Read-only review of what personal data the system holds, where it goes and when it is deleted. Report engineering facts with a location for every claim, not legal advice. Use the regulatory frame named in the project context (default: UK GDPR, plus the ICO Children's Code where data subjects are children). Other lenses cover access control; do not redo it. Local database for schema inspection only.
+
+Answer each of these with evidence:
+
+1. **Data inventory.** From the live schema and the storage configuration, list every column and bucket holding personal data, grouped by data subject. Flag higher-risk items: dates of birth or ages, photos, video and voice of children, free-text fields, health or special-category data, location, IP addresses, user agents. Say plainly what is not collected.
+2. **Retention and deletion.** For each group, what deletes it and when? Find every purge, prune, archive and delete path (crons, admin actions, cascade chains, storage removal). Specifically:
+   - When a user is deleted, what rows and files survive? Read the foreign-key delete rules from the catalogue rather than trusting comments, and test a delete inside a rolled-back transaction if you can. Is the login identity removed?
+   - The same for a tenant or organisation.
+   - Are "archived" records ever hard-deleted, or does data accumulate indefinitely? Is any retention period written down?
+   - Queue and log tables: do they keep full message bodies and addresses forever?
+   - Is there any subject-access export or erasure tooling at all? If not, say so.
+3. **Third-party flows.** Every external processor the code sends personal data to, and exactly which fields: error reporting (user context, extras, forwarded console arguments, request URLs with tokens, replay), payments (metadata and descriptions), CRM, e-commerce, email provider, hosting logs, CDNs, fonts, embeds, analytics. Check the content-security policy's source lists for third parties the browser calls.
+4. **Personal data in URLs, logs and client payloads.** Emails or names in query strings and paths; in log labels and thrown error messages; whole user rows passed to client components that need one field; what public pages serialise into their HTML.
+5. **Consent and transparency.** Where consent is collected, whether it is stored with a timestamp and a wording version, whether defaults are opt-in or opt-out, whether every sending path honours opt-outs (at queue time and at send time), and whether public data-collection forms show a privacy notice, including when embedded elsewhere.
+6. **Risks specific to the data subjects** (for children: how they authenticate, whether they can see each other's names, photos or work, whether bulk exports are logged, how long signed links to their media live, whether any of it sits in a public bucket).
+7. **Seed and test data.** Anything in seeds, fixtures or tracked files that looks like real personal data.
+8. **Headers and browser storage.** Referrer policy versus URLs carrying tokens; cache headers on authenticated pages and export downloads; session cookie flags and lifetime; personal data left in browser storage on shared machines.
+
+Output: (a) the inventory as a compact table; (b) findings as CRITICAL / HIGH / WARNING, each with location, whose data is affected, the concrete exposure or gap, an engineering fix, and "verified" or "unverified"; (c) a short list of questions only the client can answer (retention periods, lawful basis, processor agreements); (d) a coverage statement naming what was not reached. No generic compliance advice.
