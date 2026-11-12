@@ -7,15 +7,22 @@
 # of the same name, because a global core.hooksPath stops git running
 # .git/hooks. Repos that set their own core.hooksPath (husky) bypass this.
 #
+# Turn the scan off on a machine with `git config --file ~/.gitconfig.local
+# dotfiles.gitleaks false`. It is a git setting rather than a ~/.localrc
+# variable so GUI git clients, which never source the shell, see it too; a
+# repo can set it back to true with `git config dotfiles.gitleaks true`.
+#
 ###############################################################################
 
 set -u
 
 hook_name=$(basename "$0")
 
-if [ "$hook_name" = "pre-commit" ]
+if [ "$hook_name" = "pre-commit" ] &&
+  [ "$(git config --type=bool dotfiles.gitleaks)" != "false" ]
 then
-  # Fail closed: a missing scanner must not quietly let a secret through
+  # Fail closed: a missing scanner (or a mistyped dotfiles.gitleaks) must not
+  # quietly let a secret through
   if ! command -v gitleaks > /dev/null 2>&1
   then
     echo "gitleaks not found on PATH, so the secret scan cannot run." >&2

@@ -124,6 +124,25 @@ setup() {
   [[ "$output" == *"gitleaks not found"* ]]
 }
 
+@test "pre-commit: dotfiles.gitleaks false skips the scan but still runs the repo's hook" {
+  printf '#!/bin/sh\necho ran > "%s/local-pre-commit"\n' "$BATS_TEST_TMPDIR" > .git/hooks/pre-commit
+  chmod +x .git/hooks/pre-commit
+  git config --global dotfiles.gitleaks false
+  git add secret.txt
+  run env PATH="/usr/bin:/bin" git commit -q -m "add secret"
+  [ "$status" -eq 0 ]
+  [ "$(cat "$BATS_TEST_TMPDIR/local-pre-commit")" = "ran" ]
+}
+
+@test "pre-commit: a repo can turn the scan back on over a global false" {
+  git config --global dotfiles.gitleaks false
+  git config dotfiles.gitleaks true
+  git add secret.txt
+  run git commit -q -m "add secret"
+  [ "$status" -ne 0 ]
+  [[ "$output" == *"leaks found"* ]]
+}
+
 @test "pre-commit: a repo hook linked back to the global hook does not loop" {
   ln -s "$HOOKS/pre-commit" .git/hooks/pre-commit
   git add clean.txt
