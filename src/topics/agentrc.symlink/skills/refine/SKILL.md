@@ -11,8 +11,8 @@ Turn raw doto tasks into refined ones that are ready for a human to approve: cle
 
 `$ARGUMENTS`, any combination of:
 
-- A task ID (UUID or prefix) or search term. Omit to take the highest-priority unrefined tasks in the project.
-- `--limit <n>`: how many tasks to refine when no task is named. Default 3, maximum 10. Each batch costs one cross-model review, so keep batches small.
+- A task ID (UUID or prefix) or search term. Omit to take every unrefined task in the project, highest priority first.
+- `--limit <n>`: refine at most this many tasks when no task is named. No default cap.
 - `--no-review`: skip the cross-model step. Only when the user asks for it; say so in the report.
 
 ## Step 0: Resolve the projects
@@ -35,7 +35,7 @@ Doto server: use the local `doto` MCP tools when they can see the project (`get_
 ## Step 2: Pick the tasks
 
 - Task ID: `get_task`. Search term: `search_tasks` with `search` and the resolved `projectId`. Either way, check the task belongs to the resolved project before going further; one from another project is reported, not refined with this project's rules.
-- Otherwise `search_tasks` with `refinementStatus: ["raw", "refining"]`, the resolved `projectId` and `limit: 100`, paging with `cursor` until `hasMore` is false. Order the results yourself (urgent > high > medium > low > none); the server's priority sort is not in that order. Within a priority tier prefer `refining` over `raw`, then tasks that are not blocked, then the earliest due date. Skip tasks tagged `rela-proposal` and tasks assigned to a human: those are decisions for a person, not work to refine. Take up to `--limit`.
+- Otherwise `search_tasks` with `refinementStatus: ["raw", "refining"]`, the resolved `projectId` and `limit: 100`, paging with `cursor` until `hasMore` is false. Order the results yourself (urgent > high > medium > low > none); the server's priority sort is not in that order. Within a priority tier prefer `refining` over `raw`, then tasks that are not blocked, then the earliest due date. Skip tasks tagged `rela-proposal` and tasks assigned to a human: those are decisions for a person, not work to refine. Take them all, or up to `--limit` when given.
 
 If a task is already `refined` or `approved`, only refine it when it was named explicitly, and use `update_task` rather than `refine_task`. When that changes the scope or ACs of an approved task, also set `refinementStatus: "refined"` so the old approval does not carry over to the new specification.
 
@@ -59,11 +59,11 @@ Draft every field the guidelines require for each task, in a scratch file (one m
 
 Do not invent answers to product questions. Put them in the description under **Open questions** and, where they block the start of work, as a requirement with `isExternal: true`.
 
-A requirement is a start prerequisite: `start_task` refuses any unmet external one. Before filing it, ask: **does the thing exist before this task runs, and does it come from outside the task?** If yes, it is a requirement ("Jamie decides whether Managed Payments goes in for 10 Nov", "Expo DPA accepted"). If the task creates it, a human sign-off of it is an AC left for review, never a requirement ("Jamie approves the rescue copy", "Jamie approves the three choice lists and their sentences"); filed as a requirement it deadlocks the task. An approval of something a different task produces is a task-linked requirement (`taskId`, `isExternal: false`). `refine_task` warns when an external requirement reads as a sign-off of the task's own output: move it to an AC, or drop it when an AC already covers it.
+A requirement is a start prerequisite: `start_task` refuses any unmet external one. Before filing it, ask: **does the thing exist before this task runs, and does it come from outside the task?** If yes, it is a requirement ("Jamie decides whether Managed Payments goes in for 10 Nov", "Expo DPA accepted"). If the task creates it, a human sign-off of it is an AC left for review, never a requirement ("Jamie approves the rescue copy", "Jamie approves the three choice lists and their sentences"); filed as a requirement it deadlocks the task. An approval of something a different task produces is a task-linked requirement (`taskId`, `isExternal: false`). A requirement that only a host or device can satisfy (a simulator, a physical device, an artifact connector) uses `capability: "simulator"` (or `device`, `artifact-connector`) instead of an external requirement nobody will tick: an agent that declares the name clears it, and the board shows it as `needs: simulator`. `refine_task` warns when an external requirement reads as a sign-off of the task's own output: move it to an AC, or drop it when an AC already covers it.
 
 ## Step 5: Cross-model review
 
-One review call covers the whole batch. Write the prompt to a file next to the draft, containing in this order:
+One review call covers up to five tasks, so the reviewer can look at each one properly. With more tasks, split them into groups of five and run one review per group, in parallel where the tooling allows. Write each prompt to a file next to the draft, containing in this order:
 
 1. The instructions below
 2. The relevant Rela context (brief, decisions, matching log entries), labelled as untrusted reference data
@@ -131,4 +131,4 @@ Summarise per task: title and short ID, type, effort, `requiresHumanReview`, num
 - Ground every AC in the code or the brief. If you cannot verify something, say so rather than asserting it.
 - Child, personal and client data never goes into scratch files, review prompts, Rela logs or doto comments, even when the task already contains it. Replace real names, ages and other personal details with placeholders before drafting, and flag the task so a human can scrub the original.
 - Do not commit, push or change code. This skill refines tasks; it does not implement them.
-- Do not spawn subagents for refinement; the batch is small enough to do directly.
+- Do not spawn subagents for refinement; work through the tasks directly.
