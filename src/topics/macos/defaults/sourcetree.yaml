@@ -1,0 +1,9 @@
+---
+description: "Sourcetree"
+kill: ["Sourcetree"]
+data:
+  com.torusknot.SourceTreeNotMAS:
+    # Stop Sourcetree writing its difftool/mergetool blocks into ~/.gitconfig
+    # on every launch: that file is a symlink into this repo. The blocks live
+    # in ~/.gitconfig.local instead.
+    agreedToUpdateConfig: false
