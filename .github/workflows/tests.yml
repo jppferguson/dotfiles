@@ -48,7 +48,7 @@ jobs:
           sudo install gitleaks /usr/local/bin/gitleaks
       - name: Setup Bats and bats libs
         id: setup-bats
-        uses: bats-core/bats-action@4.0.0
+        uses: bats-core/bats-action@4.1.0
       - name: Tests
         shell: bash
         env:
